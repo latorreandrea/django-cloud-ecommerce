@@ -123,15 +123,23 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 if DEBUG:
-    # Sviluppo: usa il sistema statico di Django
+    # Developing:  Django static system
     STATIC_URL = 'static/'
     STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 else:
-    # Produzione: usa Cloud Storage
+    # Production: Cloud Storage
     GS_BUCKET_NAME = 'nome-del-tuo-bucket'
     STATICFILES_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
     STATIC_URL = f'https://storage.googleapis.com/{GS_BUCKET_NAME}/'
 
+# Media files (user uploaded content)
+if DEBUG:
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+else:
+    MEDIA_URL = f'https://storage.googleapis.com/{GS_BUCKET_NAME}/media/'
+    DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+    
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
