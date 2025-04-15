@@ -25,12 +25,14 @@
     {% block extra_js %}
     {% endblock %}
 
-    <title>Django Cloud Ecommerce {% block extra_title %}{% endblock %}</title>
+    <title>    
+        {% block title %}E-commerce {% endblock %}
+        {% block extra_title %}{% endblock %}
+    </title>
 </head>
 <body>
     <header>
         {% block header %}
-            {% include 'partials/banner.html' %}
             {% include 'partials/navbar.html' %}
         {% endblock %}
     </header>
