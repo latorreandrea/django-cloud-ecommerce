@@ -12,21 +12,44 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os  # Add os import for os.path.join
-
+import google.cloud.secretmanager as secretmanager
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+### SET UP FOR GOOGLE CLOUD RUN ###
+# Determine if we're running on Google Cloud Run
+def is_running_on_gcp():
+    return os.environ.get('GAE_ENV', '').startswith('standard') or \
+           os.environ.get('K_SERVICE', None) is not None
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
+# Secret Key handling
+if is_running_on_gcp():
+    # Running on Cloud Run - get secrets from Secret Manager
+    PROJECT_ID = os.environ.get('PROJECT_ID')
+    try:
+        client = secretmanager.SecretManagerServiceClient()
+        name = f"projects/{PROJECT_ID}/secrets/django-secret-key/versions/latest"
+        response = client.access_secret_version(request={"name": name})
+        SECRET_KEY = response.payload.data.decode("UTF-8")
+    except Exception as e:
+        print(f"Error accessing Secret Manager: {e}")
+        # Fallback to environment variable if Secret Manager fails
+        SECRET_KEY = os.environ.get('SECRET_KEY', 'fallback-insecure-key-for-emergencies')
+else:
+    # Local development - use the hard-coded key
+    SECRET_KEY = 'django-insecure-**ufr+c&*byb8zx64$1ih+ww2db665bkb2hrrx!gr7l!w9h*+&'
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-**ufr+c&*byb8zx64$1ih+ww2db665bkb2hrrx!gr7l!w9h*+&'
+# Debug settings
+DEBUG = not is_running_on_gcp()  # True in local dev, False in production
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Update ALLOWED_HOSTS for Cloud Run
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+if is_running_on_gcp():
+    ALLOWED_HOSTS.extend([
+        '.run.app',  # All Cloud Run URLs
+        os.environ.get('ALLOWED_HOST', ''),  # Custom domain if specified
+    ])
 
-ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -134,7 +157,7 @@ else:
 
 # Media files (user uploaded content)
 if DEBUG:
-    MEDIA_URL = '/media/'
+    MEDIA_URL = 'media/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 else:
     MEDIA_URL = f'https://storage.googleapis.com/{GS_BUCKET_NAME}/media/'
