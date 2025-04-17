@@ -46,7 +46,7 @@ DEBUG = not is_running_on_gcp()  # True in local dev, False in production
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 if is_running_on_gcp():
     ALLOWED_HOSTS.extend([
-        '.run.app',  # All Cloud Run URLs
+        '.run.app', 'blunttee.com', 'www.blunttee.com',  # All Cloud Run URLs
         os.environ.get('ALLOWED_HOST', ''),  # Custom domain if specified
     ])
 
@@ -149,6 +149,7 @@ if DEBUG:
     # Developing:  Django static system
     STATIC_URL = '/static/'
     STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 else:
     # Production: Cloud Storage
     GS_BUCKET_NAME = 'nome-del-tuo-bucket'
