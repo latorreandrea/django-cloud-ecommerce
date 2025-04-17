@@ -147,7 +147,7 @@ USE_TZ = True
 
 if DEBUG:
     # Developing:  Django static system
-    STATIC_URL = 'static/'
+    STATIC_URL = '/static/'
     STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 else:
     # Production: Cloud Storage
