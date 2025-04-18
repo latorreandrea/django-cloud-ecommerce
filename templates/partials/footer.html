@@ -1,33 +1,50 @@
-<footer class="footer fixed-bottom py-4 bg-dark text-white shadow-sm">
+<footer class="footer py-5 bg-dark text-white">
     <div class="container">
-        <div class="row">
-            <div class="col-md-4 mb-3">
-                <h5>About Us</h5>
-                <p>Django Cloud Ecommerce is a clothing store offering the latest fashion trends at affordable prices.</p>
+        <div class="row align-items-start">
+            <!-- Logo & About -->
+            <div class="col-md-3 mb-4 mb-md-0">
+                <a href="/" class="d-inline-block mb-2">
+                    <!-- logo -->
+                    <img src="/static/img/logo-white.png" alt="Django Cloud Ecommerce" style="max-width:120px;">
+                </a>
+                <p class="small mb-0">BluntTee: Your words. Our shirts. Coincidence? We think not.</p>
             </div>
-            <div class="col-md-4 mb-3">
-                <h5>Quick Links</h5>
+            <!-- Quick Links -->
+            <div class="col-md-3 mb-4 mb-md-0">
+                <h6 class="text-uppercase fw-bold mb-3">Shop</h6>
                 <ul class="list-unstyled">
-                    <li><a href="#" class="text-white">Home</a></li>
-                    <li><a href="#" class="text-white">Products</a></li>
-                    <li><a href="#" class="text-white">Special Offers</a></li>
-                    <li><a href="#" class="text-white">Contact Us</a></li>
+                    <li><a href="#" class="text-white-50 text-decoration-none">Home</a></li>
+                    <li><a href="#" class="text-white-50 text-decoration-none">Products</a></li>
+                    <li><a href="#" class="text-white-50 text-decoration-none">Special Offers</a></li>
+                    <li><a href="#" class="text-white-50 text-decoration-none">Contact Us</a></li>
                 </ul>
             </div>
-            <div class="col-md-4 mb-3">
-                <h5>Follow Us</h5>
-                <div class="social-links">
-                    <a href="#" class="text-white me-2"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="text-white me-2"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="text-white me-2"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="text-white"><i class="fab fa-pinterest"></i></a>
+            <!-- Policies -->
+            <div class="col-md-3 mb-4 mb-md-0">
+                <h6 class="text-uppercase fw-bold mb-3">Policies</h6>
+                <ul class="list-unstyled">
+                    <li><a href="#" class="text-white-50 text-decoration-none">Privacy Policy</a></li>
+                    <li><a href="#" class="text-white-50 text-decoration-none">Terms of Service</a></li>
+                    <li><a href="#" class="text-white-50 text-decoration-none">Returns & Exchanges</a></li>
+                    <li><a href="#" class="text-white-50 text-decoration-none">Shipping Info</a></li>
+                </ul>
+            </div>
+            <!-- Social -->
+            <div class="col-md-3 text-md-end">
+                <h6 class="text-uppercase fw-bold mb-3">Follow Us</h6>
+                <div class="d-flex justify-content-md-end justify-content-start gap-3 mb-2">
+                    <a href="#" class="text-white fs-4"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-white fs-4"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-white fs-4"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-white fs-4"><i class="fab fa-pinterest"></i></a>
                 </div>
             </div>
         </div>
-        <hr>
+        <hr class="border-secondary my-4">
         <div class="row">
             <div class="col-12 text-center">
-                <p class="mb-0">&copy; {% now 'Y' %} Django Cloud Ecommerce. All rights reserved.</p>
+                <p class="small mb-1">&copy; {% now 'Y' %} BluntTee. All rights reserved.</p>
+                <p class="small text-white-50 mb-0"></p>
             </div>
         </div>
     </div>
