@@ -22,7 +22,8 @@ steps:
     - 'managed'
     - '--allow-unauthenticated'
     - '--set-env-vars'
-    - 'PROJECT_ID=$PROJECT_ID'
+    - 'PROJECT_ID=freelance-andrea-latorre'
+    - 'GS_BUCKET_NAME=blunttee'
 
 # Images to be stored in Container Registry
 images:
