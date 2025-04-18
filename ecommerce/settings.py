@@ -152,7 +152,7 @@ if DEBUG:
     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 else:
     # Production: Cloud Storage
-    GS_BUCKET_NAME = 'nome-del-tuo-bucket'
+    GS_BUCKET_NAME = 'blunttee'
     STATICFILES_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
     STATIC_URL = f'https://storage.googleapis.com/{GS_BUCKET_NAME}/'
 
