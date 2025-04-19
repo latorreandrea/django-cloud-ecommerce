@@ -1,34 +1,18 @@
+{% load static %}
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top py-2">
     <div class="container">
         <!-- Logo -->
-        <a class="navbar-brand fw-bold" href="/">
-            <img src="/static/img/logo.png" alt="Logo" width="36" height="36" class="me-2 align-middle" style="object-fit:contain;">
+        <a class="navbar-brand" href="{% url 'home' %}">
+            <img src="{% static 'img/bt_logo_nobg.png' %}" class="me-2 align-middle navbar-logo" alt="Logo BluntTee">
         </a>
         <!-- Toggler -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+            <i class="fas fa-cog fa-lg"></i>
         </button>
         <!-- Navbar content -->
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <!-- Left: Shop dropdown -->
-            <ul class="navbar-nav me-3 mb-2 mb-lg-0">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle fw-semibold" href="#" id="navbarDropdownShop" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Shop
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownShop">
-                        <li><a class="dropdown-item" href="#">All Products</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#">T-Shirts</a></li>
-                        <li><a class="dropdown-item" href="#">Stickers</a></li>
-                        <li><a class="dropdown-item" href="#">Mugs</a></li>
-                        <li><a class="dropdown-item" href="#">Hoodies</a></li>
-                        <li><a class="dropdown-item" href="#">Accessories</a></li>
-                    </ul>
-                </li>
-            </ul>
             <!-- Center: Search bar -->
-            <form class="d-flex mx-auto flex-grow-1" style="max-width: 500px;">
+            <form class="search-bar d-flex mx-auto flex-grow-1">
                 <input class="form-control rounded-pill px-4" type="search" placeholder="Search for designs, artists, products..." aria-label="Search">
                 <button class="btn btn-link ms-n5" type="submit" style="z-index:2;">
                     <i class="fas fa-search"></i>
@@ -54,3 +38,37 @@
         </div>
     </div>
 </nav>
+<!-- Shop slider row -->
+<div class="shop-slider-wrapper bg-white shadow-sm">
+    <div class="d-flex flex-row align-items-center py-2">
+        <div class="shop-slider-title fw-bold text-primary ms-3 me-4" style="font-size:1.1em; min-width:90px;">
+            Cool Stuff
+        </div>
+        <div class="shop-slider d-flex flex-row flex-nowrap justify-content-center flex-grow-1">
+            <a class="btn btn-light mx-1 d-flex flex-column align-items-center" href="#" title="All Products">
+                <i class="fas fa-th-large fa-lg mb-1"></i>
+                <span style="font-size:0.75em;">All</span>
+            </a>
+            <a class="btn btn-light mx-1 d-flex flex-column align-items-center" href="#" title="T-Shirts">
+                <i class="fas fa-tshirt fa-lg mb-1"></i>
+                <span style="font-size:0.75em;">T-Shirts</span>
+            </a>
+            <a class="btn btn-light mx-1 d-flex flex-column align-items-center" href="#" title="Stickers">
+                <i class="fas fa-sticky-note fa-lg mb-1"></i>
+                <span style="font-size:0.75em;">Stickers</span>
+            </a>
+            <a class="btn btn-light mx-1 d-flex flex-column align-items-center" href="#" title="Mugs">
+                <i class="fas fa-mug-hot fa-lg mb-1"></i>
+                <span style="font-size:0.75em;">Mugs</span>
+            </a>
+            <a class="btn btn-light mx-1 d-flex flex-column align-items-center" href="#" title="Hoodies">
+                <i class="fas fa-user-astronaut fa-lg mb-1"></i>
+                <span style="font-size:0.75em;">Hoodies</span>
+            </a>
+            <a class="btn btn-light mx-1 d-flex flex-column align-items-center" href="#" title="Accessories">
+                <i class="fas fa-gem fa-lg mb-1"></i>
+                <span style="font-size:0.75em;">Accessories</span>
+            </a>
+        </div>
+    </div>
+</div>
