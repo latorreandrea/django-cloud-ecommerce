@@ -1,5 +1,5 @@
 {% load static %}
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top py-2">
+<nav class="navbar navbar-expand-lg navbar-light shadow-sm sticky-top py-2">
     <div class="container">
         <!-- Logo -->
         <a class="navbar-brand" href="{% url 'home' %}">
@@ -13,25 +13,25 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Center: Search bar -->
             <form class="search-bar d-flex mx-auto flex-grow-1">
-                <input class="form-control rounded-pill px-4" type="search" placeholder="Search for designs, artists, products..." aria-label="Search">
-                <button class="btn btn-link ms-n5" type="submit" style="z-index:2;">
+                <input class="form-control rounded-pill px-4 my-3" type="search" placeholder="Search for designs, artists, products..." aria-label="Search">
+                <button class="btn btn-link ms-n5 my-3" type="submit">
                     <i class="fas fa-search"></i>
                 </button>
             </form>
             <!-- Right: Icons and Sign Up -->
             <div class="d-flex align-items-center ms-auto">
-                <a href="#" class="btn btn-link text-dark position-relative me-2" title="Wishlist">
+                <a href="#" class="btn btn-link text-black position-relative me-2" title="Wishlist">
                     <i class="far fa-heart fa-lg"></i>
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:0.7em;">2</span>
                 </a>
-                <a href="#" class="btn btn-link text-dark position-relative me-2" title="Cart">
+                <a href="#" class="btn btn-link text-black position-relative me-2" title="Cart">
                     <i class="fas fa-shopping-cart fa-lg"></i>
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark" style="font-size:0.7em;">0</span>
                 </a>
-                <a href="#" class="btn btn-link text-dark me-2" title="Account">
+                <a href="#" class="btn btn-link text-text-black me-2" title="Account">
                     <i class="fas fa-user fa-lg"></i>
                 </a>
-                <a href="#" class="btn btn-primary rounded-pill px-3 fw-semibold ms-2">
+                <a href="#" class="btn call-action rounded-pill px-4 fw-semibold ms-2">
                     Sign Up
                 </a>
             </div>
@@ -39,35 +39,35 @@
     </div>
 </nav>
 <!-- Shop slider row -->
-<div class="shop-slider-wrapper bg-white shadow-sm">
-    <div class="d-flex flex-row align-items-center py-2">
-        <div class="shop-slider-title fw-bold text-primary ms-3 me-4" style="font-size:1.1em; min-width:90px;">
+<div class="shop-slider-wrapper shadow-sm">
+    <div class="d-flex flex-row align-items-center pb-4">
+        <h6 class="shop-slider-title fw-bold ms-3 mt-4">
             Cool Stuff
-        </div>
+        </h6>
         <div class="shop-slider d-flex flex-row flex-nowrap justify-content-center flex-grow-1">
-            <a class="btn btn-light mx-1 d-flex flex-column align-items-center" href="#" title="All Products">
-                <i class="fas fa-th-large fa-lg mb-1"></i>
+            <a class="btn btn-light mx-1 d-flex flex-column align-items-center bounce-hover" href="#" title="All Products">
                 <span style="font-size:0.75em;">All</span>
+                <i class="fas fa-th-large fa-lg mt-2"></i>
             </a>
-            <a class="btn btn-light mx-1 d-flex flex-column align-items-center" href="#" title="T-Shirts">
-                <i class="fas fa-tshirt fa-lg mb-1"></i>
+            <a class="btn btn-light mx-1 d-flex flex-column align-items-center bounce-hover" href="#" title="T-Shirts">
                 <span style="font-size:0.75em;">T-Shirts</span>
+                <i class="fas fa-tshirt fa-lg mt-2"></i>
             </a>
-            <a class="btn btn-light mx-1 d-flex flex-column align-items-center" href="#" title="Stickers">
-                <i class="fas fa-sticky-note fa-lg mb-1"></i>
+            <a class="btn btn-light mx-1 d-flex flex-column align-items-center bounce-hover" href="#" title="Stickers">
                 <span style="font-size:0.75em;">Stickers</span>
+                <i class="fas fa-sticky-note fa-lg mt-2"></i>
             </a>
-            <a class="btn btn-light mx-1 d-flex flex-column align-items-center" href="#" title="Mugs">
-                <i class="fas fa-mug-hot fa-lg mb-1"></i>
+            <a class="btn btn-light mx-1 d-flex flex-column align-items-center bounce-hover" href="#" title="Mugs">
                 <span style="font-size:0.75em;">Mugs</span>
+                <i class="fas fa-mug-hot fa-lg mt-2"></i>                
             </a>
-            <a class="btn btn-light mx-1 d-flex flex-column align-items-center" href="#" title="Hoodies">
-                <i class="fas fa-user-astronaut fa-lg mb-1"></i>
+            <a class="btn btn-light mx-1 d-flex flex-column align-items-center bounce-hover" href="#" title="Hoodies">
                 <span style="font-size:0.75em;">Hoodies</span>
+                <i class="fas fa-user-astronaut fa-lg mt-2"></i>
             </a>
-            <a class="btn btn-light mx-1 d-flex flex-column align-items-center" href="#" title="Accessories">
-                <i class="fas fa-gem fa-lg mb-1"></i>
+            <a class="btn btn-light mx-1 d-flex flex-column align-items-center bounce-hover" href="#" title="Accessories">
                 <span style="font-size:0.75em;">Accessories</span>
+                <i class="fas fa-gem fa-lg mt-2"></i>
             </a>
         </div>
     </div>

@@ -25,6 +25,7 @@
     {% endblock %}
 
     {% block extra_js %}
+        <script src="{% static 'js/main.js' %}"></script>
     {% endblock %}
 
     <title>    
@@ -56,6 +57,10 @@
 
     {% block content %}
     {% endblock %}
+    <!-- botton scroll-to-top -->
+        <button id="scrollToTopBtn" class="btn btn-dark rounded-circle shadow">
+            <i class="fas fa-arrow-up"></i>
+        </button>
 
     {% block footer %}
         {% include 'partials/footer.html' %}

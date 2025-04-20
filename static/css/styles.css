@@ -15,10 +15,13 @@ h1, h2, h3, h4, h5, h6, .navbar-brand {
 }
 
 /* Navbar */
+.navbar {
+    background-color: #1D3557 !important
+}
 .navbar-logo {
     object-fit: contain;
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
 }
 
 .navbar-toggler {
@@ -29,9 +32,11 @@ h1, h2, h3, h4, h5, h6, .navbar-brand {
 .search-bar {
     max-width: 100vw;
     width: 90%;
+    z-index:2    
 }
 
 .shop-slider-wrapper {
+    background-color: #FFCC00 !important;
     width: 100vw;
     max-width: 100vw;
     overflow-x: auto;
@@ -50,4 +55,79 @@ h1, h2, h3, h4, h5, h6, .navbar-brand {
 }
 .shop-slider a {
     white-space: nowrap;
+}
+
+.call-action {
+    background-color: #FFCC00 !important;
+}
+.call-action:hover,
+.call-action:focus {
+    background-color: #E63946 !important;
+    color: #fff !important;
+}
+
+.shop-slider .btn-light {
+    background: transparent !important;
+    color: #000 !important;
+    border: none;
+    transition: color 0.2s;
+}
+
+.shop-slider .btn-light .fa,
+.shop-slider .btn-light .fas,
+.shop-slider .btn-light .far {
+    color: #000 !important;
+    transition: color 0.2s;
+}
+
+.shop-slider .btn-light:hover,
+.shop-slider .btn-light:focus {
+    color: #E63946 !important;
+}
+
+.shop-slider .btn-light:hover .fa,
+.shop-slider .btn-light:hover .fas,
+.shop-slider .btn-light:hover .far {
+    color: #E63946 !important;
+}
+/* Banner */
+.banner-bar {
+    background-color: #FFCC00 !important;
+    color: #000 !important;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+.banner-bar a, .banner-bar p {
+    color: #000 !important;
+}
+
+/* Scrool to top */
+#scrollToTopBtn {
+    background: #1D3557 !important;
+    position:fixed; 
+    bottom:24px; 
+    left:85%; 
+    z-index:1050; 
+    display:none;
+    color: #fff !important;
+    border: none;
+}
+#scrollToTopBtn:hover {
+    background: #FFCC00 !important;
+    color: #1D3557 !important;
+}
+
+/* Animation */
+
+@keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+}
+  
+  .bounce-hover:hover {
+    animation: bounce 0.5s ease-out;
 }
