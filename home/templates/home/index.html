@@ -7,8 +7,29 @@
 {% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h1>Welcome to our E-commerce Store</h1>
-    <p class="lead">Find the best products at the best prices.</p>
+<!-- Hero section -->
+<div class="container-fluid p-0">
+    <div class="hero-image d-flex align-items-center justify-content-center text-center">
+        <div class="w-100 hero-text-wrapper">
+            <h1 class="display-4 text-white fw-bold">BluntTee – Wear Your Wit!</h1>
+            <p class="lead text-white">Let Your T-Shirt Do the Talking</p>
+            <a href="#" class="btn btn-warning btn-lg mt-3 fw-semibold px-4">Shop Now</a>
+        </div>
+    </div>
+</div>
+
+<div class="row my-5">
+    <div class="col-md-6 my-1">
+        <div class="card-blue p-5 text-white fade-in-left">
+            <h2>Card Left</h2>
+            <p>Questa è una card con sfondo SVG a sinistra.</p>
+        </div>
+    </div>
+    <div class="col-md-6 my-1">
+        <div class="card-yellow p-5 text-white fade-in-right">
+            <h2>Card Right</h2>
+            <p>Questa è una card con sfondo SVG a destra.</p>
+        </div>
+    </div>
 </div>
 {% endblock %}

@@ -100,7 +100,16 @@ h1, h2, h3, h4, h5, h6, .navbar-brand {
 .banner-bar a, .banner-bar p {
     color: #000 !important;
 }
+/* Hero */
+.hero-image {
+    min-height: 350px; 
+    background: url('{% static "img/hero.jpg" %}') center/cover no-repeat;
+}
 
+.hero-text-wrapper {
+    background: rgba(29,53,87,0.55);
+    padding: 3rem 1rem;
+}
 /* Scrool to top */
 #scrollToTopBtn {
     background: #1D3557 !important;
@@ -117,6 +126,27 @@ h1, h2, h3, h4, h5, h6, .navbar-brand {
     color: #1D3557 !important;
 }
 
+/* Cards */
+.card-blue, .card-yellow {
+    min-height: 250px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+
+.card-blue {
+    background-image: url("/static/img/blue_bg.png");
+    color: #fff;
+}
+
+
+.card-yellow {
+    background-image: url("/static/img/yellow_bg.png");
+    color: #1D3557;
+}
+
 /* Animation */
 
 @keyframes bounce {
@@ -130,4 +160,39 @@ h1, h2, h3, h4, h5, h6, .navbar-brand {
   
   .bounce-hover:hover {
     animation: bounce 0.5s ease-out;
+}
+
+
+/* fade in animation */
+.fade-in-on-scroll {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.6s ease, transform 0.6s cubic-bezier(.4,0,.2,1);
+}
+
+.fade-in-on-scroll.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Fade in from left */
+.fade-in-left {
+    opacity: 0;
+    transform: translateX(-40px);
+    transition: opacity 0.6s ease, transform 0.6s cubic-bezier(.4,0,.2,1);
+}
+.fade-in-left.visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Fade in from right */
+.fade-in-right {
+    opacity: 0;
+    transform: translateX(40px);
+    transition: opacity 0.6s ease, transform 0.6s cubic-bezier(.4,0,.2,1);
+}
+.fade-in-right.visible {
+    opacity: 1;
+    transform: translateX(0);
 }

@@ -20,4 +20,22 @@ document.addEventListener('DOMContentLoaded', function() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     }
+
+
+    // Fade-in on scroll for cards
+    const fadeEls = document.querySelectorAll('.fade-in-on-scroll, .fade-in-left, .fade-in-right');
+    if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries, obs) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    obs.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15 });
+        fadeEls.forEach(el => observer.observe(el));
+    } else {
+        // Fallback: show all if IntersectionObserver not supported
+        fadeEls.forEach(el => el.classList.add('visible'));
+    }
 });
