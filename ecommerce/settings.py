@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Developed apps
     'home',
+    'products',
     # Third-party apps
     'storages'
 ]
