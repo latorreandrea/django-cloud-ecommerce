@@ -10,5 +10,12 @@ class ProductListView(ListView):
     paginate_by = 12  # Number of products per page
 
     def get_queryset(self):
-        return Product.objects.all()
+        queryset = Product.objects.all()
+        query = self.request.GET.get('q')
+        category = self.request.GET.get('category')
+        if query:
+            queryset = queryset.filter(name__icontains=query)
+        if category:
+            queryset = queryset.filter(category__name__iexact=category)
+        return queryset
 

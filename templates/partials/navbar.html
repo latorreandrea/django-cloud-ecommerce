@@ -12,8 +12,8 @@
         <!-- Navbar content -->
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Center: Search bar -->
-            <form class="search-bar d-flex mx-auto flex-grow-1">
-                <input class="form-control rounded-pill px-4 my-3" type="search" placeholder="Search for designs, artists, products..." aria-label="Search">
+            <form class="search-bar d-flex mx-auto flex-grow-1" method="get" action="{% url 'products_list' %}">
+                <input class="form-control rounded-pill px-4 my-3" type="search" name="q" placeholder="Search for designs, artists, products..." aria-label="Search" value="{{ request.GET.q }}">
                 <button class="btn btn-link ms-n5 my-3" type="submit">
                     <i class="fas fa-search"></i>
                 </button>
@@ -45,27 +45,27 @@
             Cool Stuff
         </h6>
         <div class="shop-slider d-flex flex-row flex-nowrap justify-content-center flex-grow-1">
-            <a class="btn btn-light mx-1 d-flex flex-column align-items-center bounce-hover" href="#" title="All Products">
+            <a class="btn btn-light mx-1 d-flex flex-column align-items-center bounce-hover" href="{% url 'products_list' %}" title="All Products">
                 <span style="font-size:0.75em;">All</span>
                 <i class="fas fa-th-large fa-lg mt-2"></i>
             </a>
-            <a class="btn btn-light mx-1 d-flex flex-column align-items-center bounce-hover" href="#" title="T-Shirts">
+            <a class="btn btn-light mx-1 d-flex flex-column align-items-center bounce-hover" href="{% url 'products_list' %}?category=T-Shirts" title="T-Shirts">
                 <span style="font-size:0.75em;">T-Shirts</span>
                 <i class="fas fa-tshirt fa-lg mt-2"></i>
             </a>
-            <a class="btn btn-light mx-1 d-flex flex-column align-items-center bounce-hover" href="#" title="Stickers">
+            <a class="btn btn-light mx-1 d-flex flex-column align-items-center bounce-hover" href="{% url 'products_list' %}?category=Stickers" title="Stickers">
                 <span style="font-size:0.75em;">Stickers</span>
                 <i class="fas fa-sticky-note fa-lg mt-2"></i>
             </a>
-            <a class="btn btn-light mx-1 d-flex flex-column align-items-center bounce-hover" href="#" title="Mugs">
+            <a class="btn btn-light mx-1 d-flex flex-column align-items-center bounce-hover" href="{% url 'products_list' %}?category=Mugs" title="Mugs">
                 <span style="font-size:0.75em;">Mugs</span>
                 <i class="fas fa-mug-hot fa-lg mt-2"></i>                
             </a>
-            <a class="btn btn-light mx-1 d-flex flex-column align-items-center bounce-hover" href="#" title="Hoodies">
+            <a class="btn btn-light mx-1 d-flex flex-column align-items-center bounce-hover" href="{% url 'products_list' %}?category=Hoodies" title="Hoodies">
                 <span style="font-size:0.75em;">Hoodies</span>
                 <i class="fas fa-user-astronaut fa-lg mt-2"></i>
             </a>
-            <a class="btn btn-light mx-1 d-flex flex-column align-items-center bounce-hover" href="#" title="Accessories">
+            <a class="btn btn-light mx-1 d-flex flex-column align-items-center bounce-hover" href="{% url 'products_list' %}?category=Accessories" title="Accessories">
                 <span style="font-size:0.75em;">Accessories</span>
                 <i class="fas fa-gem fa-lg mt-2"></i>
             </a>

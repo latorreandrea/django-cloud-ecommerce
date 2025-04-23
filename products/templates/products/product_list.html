@@ -1,7 +1,16 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container">
-    <h1>Products</h1>
+    <div class="row text-center my-2">
+        {% if request.GET.q %}
+            <h1>Cool stuff we found for:</h1> <strong>{{ request.GET.q }}</strong>
+        {% elif request.GET.category %}
+            <h1>Because you clearly need more {{ request.GET.category }}</h1>
+        {% else %}
+            <h1>All the cool stuff in one place</h1>
+        {% endif %}      
+    </div>
+    
     <div class="row">
         {% for product in products %}
             <div class="col-md-4 mb-4">
