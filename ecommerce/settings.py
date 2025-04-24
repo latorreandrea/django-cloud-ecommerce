@@ -155,7 +155,7 @@ else:
     # Production: Cloud Storage
     GS_BUCKET_NAME = 'blunttee'
     STATICFILES_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
-    STATIC_URL = f'https://storage.googleapis.com/{GS_BUCKET_NAME}/'
+    STATIC_URL = f'https://storage.googleapis.com/{GS_BUCKET_NAME}/static/'
 
 # Media files (user uploaded content)
 if DEBUG:
