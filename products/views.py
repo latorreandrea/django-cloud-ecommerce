@@ -4,6 +4,9 @@ from django.shortcuts import render
 
 # Create your views here.
 class ProductListView(ListView):
+    """
+    View to list all products with pagination and search functionality.
+    """
     model = Product
     template_name = 'products/product_list.html'
     context_object_name = 'products'
@@ -19,3 +22,12 @@ class ProductListView(ListView):
             queryset = queryset.filter(category__name__iexact=category)
         return queryset
 
+
+class ProductDetailView(DetailView):
+    """
+    View to display the details of a single product.
+    It includes related images and colors.
+    """
+    model = Product
+    template_name = 'products/product_detail.html'
+    context_object_name = 'product'

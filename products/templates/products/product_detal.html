@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-6">
+            {% if product.images.all %}
+                <div id="productImagesCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        {% for image in product.images.all %}
+                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                            <img src="{{ image.image.url }}" class="d-block w-100" alt="{{ product.name }}">
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% if product.images.count > 1 %}
+                    <button class="carousel-control-prev" type="button" data-bs-target="#productImagesCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#productImagesCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                    {% endif %}
+                </div>
+            {% else %}
+                <img src="https://via.placeholder.com/500x500?text=No+Image" class="img-fluid" alt="No image">
+            {% endif %}
+        </div>
+        <div class="col-md-6">
+            <h2 class="fw-bold">{{ product.name }}</h2>
+            <p class="lead">{{ product.description }}</p>
+            <p><strong>Price:</strong> {{ product.price }}€</p>
+            {% if product.colors.all %}
+                <p><strong>Available colors:</strong>
+                    {% for color in product.colors.all %}
+                        <span class="badge bg-secondary">{{ color.name }}</span>
+                    {% endfor %}
+                </p>
+            {% endif %}
+            <!-- Aggiungi qui pulsanti per aggiungere al carrello, wishlist, ecc. -->
+            <a href="#" class="btn btn-warning btn-lg mt-3 fw-semibold px-4">Add to Cart</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
