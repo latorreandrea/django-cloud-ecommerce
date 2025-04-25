@@ -14,16 +14,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy project files
 COPY . .
 
-# # Collect static files
+# Collect static files
 RUN python manage.py collectstatic --noinput
-
-# Run as non-root user for security
-RUN useradd -m appuser
-USER appuser
-
-# Set environment variables
-ENV PORT=8080
-ENV PYTHONUNBUFFERED=1
 
 # Copy entrypoint script and set permissions BEFORE switching user
 COPY entrypoint.sh /entrypoint.sh
@@ -33,6 +25,9 @@ RUN chmod +x /entrypoint.sh
 RUN useradd -m appuser
 USER appuser
 
+# Set environment variables
+ENV PORT=8080
+ENV PYTHONUNBUFFERED=1
+
 ENTRYPOINT ["/entrypoint.sh"]
-# Run gunicorn
 CMD gunicorn ecommerce.wsgi:application --bind 0.0.0.0:$PORT
