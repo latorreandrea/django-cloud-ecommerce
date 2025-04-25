@@ -16,10 +16,10 @@ Django==5.2
 django-storages==1.14.6
 fasteners==0.19
 frozenlist==1.6.0
-google-auth==2.39.0
+
 google-api-core==2.24.2
 google-apitools==0.5.32
-gcs-oauth2-boto-plugin==3.2
+
 google-auth-httplib2==0.2.0
 google-cloud-core==2.4.3
 google-cloud-secret-manager==2.23.2
@@ -31,7 +31,6 @@ googleapis-common-protos==1.70.0
 grpc-google-iam-v1==0.14.2
 grpcio==1.71.0
 grpcio-status==1.71.0
-gsutil==5.34
 gunicorn==23.0.0
 httplib2==0.20.4
 idna==3.10
