@@ -28,6 +28,10 @@ ENV PYTHONUNBUFFERED=1
 # read the entrypoint script
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
+# Run as non-root user for security
+RUN useradd -m appuser
+USER appuser
+
 ENTRYPOINT ["/entrypoint.sh"]
 
 # Run gunicorn
