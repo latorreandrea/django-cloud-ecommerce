@@ -1,3 +1,4 @@
+{% load static %}
 <footer class="footer py-5 bg-dark text-white">
     <div class="container">
         <div class="row align-items-start">
@@ -5,7 +6,7 @@
             <div class="col-md-3 mb-4 mb-md-0">
                 <a href="/" class="d-inline-block mb-2">
                     <!-- logo -->
-                    <img src="/static/img/bt_logo_nobg.png" alt="Logo BluntTee" style="max-width:120px;">
+                    <img src="{% static 'img/bt_logo_nobg.png' %}" alt="Logo BluntTee" style="max-width:120px;">
                 </a>
                 <p class="small mb-0">BluntTee: Your words. Our shirts. Coincidence? We think not.</p>
             </div>

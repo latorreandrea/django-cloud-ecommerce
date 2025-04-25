@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os  # Add os import for os.path.join
 import google.cloud.secretmanager as secretmanager
+import dj_database_url
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -28,17 +29,35 @@ if is_running_on_gcp():
     PROJECT_ID = os.environ.get('PROJECT_ID')
     try:
         client = secretmanager.SecretManagerServiceClient()
-        name = f"projects/{PROJECT_ID}/secrets/django-secret-key/versions/latest"
-        response = client.access_secret_version(request={"name": name})
-        SECRET_KEY = response.payload.data.decode("UTF-8")
+        # GET PROJECT_ID from Secret Manager
+        project_id_secret = f"projects/{PROJECT_ID}/secrets/blunttee_PROJECT_ID/versions/latest"
+        project_id_response = client.access_secret_version(request={"name": project_id_secret})
+        PROJECT_ID = project_id_response.payload.data.decode("UTF-8")
+        # GET DATABASE_URL from Secret Manager
+        db_url_secret = f"projects/{PROJECT_ID}/secrets/blunttee_dj_database_url/versions/latest"
+        db_url_response = client.access_secret_version(request={"name": db_url_secret})
+        DATABASE_URL = db_url_response.payload.data.decode("UTF-8")
     except Exception as e:
         print(f"Error accessing Secret Manager: {e}")
         # Fallback to environment variable if Secret Manager fails
         SECRET_KEY = os.environ.get('SECRET_KEY', 'fallback-insecure-key-for-emergencies')
-else:
-    # Local development - use the hard-coded key
-    SECRET_KEY = 'django-insecure-**ufr+c&*byb8zx64$1ih+ww2db665bkb2hrrx!gr7l!w9h*+&'
+        DATABASE_URL = os.environ.get('DATABASE_URL', '')
+    
+    # Set up database connection
+    DATABASES = {
+        'default': dj_database_url.parse(DATABASE_URL)
+    }
 
+else:
+    # Local development - use local settings
+    SECRET_KEY = 'django-insecure-**ufr+c&*byb8zx64$1ih+ww2db665bkb2hrrx!gr7l!w9h*+&'
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+    
 # Debug settings
 DEBUG = not is_running_on_gcp()  # True in local dev, False in production
 
@@ -100,16 +119,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ecommerce.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
 
 
 # Password validation

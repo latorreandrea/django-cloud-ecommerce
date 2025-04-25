@@ -25,5 +25,10 @@ USER appuser
 ENV PORT=8080
 ENV PYTHONUNBUFFERED=1
 
+# read the entrypoint script
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+
 # Run gunicorn
 CMD gunicorn ecommerce.wsgi:application --bind 0.0.0.0:$PORT
