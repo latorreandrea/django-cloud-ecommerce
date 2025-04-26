@@ -18,18 +18,206 @@
     </div>
 </div>
 
-<div class="row my-5">
-    <div class="col-md-6 my-1">
-        <div class="card-blue p-5 text-white fade-in-left">
-            <h2>Card Left</h2>
-            <p>Questa è una card con sfondo SVG a sinistra.</p>
+<!-- 1. Hero Section (Secondary) -->
+<section class="py-5 text-center bg-warning bg-gradient">
+    <div class="container">
+        <h2 class="display-6 fw-bold mb-3">Warning: Your wardrobe is about to get a whole lot sassier.</h2>
+        <a href="#" class="btn btn-dark btn-lg fw-semibold px-4">Shop the Madness</a>
+    </div>
+</section>
+
+<!-- 2. Featured Collections -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="fw-bold text-center mb-5">Featured Collections</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card card-blue">
+                    <div class="card-body d-flex flex-column justify-content-end">
+                        <h3 class="card-title">Freshly Baked Tees</h3>
+                        <p class="card-text">New Arrivals</p>
+                        <a href="#" class="btn btn-warning mt-3 fw-semibold">Shop New</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card card-yellow">
+                    <div class="card-body d-flex flex-column justify-content-end">
+                        <h3 class="card-title">Fan Favorites</h3>
+                        <p class="card-text">Best Sellers</p>
+                        <a href="#" class="btn btn-dark mt-3 fw-semibold">See Best Sellers</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body d-flex flex-column justify-content-end">
+                        <h3 class="card-title">Mood Swings Included</h3>
+                        <p class="card-text">Collections by Theme: Nerd, Work, Life Struggles, etc.</p>
+                        <a href="#" class="btn btn-outline-dark mt-3 fw-semibold">Browse Themes</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="col-md-6 my-1">
-        <div class="card-yellow p-5 text-white fade-in-right">
-            <h2>Card Right</h2>
-            <p>Questa è una card con sfondo SVG a destra.</p>
+</section>
+
+<!-- 3. Best Sellers -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="fw-bold text-center mb-4">These Tees Broke the Internet (Almost)</h2>
+        <div class="row g-4">
+            <!-- Example best seller cards, replace with dynamic content as needed -->
+            <div class="col-md-3">
+                <div class="card h-100 shadow">
+                    <img src="{% static 'img/bestseller1.jpg' %}" class="card-img-top" alt="Best Seller 1">
+                    <div class="card-body">
+                        <h5 class="card-title">Sassy Cat Tee</h5>
+                        <p class="card-text">Everyone's favorite meme on a tee.</p>
+                        <a href="#" class="btn btn-warning btn-sm fw-semibold">Shop Now</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card h-100 shadow">
+                    <img src="{% static 'img/bestseller2.jpg' %}" class="card-img-top" alt="Best Seller 2">
+                    <div class="card-body">
+                        <h5 class="card-title">Monday Mood Tee</h5>
+                        <p class="card-text">For those who need coffee and a hug.</p>
+                        <a href="#" class="btn btn-warning btn-sm fw-semibold">Shop Now</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card h-100 shadow">
+                    <img src="{% static 'img/bestseller3.jpg' %}" class="card-img-top" alt="Best Seller 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Nerd Alert Tee</h5>
+                        <p class="card-text">Geek out in style.</p>
+                        <a href="#" class="btn btn-warning btn-sm fw-semibold">Shop Now</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card h-100 shadow">
+                    <img src="{% static 'img/bestseller4.jpg' %}" class="card-img-top" alt="Best Seller 4">
+                    <div class="card-body">
+                        <h5 class="card-title">Life Struggle Tee</h5>
+                        <p class="card-text">Because adulting is hard.</p>
+                        <a href="#" class="btn btn-warning btn-sm fw-semibold">Shop Now</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
+</section>
+
+<!-- 4. Why You'll Love Us -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="fw-bold text-center mb-4">Because Life’s Too Short for Boring Clothes:</h2>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <ul class="list-group list-group-flush fs-5">
+                    <li class="list-group-item bg-light">Premium cotton that hugs you just right</li>
+                    <li class="list-group-item bg-light">Prints tougher than your Monday mood</li>
+                    <li class="list-group-item bg-light">Shipping faster than you can say "add to cart"</li>
+                    <li class="list-group-item bg-light">Money-back guarantee (but you won’t need it, duh)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 5. Customer Reviews -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="fw-bold text-center mb-4">Real People, Real Sass.</h2>
+        <div class="row g-4">
+            <!-- Example reviews, replace with dynamic content as needed -->
+            <div class="col-md-4">
+                <div class="card h-100 shadow">
+                    <div class="card-body">
+                        <p class="card-text">"Literally the only shirt I want to wear now. 10/10 sass."</p>
+                        <h6 class="card-subtitle text-muted">– Alex P.</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 shadow">
+                    <div class="card-body">
+                        <p class="card-text">"Got three, my friends want them all. Insta flex achieved."</p>
+                        <h6 class="card-subtitle text-muted">– Jamie L.</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 shadow">
+                    <div class="card-body">
+                        <p class="card-text">"Comfy, funny, and my mom even laughed. Will buy again!"</p>
+                        <h6 class="card-subtitle text-muted">– Taylor R.</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 6. Insta-Party / Customer Love -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="fw-bold text-center mb-4">Caught Wearing Us in Public (And Loving It)</h2>
+        <p class="text-center mb-4">Your selfies + our tees = a match made in meme heaven.</p>
+        <div class="row g-3 justify-content-center">
+            <!-- Example Instagram-style images, replace with real ones -->
+            <div class="col-4 col-md-2">
+                <img src="{% static 'img/insta1.jpg' %}" class="img-fluid rounded shadow-sm" alt="Customer Selfie 1">
+            </div>
+            <div class="col-4 col-md-2">
+                <img src="{% static 'img/insta2.jpg' %}" class="img-fluid rounded shadow-sm" alt="Customer Selfie 2">
+            </div>
+            <div class="col-4 col-md-2">
+                <img src="{% static 'img/insta3.jpg' %}" class="img-fluid rounded shadow-sm" alt="Customer Selfie 3">
+            </div>
+            <div class="col-4 col-md-2">
+                <img src="{% static 'img/insta4.jpg' %}" class="img-fluid rounded shadow-sm" alt="Customer Selfie 4">
+            </div>
+            <div class="col-4 col-md-2">
+                <img src="{% static 'img/insta5.jpg' %}" class="img-fluid rounded shadow-sm" alt="Customer Selfie 5">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 7. About Us -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="fw-bold text-center mb-4">We’re Just Here to Make You LOL (and Look Good Doing It)</h2>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <p class="lead text-center">
+                    Born from too much coffee, bad puns, and a serious passion for comfy t-shirts.<br>
+                    Our mission: Make you laugh, make you comfy, and maybe make your mom roll her eyes.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 8. Newsletter Sign-up -->
+<section class="py-5 bg-warning bg-gradient">
+    <div class="container">
+        <h2 class="fw-bold text-center mb-3">Join Our Cult (We Mean... Mailing List)</h2>
+        <p class="text-center mb-4">Get 10% off your first order and maybe an unsolicited dad joke.</p>
+        <form class="row justify-content-center">
+            <div class="col-md-6 col-lg-4">
+                <input type="email" class="form-control form-control-lg mb-2" placeholder="Your email address" required>
+            </div>
+            <div class="col-md-2 col-lg-2">
+                <button type="submit" class="btn btn-dark btn-lg w-100 fw-semibold">Sign Up</button>
+            </div>
+        </form>
+    </div>
+</section>
+
 {% endblock %}

@@ -3,15 +3,22 @@
     <div class="container">
         <div class="row align-items-start">
             <!-- Logo & About -->
-            <div class="col-md-3 mb-4 mb-md-0">
+            <div class="col-12 col-md-2 mb-4 mb-md-0 d-flex flex-column align-items-md-start align-items-center">
                 <a href="/" class="d-inline-block mb-2">
-                    <!-- logo -->
-                    <img src="{% static 'img/bt_logo_nobg.png' %}" alt="Logo BluntTee" style="max-width:120px;">
+                    <img src="{% static 'img/bt_logo_nobg.png' %}" alt="Logo BluntTee" style="max-width:100px;">
                 </a>
-                <p class="small mb-0">BluntTee: Your words. Our shirts. Coincidence? We think not.</p>
+                <p class="small mb-0 text-center text-md-start">BluntTee: Your words. Our shirts. Coincidence? We think not.</p>
             </div>
-            <!-- Quick Links -->
-            <div class="col-md-3 mb-4 mb-md-0">
+            <!-- Story Links -->
+            <div class="col-6 col-md-2 mb-4 mb-md-0">
+                <h6 class="text-uppercase fw-bold mb-3">Our Story</h6>
+                <ul class="list-unstyled">
+                    <li><a href="#" class="text-white-50 text-decoration-none">About Us</a></li>
+                    <li><a href="#" class="text-white-50 text-decoration-none">Our Mission</a></li>
+                </ul>
+            </div>
+            <!-- Shop Links -->
+            <div class="col-6 col-md-2 mb-4 mb-md-0">
                 <h6 class="text-uppercase fw-bold mb-3">Shop</h6>
                 <ul class="list-unstyled">
                     <li><a href="#" class="text-white-50 text-decoration-none">Home</a></li>
@@ -21,19 +28,27 @@
                 </ul>
             </div>
             <!-- Policies -->
-            <div class="col-md-3 mb-4 mb-md-0">
-                <h6 class="text-uppercase fw-bold mb-3">Policies</h6>
+            <div class="col-6 col-md-2 mb-4 mb-md-0">
+                <h6 class="text-uppercase fw-bold mb-3">Policies & FAQs</h6>
                 <ul class="list-unstyled">
                     <li><a href="#" class="text-white-50 text-decoration-none">Privacy Policy</a></li>
                     <li><a href="#" class="text-white-50 text-decoration-none">Terms of Service</a></li>
-                    <li><a href="#" class="text-white-50 text-decoration-none">Returns & Exchanges</a></li>
-                    <li><a href="#" class="text-white-50 text-decoration-none">Shipping Info</a></li>
+                    <li><a href="#" class="text-white-50 text-decoration-none">FAQs</a></li>
+                    <li><a href="#" class="text-white-50 text-decoration-none">Shipping & Returns</a></li>
+                </ul>
+            </div>
+            <!-- Contact -->
+            <div class="col-6 col-md-2 mb-4 mb-md-0">
+                <h6 class="text-uppercase fw-bold mb-3">Contact</h6>
+                <ul class="list-unstyled">
+                    <li><a href="#" class="text-white-50 text-decoration-none">Contact</a></li>
+                    <li><a href="#" class="text-white-50 text-decoration-none">Support</a></li>
                 </ul>
             </div>
             <!-- Social -->
-            <div class="col-md-3 text-md-end">
-                <h6 class="text-uppercase fw-bold mb-3">Follow Us</h6>
-                <div class="d-flex justify-content-md-end justify-content-start gap-3 mb-2">
+            <div class="col-12 col-md-2 mt-4 mt-md-0 d-flex flex-column align-items-md-end align-items-center">
+                <h6 class="text-uppercase fw-bold mb-3">Stalk us on:</h6>
+                <div class="d-flex gap-3 mb-2">
                     <a href="#" class="text-white fs-4"><i class="fab fa-facebook-f"></i></a>
                     <a href="#" class="text-white fs-4"><i class="fab fa-twitter"></i></a>
                     <a href="#" class="text-white fs-4"><i class="fab fa-instagram"></i></a>
@@ -45,7 +60,6 @@
         <div class="row">
             <div class="col-12 text-center">
                 <p class="small mb-1">&copy; {% now 'Y' %} BluntTee. All rights reserved.</p>
-                <p class="small text-white-50 mb-0"></p>
             </div>
         </div>
     </div>
