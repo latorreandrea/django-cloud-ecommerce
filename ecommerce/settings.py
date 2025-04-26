@@ -14,6 +14,7 @@ from pathlib import Path
 import os  # Add os import for os.path.join
 import google.cloud.secretmanager as secretmanager
 import dj_database_url
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -23,33 +24,28 @@ def is_running_on_gcp():
     return os.environ.get('GAE_ENV', '').startswith('standard') or \
            os.environ.get('K_SERVICE', None) is not None
 
-# Secret Key handling
 if is_running_on_gcp():
-    # Running on Cloud Run - get secrets from Secret Manager
+    # Use PROJECT_ID as GCP project ID
     PROJECT_ID = os.environ.get('PROJECT_ID')
     try:
         client = secretmanager.SecretManagerServiceClient()
-        # GET PROJECT_ID from Secret Manager
-        project_id_secret = f"projects/{PROJECT_ID}/secrets/blunttee_PROJECT_ID/versions/latest"
-        project_id_response = client.access_secret_version(request={"name": project_id_secret})
-        PROJECT_ID = project_id_response.payload.data.decode("UTF-8")
-        # GET DATABASE_URL from Secret Manager
+        # Get SECRET_KEY from secret blunttee_PROJECT_ID
+        secret_key_secret = f"projects/{PROJECT_ID}/secrets/blunttee_PROJECT_ID/versions/latest"
+        secret_key_response = client.access_secret_version(request={"name": secret_key_secret})
+        SECRET_KEY = secret_key_response.payload.data.decode("UTF-8")
+        # Get DATABASE_URL from secret blunttee_dj_database_url
         db_url_secret = f"projects/{PROJECT_ID}/secrets/blunttee_dj_database_url/versions/latest"
         db_url_response = client.access_secret_version(request={"name": db_url_secret})
         DATABASE_URL = db_url_response.payload.data.decode("UTF-8")
     except Exception as e:
         print(f"Error accessing Secret Manager: {e}")
-        # Fallback to environment variable if Secret Manager fails
         SECRET_KEY = os.environ.get('SECRET_KEY', 'fallback-insecure-key-for-emergencies')
         DATABASE_URL = os.environ.get('DATABASE_URL', '')
-    
-    # Set up database connection
     DATABASES = {
         'default': dj_database_url.parse(DATABASE_URL)
     }
-
 else:
-    # Local development - use local settings
+    # Local development
     SECRET_KEY = 'django-insecure-**ufr+c&*byb8zx64$1ih+ww2db665bkb2hrrx!gr7l!w9h*+&'
     DATABASES = {
         'default': {
@@ -57,7 +53,8 @@ else:
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
-    
+
+
 # Debug settings
 DEBUG = not is_running_on_gcp()  # True in local dev, False in production
 
