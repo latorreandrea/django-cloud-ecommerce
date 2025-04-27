@@ -25,7 +25,7 @@ class Product(models.Model):
     category = models.ForeignKey('Category', null=True, blank=True, on_delete=models.SET_NULL)
     description = models.TextField()
     price = models.DecimalField(max_digits=6, decimal_places=2)
-    cost = models.DecimalField(max_digits=6, decimal_places=2)
+    cost = models.DecimalField(max_digits=6, decimal_places=2, default=10)
     colors = models.ManyToManyField(Color, blank=True, related_name='products')
 
     def __str__(self):

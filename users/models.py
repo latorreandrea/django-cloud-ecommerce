@@ -15,6 +15,13 @@ class UserProfile(models.Model):
     street_address1 = models.CharField(max_length=40, blank=True, null=True)
     street_address2 = models.CharField(max_length=40, blank=True, null=True)
     county = models.CharField(max_length=40, blank=True, null=True)
+    date_joined = models.DateTimeField(auto_now_add=True)
+    last_login = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+    date_joined = models.DateTimeField(auto_now_add=True)
+    last_login = models.DateTimeField(auto_now=True)
+    email = models.CharField(max_length=100, blank=True, default="", null=True)
 
     def __str__(self):
         return self.user.username
