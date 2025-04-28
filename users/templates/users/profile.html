@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+<div class="container justify-content-center py-5">
+    <h2 class="mb-4">{{ user.username }}</h2>   
+
+    <ul class="nav nav-tabs mb-4" id="accountTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab">
+                Profile
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="addresses-tab" data-bs-toggle="tab" data-bs-target="#addresses" type="button" role="tab">
+                Addresses
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="orders-tab" data-bs-toggle="tab" data-bs-target="#orders" type="button" role="tab">
+                Order History
+            </button>
+        </li>
+        <!-- <li class="nav-item" role="presentation">
+            <button class="nav-link" id="payments-tab" data-bs-toggle="tab" data-bs-target="#payments" type="button" role="tab">
+                Payments
+            </button>
+        </li> -->
+        <!-- <li class="nav-item" role="presentation">
+            <button class="nav-link" id="wishlist-tab" data-bs-toggle="tab" data-bs-target="#wishlist" type="button" role="tab">
+                Wishlist
+            </button>
+        </li> -->
+        <!-- <li class="nav-item" role="presentation">
+            <button class="nav-link" id="rewards-tab" data-bs-toggle="tab" data-bs-target="#rewards" type="button" role="tab">
+                Loyalty
+            </button>
+        </li>         -->
+    </ul>
+
+    <div class="tab-content" id="accountTabsContent">
+        <div class="tab-pane fade show active" id="profile" role="tabpanel">
+            <!-- Profile info here -->
+            <p><strong>Full Name:</strong> {{ userprofile.full_name }}</p>
+            <p><strong>Username:</strong> {{ user.username }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Contact Email:</strong> {{ userprofile.contact_email }}</p>
+            <!-- ...altro... -->
+        </div>
+        <div class="tab-pane fade" id="addresses" role="tabpanel">
+            <!-- Address info here -->
+            <p><strong>City:</strong> {{ userprofile.town_or_city }}</p>
+            <p><strong>Street:</strong> {{ userprofile.street_address1 }}</p>
+            <p><strong>Street (Line 2):</strong> {{ userprofile.street_address2 }}</p>
+            <p><strong>State:</strong> {{ userprofile.state }}</p>
+            <p><strong>Postal Code:</strong> {{ userprofile.postcode }}</p>
+            <p><strong>Country:</strong> {{ userprofile.country }}</p>
+            <!-- ...altro... -->
+        </div>
+        <!-- next step
+        <div class="tab-pane fade" id="orders" role="tabpanel">
+             Orders info here 
+            <p><strong>Total Orders:</strong> {{ userprofile.orders.count }}</p>             
+            {% for order in page_obj %}
+                <p><strong>Order History:</strong></p>
+                <p><strong>Order ID:</strong> {{ order.id }}</p>
+                <p><strong>Order Date:</strong> {{ order.date }}</p>
+                <p><strong>Status:</strong> {{ order.status }}</p>
+            {% empty %}
+                <p>No orders found.</p>
+            {% endfor %}
+             Pagination controls 
+            <nav>
+                <ul class="pagination">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                    </li>
+                {% endif %}
+                <li class="page-item disabled">
+                    <span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+                </li>
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                    </li>
+                {% endif %}
+                </ul>
+            </nav> 
+             
+            
+        </div> -->
+    </div>
+    <div class="text-end mt-4">
+        <a href="{% url 'edit_profile' %}" class="btn btn-primary">Change Info</a>
+    </div>
+</div>
+{% endblock %}

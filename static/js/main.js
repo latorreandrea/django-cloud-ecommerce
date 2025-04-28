@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     // Fade-in on scroll for cards
-    const fadeEls = document.querySelectorAll('.fade-in-on-scroll, .fade-in-left, .fade-in-right');
+    const fadeEls = document.querySelectorAll('.fade-in, .fade-in-left, .fade-in-right');
     if ('IntersectionObserver' in window) {
         const observer = new IntersectionObserver((entries, obs) => {
             entries.forEach(entry => {

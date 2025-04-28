@@ -1,15 +1,29 @@
-from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import UpdateView
+from django.urls import reverse_lazy
 from .models import UserProfile
-# from checkout.models import Order
-from django.contrib.auth.decorators import login_required
+from .forms import UserProfileForm
 
-# Create your views here.
-@login_required
-def accounts(request):
-    """ A view to show to the user the order history and manage his account"""
-    account = get_object_or_404(UserProfile, user=request.user)
-    
-    context = {
-        'account': account
-    }   
-    return render(request, 'accounts/accounts.html', context)
+
+class UserProfileDetailView(LoginRequiredMixin, DetailView):
+    """View to display user profile information."""
+    model = UserProfile
+    template_name = 'users/profile.html'
+
+    def get_object(self, queryset=None):
+        """Override get_object to return the user's profile."""
+        return UserProfile.objects.get(user=self.request.user)
+
+
+
+class UserProfileUpdateView(LoginRequiredMixin, UpdateView):
+    """View to update user profile."""
+    model = UserProfile
+    form_class = UserProfileForm
+    template_name = 'users/profile_edit.html'
+    success_url = reverse_lazy('user_profile')
+
+    def get_object(self, queryset=None):
+        """Override get_object to return the user's profile."""
+        return UserProfile.objects.get(user=self.request.user)

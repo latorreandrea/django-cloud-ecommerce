@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container justify-content-center py-5">
+    <h2 class="mb-4">Edit Your Profile</h2>
+    <ul class="nav nav-tabs mb-4" id="accountTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab">
+                Profile
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="addresses-tab" data-bs-toggle="tab" data-bs-target="#addresses" type="button" role="tab">
+                Addresses
+            </button>
+        </li>
+    </ul>
+    <form method="post" class="mx-auto">
+        {% csrf_token %}
+        <div class="tab-content" id="accountTabsContent">
+            <!-- Profile Tab -->
+            <div class="tab-pane fade show active" id="profile" role="tabpanel">
+                <div class="mb-3">
+                    <label for="{{ form.full_name.id_for_label }}" class="form-label"><strong>{{ form.full_name.label }}</strong></label>
+                    {{ form.full_name }}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Username</label>
+                    <input type="text" class="form-control" value="{{ user.username }}" disabled>
+                </div>                
+                <div class="mb-3">
+                    <label for="{{ form.contact_email.id_for_label }}" class="form-label"><strong>{{ form.contact_email.label }}</strong></label>
+                    {{ form.contact_email }}
+                </div>
+                <div class="mb-3">
+                    <label for="{{ form.phone_number.id_for_label }}" class="form-label"><strong>{{ form.phone_number.label }}</strong></label>
+                    {{ form.phone_number }}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" value="{{ user.email }}" disabled>
+                    <a href="{% url 'account_email' %}" class="btn btn-link p-0">Change Email</a>
+                </div>
+            </div>
+            <!-- Addresses Tab -->
+            <div class="tab-pane fade" id="addresses" role="tabpanel">
+                <div class="mb-3">
+                    <label for="{{ form.town_or_city.id_for_label }}" class="form-label"><strong>{{ form.town_or_city.label }}</strong></label>
+                    {{ form.town_or_city }}
+                </div>
+                <div class="mb-3">
+                    <label for="{{ form.street_address1.id_for_label }}" class="form-label"><strong>{{ form.street_address1.label }}</strong></label>
+                    {{ form.street_address1 }}
+                </div>
+                <div class="mb-3">
+                    <label for="{{ form.street_address2.id_for_label }}" class="form-label"><strong>{{ form.street_address2.label }}</strong></label>
+                    {{ form.street_address2 }}
+                </div>
+                <div class="mb-3">
+                    <label for="{{ form.county.id_for_label }}" class="form-label"><strong>{{ form.county.label }}</strong></label>
+                    {{ form.county }}
+                </div>
+                <div class="mb-3">
+                    <label for="{{ form.postcode.id_for_label }}" class="form-label"><strong>{{ form.postcode.label }}</strong></label>
+                    {{ form.postcode }}
+                </div>
+                <div class="mb-3">
+                    <label for="{{ form.country.id_for_label }}" class="form-label"><strong>{{ form.country.label }}</strong></label>
+                    {{ form.country }}
+                </div>
+            </div>
+        </div>
+        <div class="text-end mt-4">
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
