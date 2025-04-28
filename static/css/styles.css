@@ -190,13 +190,13 @@ h1, h2, h3, h4, h5, h6, .navbar-brand {
     animation: spin 2s linear infinite;
 }
 /* fade in animation */
-.fade-in-on-scroll {
+.fade-in {
     opacity: 0;
     transform: translateY(40px);
     transition: opacity 0.6s ease, transform 0.6s cubic-bezier(.4,0,.2,1);
 }
 
-.fade-in-on-scroll.visible {
+.fade-in.visible {
     opacity: 1;
     transform: translateY(0);
 }

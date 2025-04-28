@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def accounts(request):
     """ A view to show to the user the order history and manage his account"""
-    account = get_object_or_404(Account, user=request.user)
+    account = get_object_or_404(UserProfile, user=request.user)
     
     context = {
         'account': account
