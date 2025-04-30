@@ -38,4 +38,17 @@ document.addEventListener('DOMContentLoaded', function() {
         // Fallback: show all if IntersectionObserver not supported
         fadeEls.forEach(el => el.classList.add('visible'));
     }
+
+    // Variant image preview (for product cards)
+    const variantImages = document.querySelectorAll('.variant-image');
+    variantImages.forEach(image => {
+        image.addEventListener('click', function() {
+            const productId = this.getAttribute('data-product-id');
+            const newImageUrl = this.getAttribute('data-image-url');
+            const mainImage = document.getElementById('main-image-' + productId);
+            if (mainImage) {
+                mainImage.setAttribute('src', newImageUrl);
+            }
+        });
+    });
 });
