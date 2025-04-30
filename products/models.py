@@ -34,7 +34,8 @@ class Product(models.Model):
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
     color = models.ForeignKey(Color, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(upload_to='products/')
+    small_image = models.URLField(max_length=1000, blank=True, null=True)
+    large_image = models.URLField(max_length=1000, blank=True, null=True)
 
     def __str__(self):
         return f"{self.product} - {self.color}"
