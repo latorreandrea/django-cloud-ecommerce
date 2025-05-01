@@ -1,5 +1,6 @@
 from django.views.generic import ListView, DetailView
 from .models import Product
+from cart.models import Wishlist
 from django.shortcuts import render
 
 # Create your views here.
@@ -31,3 +32,19 @@ class ProductDetailView(DetailView):
     model = Product
     template_name = 'products/product_detail.html'
     context_object_name = 'product'
+
+    def get_context_data(self, **kwargs):
+        """
+        Override get_context_data to add additional context for the product detail view.
+        """
+        # Get the default context
+        context = super().get_context_data(**kwargs)
+        in_wishlist = False
+        user = self.request.user
+        product = self.object
+        # Check if the user is authenticated and has a wishlist
+        # If the user is authenticated, check if the product is in their wishlist
+        if user.is_authenticated and hasattr(user, 'wishlist'):
+            in_wishlist = user.wishlist.items.filter(product=product).exists()
+        context['in_wishlist'] = in_wishlist
+        return context

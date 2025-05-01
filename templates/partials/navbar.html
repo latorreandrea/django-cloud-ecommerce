@@ -21,9 +21,14 @@
             <!-- Right: Icons and Sign Up -->
             <div class="d-flex align-items-center ms-auto">
                 <!-- Wishlist -->
-                <a href="#" class="btn btn-link text-black position-relative me-2" title="Wishlist">
+                <a href="{% url 'wishlist' %}" class="btn btn-link text-black position-relative me-2" title="Wishlist">
                     <i class="far fa-heart fa-lg"></i>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:0.7em;">2</span>
+                    {% if user.is_authenticated %}
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:0.7em;">
+                            {{ user.wishlist.items.count|default:"0" }}
+                        </span>
+                    {% else %}
+                    {% endif %}
                 </a>
                 <!-- Cart -->
                 <a href="#" class="btn btn-link text-black position-relative me-2" title="Cart">

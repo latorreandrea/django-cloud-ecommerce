@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container my-5 text-center">
+    <h2 class="mb-4">Shut Up and Take My Money... Later</h2>
+    <p>
+        Here’s where your heart shops before your wallet does. 
+        Save your favorite tees for the day you win the lottery, 
+        find inner peace, or just get paid.
+    </p>
+    {% if wishlist_items %}
+        <div class="row">
+            {% for item in wishlist_items %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <a href="{% url 'product_detail' item.product.id %}">
+                            {% if item.product.images.first %}
+                                <img src="{{ item.product.images.first.small_image }}" class="card-img-top" alt="{{ item.product.name }}">
+                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="card-title">{{ item.product.name|truncatechars:25 }}</h5>
+                                <p class="card-text"><strong>Price:</strong> {{ item.product.price }}€</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>So empty... it's like your fridge on a Sunday night. <br>
+            (Start adding stuff before this turns into an existential crisis.)
+        </p>
+    {% endif %}
+</div>
+{% endblock %}

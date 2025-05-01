@@ -5,16 +5,20 @@
         <div class="col-md-6">
             {% if product.images.first %}
                 <img id="main-image-{{ product.id }}" src="{{ product.images.first.large_image }}" class="d-block w-100" alt="{{ product.name }}">
-            {% endif %} 
-            <!-- color gallery slider -->
+            {% endif %}
+        </div>
+        <div class="col-md-6">
+            <h2 class="fw-bold">{{ product.name }}</h2>
+            <p><strong>Price:</strong> {{ product.price }}€</p>
+            <!-- color slider selector -->
             <div><strong>Choose Color:</strong></div>
             <div class="d-flex flex-nowrap overflow-auto justify-content-start mb-1 ps-3 pe-3" style="gap: 0.5rem;">
                 {% for image in product.images.all %}
                     <img src="{{ image.small_image }}" class="img-thumbnail variant-image" style="width: 50px; height: 50px; cursor:pointer; flex: 0 0 auto;" alt="{{ image.color.name }}" data-product-id="{{ product.id }}" data-image-url="{{ image.small_image }}">
                 {% endfor %}
-            </div> 
-            <!-- Slider per selezionare la taglia -->
-            <p class="mt-4 mb-2">Choose Size:</p>
+            </div>
+            <!-- size slider selector -->
+            <p><strong>Choose Size:</strong></p>
             <div class="d-flex flex-nowrap overflow-auto justify-content-start mb-1 ps-3 pe-3" style="gap: 0.5rem;">
                 {% for size in product.sizes.all %}
                     <button type="button"
@@ -24,21 +28,53 @@
                         {{ size.name }}
                     </button>
                 {% endfor %}
-            </div> 
-        </div>
-        <div class="col-md-6">
-            <h2 class="fw-bold">{{ product.name }}</h2>
-            <p class="lead">{{ product.description|safe }}</p>
-            <p><strong>Price:</strong> {{ product.price }}€</p>
-            {% if product.colors.all %}
-                <p><strong>Available colors:</strong>
-                    {% for color in product.colors.all %}
-                        <span class="badge bg-secondary">{{ color.name }}</span>
-                    {% endfor %}
-                </p>
+            </div>
+            <!-- add to cart, wishlist buttons -->
+            <a href="#" class="btn btn-warning btn-lg mt-3 fw-semibold">Add to Cart</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'toggle_wishlist' product.id %}"
+                class="btn btn-lg mt-3 fw-semibold {% if in_wishlist %}btn-danger active{% else %}btn-outline-secondary{% endif %}">
+                    {% if in_wishlist %}
+                        <i class="fas fa-heart"></i> In Wishlist
+                    {% else %}
+                        <i class="far fa-heart"></i> Add to Wishlist
+                    {% endif %}
+                </a>
             {% endif %}
-            <!-- Aggiungi qui pulsanti per aggiungere al carrello, wishlist, ecc. -->
-            <a href="#" class="btn btn-warning btn-lg mt-3 fw-semibold px-4">Add to Cart</a>
+            
+            <!-- Description summary/collapse -->
+            <div class="accordion my-4" id="productDescriptionAccordion">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingDescription">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDescription" aria-expanded="false" aria-controls="collapseDescription">
+                            Description
+                        </button>
+                    </h2>
+                    <div id="collapseDescription" class="accordion-collapse collapse" aria-labelledby="headingDescription" data-bs-parent="#productDescriptionAccordion">
+                        <div class="accordion-body description">
+                            {{ product.description|safe }}
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingMaterials">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMaterials" aria-expanded="false" aria-controls="collapseMaterials">
+                            Materials &amp; Care
+                        </button>
+                    </h2>
+                    <div id="collapseMaterials" class="accordion-collapse collapse" aria-labelledby="headingMaterials" data-bs-parent="#productDescriptionAccordion">
+                        <div class="accordion-body">
+                            {{ product.category.material_care|safe }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Available Colors -->
+            <p><strong>Available colors:</strong>
+                {% for color in product.colors.all %}
+                    <span class="badge bg-secondary">{{ color.name }}</span>
+                {% endfor %}
+            </p>
         </div>
     </div>
 </div>

@@ -1,6 +1,7 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from products.models import Product
-from .models import Cart, CartItem
+from .models import Cart, CartItem, Wishlist, WishlistItem
 
 # Create your views here.
 def view_cart(request):
@@ -27,7 +28,7 @@ def view_cart(request):
 
     return redirect('products_list')
 
-    
+
 def add_to_cart(request, product_id):
     """
     Add a product to the cart.
@@ -54,4 +55,29 @@ def add_to_cart(request, product_id):
 
     return redirect('products_list')
 
+# wishlist management
+@login_required
+def wishlist_view(request):
+    """
+    View the wishlist.
+    """
+    wishlist = getattr(request.user, 'wishlist', None)
+    items = wishlist.items.select_related('product') if wishlist else []
+    return render(request, 'cart/wishlist.html', {'wishlist_items': items})
 
+
+@login_required
+def toggle_wishlist(request, product_id):
+    """
+    Toggle a product in the wishlist.
+    If the product is already in the wishlist, remove it.
+    If the product is not in the wishlist, add it.
+    """
+    product = get_object_or_404(Product, id=product_id)
+    wishlist, _ = Wishlist.objects.get_or_create(user=request.user)
+    item = WishlistItem.objects.filter(wishlist=wishlist, product=product).first()
+    if item:
+        item.delete()
+    else:
+        WishlistItem.objects.create(wishlist=wishlist, product=product)
+    return redirect('product_detail', pk=product.id)
