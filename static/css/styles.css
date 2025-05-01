@@ -160,8 +160,8 @@ h1, h2, h3, h4, h5, h6, .navbar-brand {
 }
 
 .product-card {
-    height: 100vh;
-    max-height: 100vh;
+    height: 95vh;
+    max-height: 95vh;
     display: flex;
     flex-direction: column;
 }

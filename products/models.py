@@ -19,6 +19,14 @@ class Color(models.Model):
     def __str__(self):
         return self.name
 
+
+class Size(models.Model):
+    name = models.CharField(max_length=10)
+
+    def __str__(self):
+        return self.name
+
+
 class Product(models.Model):
     name = models.CharField(max_length=254)
     shirtigo_id = models.IntegerField(null=True, blank=True)
@@ -27,6 +35,7 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=6, decimal_places=2)
     cost = models.DecimalField(max_digits=6, decimal_places=2, default=10)
     colors = models.ManyToManyField(Color, blank=True, related_name='products')
+    sizes = models.ManyToManyField(Size, blank=True, related_name='products')
 
     def __str__(self):
         return self.name

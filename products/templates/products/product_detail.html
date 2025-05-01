@@ -3,33 +3,32 @@
 <div class="container my-5">
     <div class="row">
         <div class="col-md-6">
-            {% if product.images.all %}
-                <div id="productImagesCarousel" class="carousel slide" data-bs-ride="carousel">
-                    <div class="carousel-inner">
-                        {% for image in product.images.all %}
-                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                            <img src="{{ image.image.url }}" class="d-block w-100" alt="{{ product.name }}">
-                        </div>
-                        {% endfor %}
-                    </div>
-                    {% if product.images.count > 1 %}
-                    <button class="carousel-control-prev" type="button" data-bs-target="#productImagesCarousel" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
+            {% if product.images.first %}
+                <img id="main-image-{{ product.id }}" src="{{ product.images.first.large_image }}" class="d-block w-100" alt="{{ product.name }}">
+            {% endif %} 
+            <!-- color gallery slider -->
+            <div><strong>Choose Color:</strong></div>
+            <div class="d-flex flex-nowrap overflow-auto justify-content-start mb-1 ps-3 pe-3" style="gap: 0.5rem;">
+                {% for image in product.images.all %}
+                    <img src="{{ image.small_image }}" class="img-thumbnail variant-image" style="width: 50px; height: 50px; cursor:pointer; flex: 0 0 auto;" alt="{{ image.color.name }}" data-product-id="{{ product.id }}" data-image-url="{{ image.small_image }}">
+                {% endfor %}
+            </div> 
+            <!-- Slider per selezionare la taglia -->
+            <p class="mt-4 mb-2">Choose Size:</p>
+            <div class="d-flex flex-nowrap overflow-auto justify-content-start mb-1 ps-3 pe-3" style="gap: 0.5rem;">
+                {% for size in product.sizes.all %}
+                    <button type="button"
+                            class="btn btn-outline-primary size-btn"
+                            data-size="{{ size.id }}"
+                            style="min-width: 60px;">
+                        {{ size.name }}
                     </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#productImagesCarousel" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
-                    {% endif %}
-                </div>
-            {% else %}
-                <img src="https://via.placeholder.com/500x500?text=No+Image" class="img-fluid" alt="No image">
-            {% endif %}
+                {% endfor %}
+            </div> 
         </div>
         <div class="col-md-6">
             <h2 class="fw-bold">{{ product.name }}</h2>
-            <p class="lead">{{ product.description }}</p>
+            <p class="lead">{{ product.description|safe }}</p>
             <p><strong>Price:</strong> {{ product.price }}€</p>
             {% if product.colors.all %}
                 <p><strong>Available colors:</strong>

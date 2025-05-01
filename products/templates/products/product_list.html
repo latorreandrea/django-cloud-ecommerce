@@ -15,19 +15,21 @@
         {% for product in products %}
             <div class="col-md-4 mb-4">
                 <div class="card product-card">
-                    {% if product.images.first %}
-                        <img id="main-image-{{ product.id }}" src="{{ product.images.first.small_image }}" class="card-img-top" alt="{{ product.name }}">
-                    {% endif %}                  
+                    <a href="{% url 'product_detail' product.id %}" class="text-decoration-none text-dark">
+                        {% if product.images.first %}
+                            <img id="main-image-{{ product.id }}" src="{{ product.images.first.small_image }}" class="card-img-top" alt="{{ product.name }}">
+                        {% endif %}   
+                        <div class="card-body">
+                            <h5 class="card-title">{{ product.name|truncatechars:25 }}</h5>
+                            <p class="card-text">{{ product.description|truncatewords:20 }}</p>
+                            <p class="card-text"><strong>Price:</strong> {{ product.price }}€ </p>
+                        </div>
+                    </a>
                     <!-- color gallery slider -->
-                    <div class="d-flex flex-nowrap overflow-auto justify-content-start my-2 ps-3 pe-3" style="gap: 0.5rem;">
+                    <div class="d-flex flex-nowrap overflow-auto justify-content-start mb-1 ps-3 pe-3" style="gap: 0.5rem;">
                         {% for image in product.images.all %}
                             <img src="{{ image.small_image }}" class="img-thumbnail variant-image" style="width: 50px; height: 50px; cursor:pointer; flex: 0 0 auto;" alt="{{ image.color.name }}" data-product-id="{{ product.id }}" data-image-url="{{ image.small_image }}">
                         {% endfor %}
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">{{ product.name|truncatechars:25 }}</h5>
-                        <p class="card-text">{{ product.description|truncatewords:20 }}</p>
-                        <p class="card-text"><strong>Price:</strong> {{ product.price }}€ </p>
                     </div>
                 </div>
             </div>

@@ -19,7 +19,7 @@ class ProductListView(ListView):
         if query:
             queryset = queryset.filter(name__icontains=query)
         if category:
-            queryset = queryset.filter(category__name__iexact=category)
+            queryset = queryset.filter(category__friendly_name__iexact=category)
         return queryset
 
 

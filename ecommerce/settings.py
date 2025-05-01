@@ -90,6 +90,7 @@ INSTALLED_APPS = [
     'home',
     'products',
     'users',
+    'cart',
     # Third-party apps
     'storages',
     # Crispy Forms
