@@ -10,37 +10,49 @@
         <div class="col-md-6">
             <h2 class="fw-bold">{{ product.name }}</h2>
             <p><strong>Price:</strong> {{ product.price }}€</p>
-            <!-- color slider selector -->
-            <div><strong>Choose Color:</strong></div>
-            <div class="d-flex flex-nowrap overflow-auto justify-content-start mb-1 ps-3 pe-3" style="gap: 0.5rem;">
-                {% for image in product.images.all %}
-                    <img src="{{ image.small_image }}" class="img-thumbnail variant-image" style="width: 50px; height: 50px; cursor:pointer; flex: 0 0 auto;" alt="{{ image.color.name }}" data-product-id="{{ product.id }}" data-image-url="{{ image.small_image }}">
-                {% endfor %}
-            </div>
-            <!-- size slider selector -->
-            <p><strong>Choose Size:</strong></p>
-            <div class="d-flex flex-nowrap overflow-auto justify-content-start mb-1 ps-3 pe-3" style="gap: 0.5rem;">
-                {% for size in product.sizes.all %}
-                    <button type="button"
-                            class="btn btn-outline-primary size-btn"
-                            data-size="{{ size.id }}"
-                            style="min-width: 60px;">
-                        {{ size.name }}
-                    </button>
-                {% endfor %}
-            </div>
-            <!-- add to cart, wishlist buttons -->
-            <a href="#" class="btn btn-warning btn-lg mt-3 fw-semibold">Add to Cart</a>
-            {% if user.is_authenticated %}
-                <a href="{% url 'toggle_wishlist' product.id %}"
-                class="btn btn-lg mt-3 fw-semibold {% if in_wishlist %}btn-danger active{% else %}btn-outline-secondary{% endif %}">
-                    {% if in_wishlist %}
-                        <i class="fas fa-heart"></i> In Wishlist
-                    {% else %}
-                        <i class="far fa-heart"></i> Add to Wishlist
-                    {% endif %}
-                </a>
-            {% endif %}
+            <form method="post" action="{% url 'add_to_cart' product.id %}" id="add-to-cart-form">
+                {% csrf_token %}
+                <!-- Color slider selector -->
+                <div><strong>Choose Color:</strong></div>
+                <div class="d-flex flex-nowrap overflow-auto justify-content-start mb-1 ps-3 pe-3" id="color-slider" style="gap: 0.5rem;">
+                    {% for image in product.images.all %}
+                        <img src="{{ image.small_image }}"
+                            class="img-thumbnail variant-image color-option"
+                            style="width: 50px; height: 50px; cursor:pointer; flex: 0 0 auto;"
+                            alt="{{ image.color.name }}"
+                            data-color-id="{{ image.color.id }}"
+                            data-product-id="{{ product.id }}">
+                    {% endfor %}
+                    <input type="hidden" name="color_id" id="selected-color">
+                </div>
+                <!-- Size slider selector -->
+                <p><strong>Choose Size:</strong></p>
+                <div class="d-flex flex-nowrap overflow-auto justify-content-start mb-1 ps-3 pe-3" id="size-slider" style="gap: 0.5rem;">
+                    {% for size in product.sizes.all %}
+                        <button type="button"
+                                class="btn btn-outline-primary size-btn"
+                                data-size-id="{{ size.id }}"
+                                style="min-width: 60px;">
+                            {{ size.name }}
+                        </button>
+                    {% endfor %}
+                    <input type="hidden" name="size_id" id="selected-size">
+                </div>
+                <button type="submit" class="btn btn-warning btn-lg mt-3 fw-semibold">Add to Cart</button>
+                {% if user.is_authenticated %}
+                <span>
+                    <a href="{% url 'toggle_wishlist' product.id %}"
+                    class="btn btn-lg mt-3 fw-semibold {% if in_wishlist %}btn-danger active{% else %}btn-outline-secondary{% endif %}">
+                        {% if in_wishlist %}
+                            <i class="fas fa-heart"></i> In Wishlist
+                        {% else %}
+                            <i class="far fa-heart"></i> Add to Wishlist
+                        {% endif %}
+                    </a>
+                </span>
+                {% endif %}
+            </form>
+            
             
             <!-- Description summary/collapse -->
             <div class="accordion my-4" id="productDescriptionAccordion">
@@ -78,4 +90,33 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block postloadjs %}
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Color selection
+        document.querySelectorAll('.color-option').forEach(function(img) {
+            img.addEventListener('click', function() {
+                document.querySelectorAll('.color-option').forEach(i => i.classList.remove('border-primary', 'shadow'));
+                this.classList.add('border-primary', 'shadow');
+                document.getElementById('selected-color').value = this.dataset.colorId;
+
+                // change the main image
+                var mainImage = document.getElementById('main-image-{{ product.id }}');
+                if (mainImage) {
+                    mainImage.src = this.src;
+                }
+            });
+        });
+        // Size selection
+        document.querySelectorAll('.size-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                document.getElementById('selected-size').value = this.dataset.sizeId;
+            });
+        });
+    });
+    </script>
 {% endblock %}

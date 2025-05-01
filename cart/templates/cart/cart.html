@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container my-5">
+    <h2 class="mb-4">Your Future Wardrobe, Assembled</h2>
+    <p>
+        What's in your cart?
+    </p>
+    {% if cart_items %}
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th scope="col">Product</th>
+                    <th scope="col">Color</th>
+                    <th scope="col">Size</th>
+                    <th scope="col">Subtotal</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart_items %}
+                <tr>
+                    <td>
+                        {{ item.product.name|truncatewords:6 }}
+                    </td>
+                    <td>
+                        {% if item.image_url %}
+                            <img src="{{ item.image_url }}" alt="{{ item.color.name }}" style="width:35px; height:35px;">    
+                        {% elif item.color %}
+                            {{ item.color.name }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if item.size %}
+                            <strong>{{ item.size.name }}</strong>
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>{{ item.price }}€</td>
+                    <td>
+                        {% if item.key %}
+                            <form method="post" action="{% url 'remove_from_cart' item.key %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm" title="Remove">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}                
+            </tbody>
+        </table>
+        <div class="text-end">
+            <h4>Total: <span class="fw-bold">{{ cart_total }}€</span></h4>
+        </div>
+    {% else %}
+        <p>
+            Your cart is emptier than your motivation on a Monday morning.
+            (Go ahead, fill it up. We won't judge.)
+        </p>
+    {% endif %}
+</div>
+{% endblock %}

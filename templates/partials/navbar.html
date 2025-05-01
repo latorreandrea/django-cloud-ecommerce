@@ -27,13 +27,12 @@
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:0.7em;">
                             {{ user.wishlist.items.count|default:"0" }}
                         </span>
-                    {% else %}
                     {% endif %}
                 </a>
                 <!-- Cart -->
-                <a href="#" class="btn btn-link text-black position-relative me-2" title="Cart">
+                <a href="{% url 'cart' %}" class="btn btn-link text-black position-relative me-2" title="Cart">
                     <i class="fas fa-shopping-cart fa-lg"></i>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark" style="font-size:0.7em;">0</span>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark" style="font-size:0.7em;">{{ cart_count }}</span>
                 </a>
                 <!-- Account -->
                 {% if user.is_authenticated %}
