@@ -166,12 +166,24 @@ h1, h2, h3, h4, h5, h6, .navbar-brand {
     flex-direction: column;
 }
 
+
 /* color/size selector */
 .color-option.border-primary,
 .size-btn.active {
     border-width: 2px !important;
     border-color: #0d6efd !important;
     box-shadow: 0 0 0 0.25rem rgba(13,110,253,.25) !important;
+}
+
+
+/*-------------Toasts-------------*/
+.message-container {
+    position: fixed;
+    top: 6em;
+    right: 0;
+    z-index: 9999999;
+    max-width: 18em;
+    color: #000;
 }
 
 /* Animation */

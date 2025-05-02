@@ -1,0 +1,13 @@
+<div class="toast show">
+    <div class="toast-header bg-success text-white">
+        Great!
+        <button type="button" class="btn-close bg-white" data-bs-dismiss="toast"></button>
+    </div>
+    <div class="toast-body text-center">
+        {{ message }}
+        <div class="d-flex justify-content-center gap-2 mt-3">
+            <a href="{% url 'cart' %}" class="btn call-action px-3 py-1 fw-semibold">Check Out</a>
+            <a href="{% url 'products_list' %}" class="btn btn-dark px-3 py-1 fw-semibold">Continue Shopping</a>
+        </div>
+    </div>
+</div>

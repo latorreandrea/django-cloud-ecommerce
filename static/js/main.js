@@ -51,4 +51,10 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+    
+    // Toast notifications
+    document.querySelectorAll('.toast').forEach(function(toastEl) {
+        var toast = new bootstrap.Toast(toastEl, { delay: 5000 });
+        toast.show();
+    });
 });

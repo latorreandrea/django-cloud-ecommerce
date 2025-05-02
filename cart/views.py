@@ -94,7 +94,7 @@ def add_to_cart(request, product_id):
             }
         request.session['cart'] = cart
     messages.success(request, msg)
-    return redirect('products_list')
+    return redirect('product_detail', pk=product_id)
 
 
 def remove_from_cart(request, key):
