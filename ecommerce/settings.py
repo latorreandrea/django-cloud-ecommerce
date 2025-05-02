@@ -12,8 +12,12 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os  # Add os import for os.path.join
+
 import google.cloud.secretmanager as secretmanager
 import dj_database_url
+
+from dotenv import load_dotenv
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,14 +33,32 @@ if is_running_on_gcp():
     PROJECT_ID = os.environ.get('PROJECT_ID')
     try:
         client = secretmanager.SecretManagerServiceClient()
+        
         # Get SECRET_KEY from secret blunttee_PROJECT_ID
         secret_key_secret = f"projects/{PROJECT_ID}/secrets/blunttee_PROJECT_ID/versions/latest"
         secret_key_response = client.access_secret_version(request={"name": secret_key_secret})
         SECRET_KEY = secret_key_response.payload.data.decode("UTF-8")
+        
         # Get DATABASE_URL from secret blunttee_dj_database_url
         db_url_secret = f"projects/{PROJECT_ID}/secrets/blunttee_dj_database_url/versions/latest"
         db_url_response = client.access_secret_version(request={"name": db_url_secret})
         DATABASE_URL = db_url_response.payload.data.decode("UTF-8")
+        
+        # Get STRIPE_SECRET_KEY
+        stripe_secret_secret = f"projects/{PROJECT_ID}/secrets/blunttee_STRIPE_SECRET_KEY/versions/latest"
+        stripe_secret_response = client.access_secret_version(request={"name": stripe_secret_secret})
+        STRIPE_SECRET_KEY = stripe_secret_response.payload.data.decode("UTF-8")
+
+        # Get STRIPE_PUBLIC_KEY
+        stripe_public_secret = f"projects/{PROJECT_ID}/secrets/blunttee_STRIPE_PUBLIC_KEY/versions/latest"
+        stripe_public_response = client.access_secret_version(request={"name": stripe_public_secret})
+        STRIPE_PUBLIC_KEY = stripe_public_response.payload.data.decode("UTF-8")
+
+        # Get STRIPE_WEBHOOK_SECRET
+        stripe_webhook_secret = f"projects/{PROJECT_ID}/secrets/blunttee_STRIPE_WEBHOOK_SECRET/versions/latest"
+        stripe_webhook_response = client.access_secret_version(request={"name": stripe_webhook_secret})
+        STRIPE_WEBHOOK_SECRET = stripe_webhook_response.payload.data.decode("UTF-8")
+    
     except Exception as e:
         print(f"Error accessing Secret Manager: {e}")
         SECRET_KEY = os.environ.get('SECRET_KEY', 'fallback-insecure-key-for-emergencies')
@@ -53,6 +75,9 @@ else:
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
+    STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY', '')
+    STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY', '')
+    STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET', '')
 
 
 # Debug settings
@@ -91,6 +116,7 @@ INSTALLED_APPS = [
     'products',
     'users',
     'cart',
+    'checkout',
     # Third-party apps
     'storages',
     # Crispy Forms

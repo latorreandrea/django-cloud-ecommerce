@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container my-5">
+    <h2>Checkout</h2>
+    <div class="row">
+        <!-- Shipping Details -->
+        <div class="col-md-6 mb-4">
+            <form id="shipping-form">
+                <h4 class="mb-3">Shipping Details</h4>
+                <div class="mb-3">
+                    <label for="full_name" class="form-label">Full Name</label>
+                    <input type="text" class="form-control" id="full_name" name="full_name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="email_address" class="form-label">Email Address</label>
+                    <input type="email" class="form-control" id="email_address" name="email_address" required>
+                </div>
+                <div class="mb-3">
+                    <label for="street_address1" class="form-label">Street Address</label>
+                    <input type="text" class="form-control" id="street_address1" name="street_address1" required>
+                </div>
+                <div class="mb-3">
+                    <label for="street_address2" class="form-label">Street Address 2 (optional)</label>
+                    <input type="text" class="form-control" id="street_address2" name="street_address2">
+                </div>
+                <div class="mb-3">
+                    <label for="town_or_city" class="form-label">City</label>
+                    <input type="text" class="form-control" id="town_or_city" name="town_or_city" required>
+                </div>
+                <div class="mb-3">
+                    <label for="postcode" class="form-label">Postal Code</label>
+                    <input type="text" class="form-control" id="postcode" name="postcode">
+                </div>
+                <div class="mb-3">
+                    <label for="country" class="form-label">Country</label>
+                    <input type="text" class="form-control" id="country" name="country" required>
+                </div>
+                <div class="mb-3">
+                    <label for="phone_number" class="form-label">Phone Number</label>
+                    <input type="text" class="form-control" id="phone_number" name="phone_number">
+                </div>
+            </form>
+        </div>
+        <!-- Payment Section -->
+        <div class="col-md-6">
+            <h4 class="mb-3">Payment</h4>
+            <p>Total: <strong>{{ cart_total }} €</strong></p>
+            <form id="payment-form">
+                <div id="card-element" class="mb-3"><!-- Stripe Elements will be inserted here --></div>
+                <button id="submit" class="btn btn-success mt-3 w-100">Pay</button>
+                <div id="card-errors" role="alert" class="text-danger mt-2"></div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block postloadjs %}
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    const stripe = Stripe('{{ stripe_public_key }}');
+    const elements = stripe.elements();
+    const card = elements.create('card');
+    card.mount('#card-element');
+    const form = document.getElementById('payment-form');
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        // Qui puoi aggiungere la validazione dei dati di spedizione se vuoi
+        stripe.confirmCardPayment('{{ client_secret }}', {
+            payment_method: {
+                card: card,
+            }
+        }).then(function(result) {
+            if (result.error) {
+                document.getElementById('card-errors').textContent = result.error.message;
+            } else {
+                if (result.paymentIntent.status === 'succeeded') {
+                    window.location.href = "{% url 'checkout_success' %}";
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

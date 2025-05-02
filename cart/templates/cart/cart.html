@@ -55,12 +55,22 @@
         </table>
         <div class="text-end">
             <h4>Total: <span class="fw-bold">{{ cart_total }}€</span></h4>
-        </div>
+            <a href="{% url 'checkout' %}" class="btn call-action px-4 py-2 fw-semibold">
+                Proceed to Checkout
+            </a>
+        </div>      
+            
+        
     {% else %}
         <p>
             Your cart is emptier than your motivation on a Monday morning.
             (Go ahead, fill it up. We won't judge.)
         </p>
+        <div class="text-center mt-4">
+            <a href="{% url 'products_list' %}" class="btn btn-dark px-4 py-2 fw-semibold">
+                Back to Shop
+            </a>
+        </div>
     {% endif %}
 </div>
 {% endblock %}
