@@ -81,8 +81,7 @@ else:
 
 
 # Debug settings
-DEBUG = True # just for fix the error
-# DEBUG = not is_running_on_gcp()  # True in local dev, False in production
+DEBUG = not is_running_on_gcp()  # True in local dev, False in production
 
 # Update ALLOWED_HOSTS for Cloud Run
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
