@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     // Fade-in on scroll for cards
-    const fadeEls = document.querySelectorAll('.fade-in-on-scroll, .fade-in-left, .fade-in-right');
+    const fadeEls = document.querySelectorAll('.fade-in, .fade-in-left, .fade-in-right');
     if ('IntersectionObserver' in window) {
         const observer = new IntersectionObserver((entries, obs) => {
             entries.forEach(entry => {
@@ -38,4 +38,23 @@ document.addEventListener('DOMContentLoaded', function() {
         // Fallback: show all if IntersectionObserver not supported
         fadeEls.forEach(el => el.classList.add('visible'));
     }
+
+    // Variant image preview (for product cards)
+    const variantImages = document.querySelectorAll('.variant-image');
+    variantImages.forEach(image => {
+        image.addEventListener('click', function() {
+            const productId = this.getAttribute('data-product-id');
+            const newImageUrl = this.getAttribute('data-image-url');
+            const mainImage = document.getElementById('main-image-' + productId);
+            if (mainImage) {
+                mainImage.setAttribute('src', newImageUrl);
+            }
+        });
+    });
+    
+    // Toast notifications
+    document.querySelectorAll('.toast').forEach(function(toastEl) {
+        var toast = new bootstrap.Toast(toastEl, { delay: 5000 });
+        toast.show();
+    });
 });
