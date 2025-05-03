@@ -73,7 +73,7 @@
         document.getElementById('card-errors').textContent = result.error.message;
       } else {
         if (result.paymentIntent.status === 'succeeded') {
-          form.submit(); // oppure redirect
+          form.submit(); // Submit the form to your server
         }
       }
     });
