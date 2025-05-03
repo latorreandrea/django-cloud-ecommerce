@@ -1,84 +1,82 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
 {% block content %}
 <div class="container my-5">
-    <h2>Checkout</h2>
-    <div class="row">
-        <!-- Shipping Details -->
-        <div class="col-md-6 mb-4">
-            <form id="shipping-form">
-                <h4 class="mb-3">Shipping Details</h4>
-                <div class="mb-3">
-                    <label for="full_name" class="form-label">Full Name</label>
-                    <input type="text" class="form-control" id="full_name" name="full_name" required>
+  <div class="row">
+    <!-- Main checkout form -->
+    <div class="col-lg-7">
+        <main id="checkout-main">
+          <h1 class="mb-4">Checkout</h1>
+          <form id="checkout-form" method="post" novalidate>
+            {% csrf_token %}
+            {{ form|crispy }}
+            <!-- Payment section -->
+            <section class="mb-4">
+              <h2 class="h5">Payment</h2>
+              <p>Total: <strong>{{ cart_total }} €</strong></p>
+              <div id="card-element" class="mb-3"><!-- Stripe Elements --></div>
+              <div id="card-errors" class="text-danger mb-2"></div>
+              <button id="submit" class="btn btn-success w-100">Pay now</button>
+            </section>
+          </form>
+        </main>
+      </div>
+    <!-- Order summary -->
+    <div class="col-lg-5">
+      <aside class="bg-light p-4 rounded shadow-sm mt-4 mt-lg-0">
+        <h2 class="h5 mb-3">Order summary</h2>
+        {% if cart_items %}
+          <ul class="list-group mb-3">
+            {% for item in cart_items %}
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                  <div class="fw-semibold">{{ item.product.name|truncatewords:6 }}</div>
+                  <img src="{{ item.image_url }}" alt="{{ item.color.name }}" style="width:35px; height:35px;">
                 </div>
-                <div class="mb-3">
-                    <label for="email_address" class="form-label">Email Address</label>
-                    <input type="email" class="form-control" id="email_address" name="email_address" required>
-                </div>
-                <div class="mb-3">
-                    <label for="street_address1" class="form-label">Street Address</label>
-                    <input type="text" class="form-control" id="street_address1" name="street_address1" required>
-                </div>
-                <div class="mb-3">
-                    <label for="street_address2" class="form-label">Street Address 2 (optional)</label>
-                    <input type="text" class="form-control" id="street_address2" name="street_address2">
-                </div>
-                <div class="mb-3">
-                    <label for="town_or_city" class="form-label">City</label>
-                    <input type="text" class="form-control" id="town_or_city" name="town_or_city" required>
-                </div>
-                <div class="mb-3">
-                    <label for="postcode" class="form-label">Postal Code</label>
-                    <input type="text" class="form-control" id="postcode" name="postcode">
-                </div>
-                <div class="mb-3">
-                    <label for="country" class="form-label">Country</label>
-                    <input type="text" class="form-control" id="country" name="country" required>
-                </div>
-                <div class="mb-3">
-                    <label for="phone_number" class="form-label">Phone Number</label>
-                    <input type="text" class="form-control" id="phone_number" name="phone_number">
-                </div>
-            </form>
-        </div>
-        <!-- Payment Section -->
-        <div class="col-md-6">
-            <h4 class="mb-3">Payment</h4>
-            <p>Total: <strong>{{ cart_total }} €</strong></p>
-            <form id="payment-form">
-                <div id="card-element" class="mb-3"><!-- Stripe Elements will be inserted here --></div>
-                <button id="submit" class="btn btn-success mt-3 w-100">Pay</button>
-                <div id="card-errors" role="alert" class="text-danger mt-2"></div>
-            </form>
-        </div>
+                <span>{{ item.price }} €</span>
+              </li>
+            {% endfor %}
+          </ul>
+          <div class="d-flex justify-content-between">
+            <span class="fw-bold">Total</span>
+            <span class="fw-bold">{{ cart_total }} €</span>
+          </div>
+        {% else %}
+          <p>Your cart is empty.</p>
+        {% endif %}
+      </aside>
     </div>
+  </div>
 </div>
 {% endblock %}
 
 {% block postloadjs %}
 <script src="https://js.stripe.com/v3/"></script>
 <script>
-    const stripe = Stripe('{{ stripe_public_key }}');
-    const elements = stripe.elements();
-    const card = elements.create('card');
-    card.mount('#card-element');
-    const form = document.getElementById('payment-form');
-    form.addEventListener('submit', function(event) {
-        event.preventDefault();
-        // Qui puoi aggiungere la validazione dei dati di spedizione se vuoi
-        stripe.confirmCardPayment('{{ client_secret }}', {
-            payment_method: {
-                card: card,
-            }
-        }).then(function(result) {
-            if (result.error) {
-                document.getElementById('card-errors').textContent = result.error.message;
-            } else {
-                if (result.paymentIntent.status === 'succeeded') {
-                    window.location.href = "{% url 'checkout_success' %}";
-                }
-            }
-        });
+  const stripe = Stripe('{{ stripe_public_key }}');
+  const elements = stripe.elements();
+  const card = elements.create('card');
+  card.mount('#card-element');
+  const form = document.getElementById('checkout-form');
+  form.addEventListener('submit', function(event) {
+    event.preventDefault();
+    stripe.confirmCardPayment('{{ client_secret }}', {
+      payment_method: {
+        card: card,
+        billing_details: {
+          name: document.getElementById('full_name').value,
+          email: document.getElementById('email_address').value
+        }
+      }
+    }).then(function(result) {
+      if (result.error) {
+        document.getElementById('card-errors').textContent = result.error.message;
+      } else {
+        if (result.paymentIntent.status === 'succeeded') {
+          form.submit(); // oppure redirect
+        }
+      }
     });
+  });
 </script>
 {% endblock %}
