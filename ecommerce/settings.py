@@ -15,6 +15,8 @@ import os  # Add os import for os.path.join
 
 import google.cloud.secretmanager as secretmanager
 import dj_database_url
+# urllib.parse is used to parse the database URL
+from urllib.parse import urlparse
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -64,15 +66,26 @@ if is_running_on_gcp():
         SECRET_KEY = os.environ.get('SECRET_KEY', 'fallback-insecure-key-for-emergencies')
         DATABASE_URL = os.environ.get('DATABASE_URL', '')
     DATABASES = {
-        'default': dj_database_url.parse(DATABASE_URL)
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': tmpPostgres.path.replace('/', ''),
+            'USER': tmpPostgres.username,
+            'PASSWORD': tmpPostgres.password,
+            'HOST': tmpPostgres.hostname,
+            'PORT': 5432,
+        }
     }
 else:
     # Local development
     SECRET_KEY = 'django-insecure-**ufr+c&*byb8zx64$1ih+ww2db665bkb2hrrx!gr7l!w9h*+&'
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ.get('LOCAL_DB_NAME', 'db'),
+            'USER': os.environ.get('LOCAL_DB_USER', 'postgres'),
+            'PASSWORD': os.environ.get('LOCAL_DB_PASSWORD', ''),
+            'HOST': os.environ.get('LOCAL_DB_HOST', 'localhost'),
+            'PORT': os.environ.get('LOCAL_DB_PORT', '5432'),
         }
     }
     STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY', '')

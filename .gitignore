@@ -176,4 +176,6 @@ cython_debug/
 # Data Pipeline scripts:
 pipeline.py
 dump_postgres.sql
+dump.sql
 populate_neon.py
+import_to_neon.sh
