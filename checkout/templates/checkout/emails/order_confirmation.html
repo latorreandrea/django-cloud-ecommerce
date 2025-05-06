@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    Order Confirmation
+{% endblock %}
+{% block content %}
+<div class="container my-5">
+    <h1>Thank you for your order!</h1>
+    <p>Dear {{ order.full_name }},</p>
+    <p>Your order (#{{ order.id }}) has been confirmed and is being processed.</p>
+    
+    <h2>Order Details:</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in order.items.all %}
+            <tr>
+                <td>{{ item.product.name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.price }} €</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <p>Shipping address:<br>
+    {{ order.full_name }}<br>
+    {{ order.street_address1 }}<br>
+    {% if order.street_address2 %}{{ order.street_address2 }}<br>{% endif %}
+    {{ order.town_or_city }}<br>
+    {{ order.county }}<br>
+    {{ order.postcode }}<br>
+    {{ order.country }}</p>
+    
+    <p>If you have any questions, please contact us at {{ contact_email }}.</p>
+    <p>Thank you for shopping with us!</p>
+</div>
+
+{% endblock %}

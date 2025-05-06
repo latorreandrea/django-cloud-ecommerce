@@ -9,9 +9,10 @@
         <table class="table align-middle">
             <thead>
                 <tr>
-                    <th scope="col">Product</th>
+                    <th scope="col">Name</th>
                     <th scope="col">Color</th>
                     <th scope="col">Size</th>
+                    <th scope="col">Qt.</th>
                     <th scope="col">Subtotal</th>
                     <th scope="col"></th>
                 </tr>
@@ -20,7 +21,8 @@
                 {% for item in cart_items %}
                 <tr>
                     <td>
-                        {{ item.product.name|truncatewords:6 }}
+                        <span class="d-none d-md-inline">{{ item.product.name|truncatewords:6 }}</span>
+                        <span class="d-inline d-md-none">{{ item.product.name|truncatewords:3 }}</span>
                     </td>
                     <td>
                         {% if item.image_url %}
@@ -37,6 +39,9 @@
                         {% else %}
                             -
                         {% endif %}
+                    </td>
+                    <td>
+                        {{ item.quantity }}
                     </td>
                     <td>{{ item.price }}€</td>
                     <td>

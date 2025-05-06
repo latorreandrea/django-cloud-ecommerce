@@ -1,0 +1,28 @@
+Thank you for your order!
+
+Dear {{ order.full_name }},
+
+Your order (#{{ order.id }}) has been confirmed and is being processed.
+
+ORDER DETAILS:
+---------------------------------
+{% for item in order.items.all %}
+* {{ item.product.name }} - Qty: {{ item.quantity }} - {{ item.price }} €
+{% endfor %}
+---------------------------------
+TOTAL: {{ order.get_total_cost }} €
+
+SHIPPING ADDRESS:
+{{ order.full_name }}
+{{ order.street_address1 }}
+{% if order.street_address2 %}{{ order.street_address2 }}{% endif %}
+{{ order.town_or_city }}
+{{ order.county }}
+{{ order.postcode }}
+{{ order.country }}
+
+If you have any questions, please contact us at {{ contact_email }}.
+
+Thank you for shopping with us!
+
+The BluntTee Ecommerce Team

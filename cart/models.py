@@ -18,6 +18,15 @@ class CartItem(models.Model):
     size = models.ForeignKey('products.Size', on_delete=models.SET_NULL, null=True, blank=True)
     quantity = models.PositiveIntegerField(default=1)
 
+    class Meta:
+        # prevent creations of duplicates in cart
+        constraints = [
+            models.UniqueConstraint(
+                fields=['cart', 'product', 'color', 'size'],
+                name='unique_cart_item'
+            ),
+        ]
+
 # wishlist management
 class Wishlist(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='wishlist')

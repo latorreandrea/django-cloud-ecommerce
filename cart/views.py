@@ -50,8 +50,7 @@ class CartView(TemplateView):
 def add_to_cart(request, product_id):
     """
     Add a product to the cart.
-    If the product is already in the cart, update the quantity.
-    If the product is not in the cart, create a new cart item.
+    If the product is already in the cart, increase its quantity.
     If the user is authenticated, use the Cart model.
     If the user is not authenticated, use the session to store cart items.
     """
@@ -60,6 +59,8 @@ def add_to_cart(request, product_id):
     size_id = request.POST.get('size_id')
     quantity = int(request.POST.get('quantity', 1))
 
+    # Check if color and size are provided
+    # If not, show a message and redirect to the product detail page
     if not color_id or not size_id:
         msg = random.choice(FORGOT_COLOR_SIZE_MESSAGES)
         messages.error(request, msg)
@@ -67,33 +68,62 @@ def add_to_cart(request, product_id):
 
     color = Color.objects.filter(id=color_id).first()
     size = Size.objects.filter(id=size_id).first() 
-    # create random success message
-    msg = random.choice(PRODUCT_ADDED_MESSAGES)
+    
+    # Handle authenticated users
     if request.user.is_authenticated:
         cart, _ = Cart.objects.get_or_create(user=request.user)
-        item, created = CartItem.objects.get_or_create(
-            cart=cart, product=product, color=color, size=size
-        )
-        if not created:
-            item.quantity += quantity
-        else:
-            item.quantity = quantity
-        item.save()
-        
+        try:
+            # Try to find the existing item
+            cart_item = CartItem.objects.get(
+                cart=cart,
+                product=product,
+                color=color,
+                size=size
+            )
+            # Update quantity if item exists
+            cart_item.quantity += quantity
+            cart_item.save()
+        except CartItem.DoesNotExist:
+            # Create new item if it doesn't exist
+            CartItem.objects.create(
+                cart=cart,
+                product=product,
+                color=color,
+                size=size,
+                quantity=quantity
+            )    
+    # Handle non-authenticated users (session)
     else:
         cart = request.session.get('cart', {})
         key = f"{product_id}:{color_id}:{size_id}"
-        if key in cart and isinstance(cart[key], dict):
-            cart[key]['quantity'] += quantity
+        
+        # If the item exists, update quantity
+        if key in cart:
+            if isinstance(cart[key], dict) and 'quantity' in cart[key]:
+                cart[key]['quantity'] += quantity
+            else:
+                # Fix invalid cart item format
+                cart[key] = {
+                    'product': product_id,
+                    'color': color_id,
+                    'size': size_id,
+                    'quantity': quantity,
+                }
+        # If the item doesn't exist, create it
         else:
             cart[key] = {
                 'product': product_id,
-                'quantity': quantity,
                 'color': color_id,
                 'size': size_id,
+                'quantity': quantity,
             }
+        
         request.session['cart'] = cart
+    
+    # Show success message
+    msg = random.choice(PRODUCT_ADDED_MESSAGES)
     messages.success(request, msg)
+    
     return redirect('product_detail', pk=product_id)
 
 

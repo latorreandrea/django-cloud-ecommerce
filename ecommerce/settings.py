@@ -63,8 +63,10 @@ if is_running_on_gcp():
     
     except Exception as e:
         print(f"Error accessing Secret Manager: {e}")
-        SECRET_KEY = os.environ.get('SECRET_KEY', 'fallback-insecure-key-for-emergencies')
+        SECRET_KEY = os.environ.get('SECRET_KEY')
         DATABASE_URL = os.environ.get('DATABASE_URL', '')
+
+    tmpPostgres = urlparse(DATABASE_URL)
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
@@ -263,7 +265,7 @@ else:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
     EMAIL_USE_TLS = True
     EMAIL_PORT = 587
-    EMAIL_HOST = 'smtp.gmail.com'
+    EMAIL_HOST = 'smtp.zoho.com'
     EMAIL_HOST_USER = os.environ.get('blunttee_EMAIL_HOST_USER')
     EMAIL_HOST_PASSWORD = os.environ.get('blunttee_EMAIL_HOST_PASS')
-    DEFAULT_FROM_EMAIL = os.environ.get('blunttee_EMAIL_HOST_USER')
+    DEFAULT_FROM_EMAIL = os.environ.get('blunttee_DEFAULT_FROM_EMAIL')
