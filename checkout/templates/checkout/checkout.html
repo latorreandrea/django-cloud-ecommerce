@@ -4,102 +4,296 @@
 
 {% block content %}
 <div class="container my-5">
+ 
   <div class="row">
     <!-- Main checkout form -->
     <div class="col-lg-7">
       <main id="checkout-main">
-        <h1 class="mb-4">Checkout</h1>
+        <h1 class="h3 mb-4">Complete Your Purchase</h1>
         <form id="checkout-form" method="post" novalidate>
           {% csrf_token %}
-          <!-- Shipment Info -->
-          <div class="card mb-3">
-            <div class="card-header" id="heading-shipping">
-              <h2 class="mb-0">
-                <button class="btn btn-link fw-bold text-decoration-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-shipping" aria-expanded="true" aria-controls="collapse-shipping">
-                  Shipping Info – Your tees are itching to travel!
+          
+          <!-- Shipping Info -->
+          <div class="card mb-4 border-0 shadow-sm">
+            <div class="card-header bg-white py-3" id="heading-shipping">
+              <h2 class="h5 mb-0 d-flex align-items-center">
+                <button class="btn btn-link fw-bold text-decoration-none text-start p-0 w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-shipping" aria-expanded="true" aria-controls="collapse-shipping">
+                  Shipping Address
                 </button>
               </h2>
             </div>
             <div id="collapse-shipping" class="collapse show" aria-labelledby="heading-shipping">
-              <div class="card-body" id="shipping-fields">
-                {{ form.full_name|as_crispy_field }}
-                {{ form.email_address|as_crispy_field }}
-                {{ form.phone_number|as_crispy_field }}
-                {{ form.street_address1|as_crispy_field }}
-                {{ form.street_address2|as_crispy_field }}
-                {{ form.town_or_city|as_crispy_field }}
-                {{ form.county|as_crispy_field }}
-                {{ form.postcode|as_crispy_field }}
-                {{ form.country|as_crispy_field }}
+              <div class="card-body p-4" id="shipping-fields">
+                <!-- Personal Info -->
+                <div class="row mb-3">
+                  <div class="col-md-6 mb-3 mb-md-0">
+                    {{ form.full_name|as_crispy_field }}
+                  </div>
+                  <div class="col-md-6">
+                    {{ form.email_address|as_crispy_field }}
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    {{ form.phone_number|as_crispy_field }}
+                  </div>
+                  <div class="col-md-6">
+                    {{ form.country|as_crispy_field }}
+                  </div>
+                </div>
+                
+                <!-- Address Info -->
+                <div class="row mb-3">
+                  <div class="col-12 mb-3">
+                    {{ form.street_address1|as_crispy_field }}
+                  </div>
+                  <div class="col-12">
+                    {{ form.street_address2|as_crispy_field }}
+                  </div>
+                </div>
+                
+                <div class="row">
+                  <div class="col-md-4 mb-3 mb-md-0">
+                    {{ form.town_or_city|as_crispy_field }}
+                  </div>
+                  <div class="col-md-4 mb-3 mb-md-0">
+                    {{ form.county|as_crispy_field }}
+                  </div>
+                  <div class="col-md-4">
+                    {{ form.postcode|as_crispy_field }}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
-            <!-- Checkbox for different billing address -->
-            <div class="form-check my-3">
-              <input class="form-check-input" type="checkbox" id="billing-different" name="billing_different">
-              <label class="form-check-label" for="billing-different">
-                The billing address is different from the shipping address
-              </label>
-            </div>
+          <!-- Billing Address Toggle -->
+          <div class="form-check mb-4">
+            <input class="form-check-input" type="checkbox" id="billing-different" name="billing_different">
+            <label class="form-check-label fw-medium" for="billing-different">
+              My billing address is different from my shipping address
+            </label>
+          </div>
 
-            <!-- Billing Info -->
-            <div class="card mb-3" id="billing-card" style="display: none;">
-              <div class="card-header" id="heading-billing">
-                <h2 class="mb-0">
-                  <button class="btn btn-link fw-bold text-decoration-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-billing" aria-expanded="false" aria-controls="collapse-billing" id="billing-summary-btn">
-                    Billing Info – Boring but important!
-                  </button>
-                </h2>
-              </div>
-              <div id="collapse-billing" class="collapse" aria-labelledby="heading-billing">
-                <div class="card-body" id="billing-fields">
-                  {{ form.billing_full_name|as_crispy_field }}
-                  {{ form.billing_email_address|as_crispy_field }}
-                  {{ form.billing_phone_number|as_crispy_field }}
-                  {{ form.billing_street_address1|as_crispy_field }}
-                  {{ form.billing_street_address2|as_crispy_field }}
-                  {{ form.billing_town_or_city|as_crispy_field }}
-                  {{ form.billing_county|as_crispy_field }}
-                  {{ form.billing_postcode|as_crispy_field }}
-                  {{ form.billing_country|as_crispy_field }}
+          <!-- Billing Info -->
+          <div class="card mb-4 border-0 shadow-sm" id="billing-card" style="display: none;">
+            <div class="card-header bg-white py-3" id="heading-billing">
+              <h2 class="h5 mb-0 d-flex align-items-center">
+                <button class="btn btn-link fw-bold text-decoration-none text-start p-0 w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-billing" aria-expanded="true" aria-controls="collapse-billing" id="billing-summary-btn">
+                  Billing Address
+                </button>
+              </h2>
+            </div>
+            <div id="collapse-billing" class="collapse show" aria-labelledby="heading-billing">
+              <div class="card-body p-4" id="billing-fields">
+                <!-- Personal Info -->
+                <div class="row mb-3">
+                  <div class="col-md-6 mb-3 mb-md-0">
+                    {{ form.billing_full_name|as_crispy_field }}
+                  </div>
+                  <div class="col-md-6">
+                    {{ form.billing_email_address|as_crispy_field }}
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    {{ form.billing_phone_number|as_crispy_field }}
+                  </div>
+                  <div class="col-md-6">
+                    {{ form.billing_country|as_crispy_field }}
+                  </div>
+                </div>
+                
+                <!-- Address Info -->
+                <div class="row mb-3">
+                  <div class="col-12 mb-3">
+                    {{ form.billing_street_address1|as_crispy_field }}
+                  </div>
+                  <div class="col-12">
+                    {{ form.billing_street_address2|as_crispy_field }}
+                  </div>
+                </div>
+                
+                <div class="row">
+                  <div class="col-md-4 mb-3 mb-md-0">
+                    {{ form.billing_town_or_city|as_crispy_field }}
+                  </div>
+                  <div class="col-md-4 mb-3 mb-md-0">
+                    {{ form.billing_county|as_crispy_field }}
+                  </div>
+                  <div class="col-md-4">
+                    {{ form.billing_postcode|as_crispy_field }}
+                  </div>
                 </div>
               </div>
             </div>
-            <!-- Payment section -->
-            <section class="mb-4">
-              <h2 class="h5">Payment</h2>
-              <p>Total: <strong>{{ cart_total }} €</strong></p>
-              <div id="card-element" class="mb-3"></div>
-              <div id="card-errors" class="text-danger mb-2"></div>
-              <button id="submit" class="btn btn-success w-100">Pay now</button>
-            </section>
+          </div>
+          
+          <!-- Payment section -->
+          <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white py-3">
+              <h2 class="h5 mb-0 d-flex align-items-center">
+                Payment Method
+              </h2>
+            </div>
+            <div class="card-body p-4">
+              <p class="text-muted mb-3">All transactions are secure and encrypted.</p>
+              
+              <!-- Card visualization container -->
+              <div class="mb-4">
+                <!-- Credit Card Visual Representation -->
+                <div class="card-wrapper mb-4" style="width: 100%; max-width: 400px; margin: auto;">
+                  <div class="jp-card-container">
+                    <div class="jp-card jp-card-identified">
+                      <div class="jp-card-front bg-primary bg-gradient" style="border-radius: 12px;">
+                        <div class="jp-card-logo d-flex align-items-center p-3">
+                          <i class="fab fa-cc-visa fa-2x text-white"></i>
+                          <i class="fab fa-cc-mastercard fa-2x text-white ms-2"></i>
+                          <i class="fab fa-cc-amex fa-2x text-white ms-2"></i>
+                        </div>
+                        
+                        <div class="jp-card-lower p-3">
+                          <div class="jp-card-shiny" style="right: 20px; top: 20px;"></div>
+                          
+                          <!-- Card Number Display -->
+                          <div id="card-display-number" class="jp-card-number h5 text-white mt-4 mb-3">
+                            •••• •••• •••• ••••
+                          </div>
+                          
+                          <div class="d-flex justify-content-between">
+                            <!-- Card Holder Display -->
+                            <div>
+                              <div class="text-white opacity-75 small">Card Holder</div>
+                              <div id="card-display-name" class="text-white fw-light">Your Name</div>
+                            </div>
+                            
+                            <!-- Expiry Display -->
+                            <div>
+                              <div class="text-white opacity-75 small">Expires</div>
+                              <div id="card-display-expiry" class="text-white fw-light">MM/YY</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <!-- Back of the card (will be shown when entering CVC) -->
+                      <div class="jp-card-back bg-primary bg-gradient" style="border-radius: 12px; display: none;">
+                        <div class="jp-card-bar bg-dark" style="height: 40px; margin-top: 30px;"></div>
+                        <div class="jp-card-cvc text-end p-3">
+                          <div class="text-white opacity-75 small">CVC</div>
+                          <div class="bg-white p-2 d-inline-block" style="min-width: 60px;">
+                            <span id="card-display-cvc">•••</span>
+                          </div>
+                        </div>
+                        <div class="jp-card-shiny mt-3" style="margin-left: auto; margin-right: 20px;"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Stripe Card Element (visibile and functional) -->
+              <label for="card-element" class="form-label">Card Details</label>
+              <div id="card-element" class="form-control p-3 mb-3"></div>
+              
+              <!-- Error display -->
+              <div id="card-errors" class="text-danger mt-3" role="alert"></div>
+            </div>
+          </div>
+          
+          <!-- Submit button -->
+          <div class="d-grid">
+            <button id="submit" class="btn btn-primary btn-lg py-3">
+              <span class="d-flex align-items-center justify-content-center">
+                <span class="me-2">Pay {{ cart_total }} €</span>
+                <i class="fas fa-lock"></i>
+              </span>
+            </button>
+          </div>
         </form>
       </main>
     </div>
+    
     <!-- Order summary -->
     <div class="col-lg-5">
-      <aside class="bg-light p-4 rounded shadow-sm mt-4 mt-lg-0">
-        <h2 class="h5 mb-3">Order summary</h2>
-        {% if cart_items %}
-          <ul class="list-group mb-3">
-            {% for item in cart_items %}
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                <div>
-                  <div class="fw-semibold">{{ item.product.name|truncatewords:6 }}</div>
-                  <img src="{{ item.image_url }}" alt="{{ item.color.name }}" style="width:35px; height:35px;">
-                </div>
-                <span>{{ item.price }} €</span>
-              </li>
-            {% endfor %}
-          </ul>
-          <div class="d-flex justify-content-between">
-            <span class="fw-bold">Total</span>
-            <span class="fw-bold">{{ cart_total }} €</span>
+      <aside>
+        <div class="card border-0 shadow-sm mb-4 sticky-lg-top" style="top: 1rem;">
+          <div class="card-header bg-white py-3">
+            <h2 class="h5 mb-0">Order Summary</h2>
           </div>
-        {% else %}
-          <p>Your cart is empty.</p>
-        {% endif %}
+          <div class="card-body p-4">
+            {% if cart_items %}
+              <ul class="list-group list-group-flush mb-4">
+                {% for item in cart_items %}
+                  <li class="list-group-item px-0 py-3 d-flex justify-content-between align-items-center border-bottom">
+                    <div class="d-flex align-items-center">
+                      {% if item.image_url %}
+                        <div class="me-3 border" style="width: 60px; height: 60px; overflow: hidden;">
+                          <img src="{{ item.image_url }}" alt="{{ item.product.name }}" class="img-fluid">
+                        </div>
+                      {% endif %}
+                      <div>
+                        <h6 class="mb-0">{{ item.product.name|truncatechars:20 }}</h6>
+                        <small class="text-muted">
+                          {% if item.color %}{{ item.color.name }}{% endif %}
+                          {% if item.size %} / {{ item.size.name }}{% endif %}
+                          {% if item.quantity > 1 %} / Qty: {{ item.quantity }}{% endif %}
+                        </small>
+                      </div>
+                    </div>
+                    <span class="fw-medium">{{ item.price }} €</span>
+                  </li>
+                {% endfor %}
+              </ul>
+              
+              <div class="border-bottom mb-3">
+                <div class="d-flex justify-content-between mb-2">
+                  <span>Subtotal</span>
+                  <span>{{ cart_subtotal }} €</span>
+                </div>
+                <div class="d-flex justify-content-between mb-3">
+                  <span>Shipping</span>
+                  {% if shipping_cost > 0 %}
+                    <div class="text-end">
+                      <span>{{ shipping_cost }} €</span>
+                      {% if items_for_free_shipping > 0 %}
+                        <div class="text-success small">
+                          <i class="fas fa-info-circle me-1"></i>Add {{ items_for_free_shipping }} more item{% if items_for_free_shipping != 1 %}s{% endif %} for free shipping!
+                        </div>
+                      {% endif %}
+                    </div>
+                  {% else %}
+                    <span class="text-success">Free!</span>
+                  {% endif %}
+                </div>
+              </div>
+              
+              <div class="d-flex justify-content-between mb-0">
+                <span class="h5 fw-bold">Total</span>
+                <span class="h5 fw-bold">{{ cart_total }} €</span>
+              </div>
+              
+              <!-- Security badges -->
+              <div class="text-center mt-4">
+                <div class="d-flex justify-content-center gap-3 mb-2">
+                  <i class="fas fa-lock text-muted"></i>
+                  <i class="fab fa-cc-visa text-muted"></i>
+                  <i class="fab fa-cc-mastercard text-muted"></i>
+                  <i class="fab fa-cc-amex text-muted"></i>
+                </div>
+                <small class="text-muted">Your payment is secure and encrypted</small>
+              </div>
+            {% else %}
+              <div class="text-center py-4">
+                <div class="mb-3">
+                  <i class="fas fa-shopping-cart fa-3x text-muted"></i>
+                </div>
+                <p>Your cart is empty.</p>
+                <a href="{% url 'products' %}" class="btn btn-outline-primary">Continue Shopping</a>
+              </div>
+            {% endif %}
+          </div>
+        </div>
       </aside>
     </div>
   </div>

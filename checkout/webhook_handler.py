@@ -5,6 +5,7 @@ from django.template.loader import render_to_string
 from django.conf import settings
 from .models import Order, EventLog
 from cart.models import Cart, CartItem
+import stripe
 
 
 def send_order_confirmation(order):
@@ -67,6 +68,11 @@ def handle_payment_succeeded(event):
             
             # Send confirmation email
             send_order_confirmation(order)
+
+    except Exception as e:
+        # Log dettagliato dell'errore
+        import logging
+        logging.error(f"Error in handle_payment_succeeded: {str(e)}")
             
     except Order.DoesNotExist:
         # Log error

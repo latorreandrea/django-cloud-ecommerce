@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.http import HttpResponseRedirect
-from products.models import Product, Color, Size
+from products.models import Product, Color, Size, ProductImage
 from .models import Cart, CartItem, Wishlist, WishlistItem
 # use of random to use random messages
 import random
@@ -32,6 +32,16 @@ PRODUCT_ADDED_MESSAGES = [
     "Success! You’ve just adopted a new piece of fabric with attitude.",
 ]
 
+SUCCESSFULY_REMOVED_MESSAGES = [
+    "Poof! That item has vanished from your cart like magic.",
+    "Gone! That item has left the building, and your cart.",
+    "Adios! That item has bid farewell to your cart.",
+    "Bye-bye! That item has exited your cart, stage left.",
+    "Deleted! That item has been shown the door from your cart.",
+    "Removed! That item has taken its final bow in your cart.",
+    "Outta here! That item has made its grand exit from your cart."
+]
+
 
 # Create your views here.
 class CartView(TemplateView):
@@ -43,7 +53,75 @@ class CartView(TemplateView):
     template_name = 'cart/cart.html'
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)        
+        context = super().get_context_data(**kwargs)
+        cart_items = []
+        cart_total = 0
+
+        # for authenticated users
+        if self.request.user.is_authenticated:
+            try:
+                cart = Cart.objects.get(user=self.request.user)
+                for item in CartItem.objects.filter(cart=cart):
+                    image_url = None
+                    if item.color:
+                        product_image = ProductImage.objects.filter(
+                            product=item.product, 
+                            color=item.color
+                        ).first()
+                        if product_image:
+                            image_url = product_image.small_image
+                    cart_items.append({
+                        'product': item.product,
+                        'color': item.color,
+                        'size': item.size,
+                        'quantity': item.quantity,
+                        'price': item.product.price * item.quantity,
+                        'image_url': image_url,
+                        'key': f"{item.id}"  # Aggiungi una chiave univoca per ogni elemento
+                    })
+                    cart_total += item.product.price * item.quantity
+            except Cart.DoesNotExist:
+                pass
+        # for not authenticated users
+        else:
+            cart = self.request.session.get('cart', {})
+            for key, item_data in cart.items():
+                try:
+                    product_id = int(item_data.get('product'))
+                    product = Product.objects.get(id=product_id)
+                    color_id = item_data.get('color')
+                    size_id = item_data.get('size')
+                    quantity = int(item_data.get('quantity', 1))
+
+                    # find color and size
+                    color = None
+                    size = None
+                    image_url = None
+                    if color:
+                            product_image = ProductImage.objects.filter(
+                                product=product,
+                                color=color
+                            ).first()
+                            if product_image:
+                                image_url = product_image.small_image
+                    if size_id:
+                        size = Size.objects.filter(id=size_id).first()
+
+                    cart_items.append({
+                        'product': product,
+                        'color': color,
+                        'size': size,
+                        'quantity': quantity,
+                        'price': product.price * quantity,
+                        'image_url': image_url,
+                        'key': key
+                    })
+                    cart_total += product.price * quantity
+                except (Product.DoesNotExist, ValueError, TypeError, KeyError):
+                    pass
+
+        context['cart_items'] = cart_items
+        context['cart_total'] = cart_total
         return context
 
 
@@ -131,10 +209,24 @@ def remove_from_cart(request, key):
     """
     Remove an item from the session cart by its key.
     """
-    cart = request.session.get('cart', {})
-    if key in cart:
-        del cart[key]
-        request.session['cart'] = cart
+    if request.user.is_authenticated:
+        # use key as id of CartItem
+        try:
+            item_id = int(key)
+            CartItem.objects.filter(id=item_id, cart__user=request.user).delete()
+        except (ValueError, CartItem.DoesNotExist):
+            pass
+    else:
+        # For unauthenticated users, use the session key
+        cart = request.session.get('cart', {})
+        if key in cart:
+            del cart[key]
+            request.session['cart'] = cart
+    
+    # Show success message
+    msg = random.choice(SUCCESSFULY_REMOVED_MESSAGES)
+    messages.success(request, msg)
+            
     return HttpResponseRedirect(reverse('cart'))
 
 

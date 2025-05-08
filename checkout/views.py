@@ -6,10 +6,10 @@ from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.contrib import messages
-from products.models import Product
+from products.models import Product, Color, Size, ProductImage
 from cart.models import Cart, CartItem
 from .forms import OrderForm
-from .models import Order
+from .models import Order, OrderItem
 import stripe
 import time
 import uuid
@@ -32,19 +32,93 @@ class CheckoutView(TemplateView):
         """
         context = super().get_context_data(**kwargs)
         context['form'] = OrderForm()
+        # Get cart items
+        cart_items = []
+        # For authenticated users
+        if self.request.user.is_authenticated:
+            try:
+                cart = Cart.objects.get(user=self.request.user)
+                for item in CartItem.objects.filter(cart=cart):
+                    # Get image URL correctly
+                    image_url = None
+                    if item.color:
+                        product_image = ProductImage.objects.filter(
+                            product=item.product, 
+                            color=item.color
+                        ).first()
+                        if product_image:
+                            image_url = product_image.small_image
+                    
+                    cart_items.append({
+                        'product': item.product,
+                        'color': item.color,
+                        'size': item.size,
+                        'quantity': item.quantity,
+                        'price': item.product.price * item.quantity,
+                        'image_url': image_url,
+                    })
+            except Cart.DoesNotExist:
+                pass
+        # For non-authenticated users
+        else:
+            cart = self.request.session.get('cart', {})
+            for key, item_data in cart.items():
+                try:
+                    product_id = int(item_data.get('product'))
+                    product = Product.objects.get(id=product_id)
+                    quantity = int(item_data.get('quantity', 1))
+                    color_id = item_data.get('color')
+                    size_id = item_data.get('size')
+                    
+                    # Find color and size
+                    color = None
+                    size = None
+                    image_url = None
+                    
+                    if color_id:
+                        color = Color.objects.filter(id=color_id).first()
+                        if color:
+                            product_image = ProductImage.objects.filter(
+                                product=product,
+                                color=color
+                            ).first()
+                            if product_image:
+                                image_url = product_image.small_image
+                                
+                    if size_id:
+                        size = Size.objects.filter(id=size_id).first()
+
+                    cart_items.append({
+                        'product': product,
+                        'color': color,
+                        'size': size,
+                        'quantity': quantity,
+                        'price': product.price * quantity,  # Prezzo * quantità
+                        'image_url': image_url,
+                    })
+                except (Product.DoesNotExist, ValueError, TypeError, KeyError):
+                    pass
+                    
+        # Calculate subtotal from cart
+        cart_subtotal = self._calculate_cart_total()
         
-        # Calculate cart total based on user type (authenticated or session)
-        cart_total = self._calculate_cart_total()
+        # Calculate shipping cost
+        shipping_cost = self._calculate_shipping_cost(cart_items)
         
-        # Ensure minimum amount for Stripe (0.50 in most currencies)
-        if cart_total < 0.50 and cart_total > 0:
-            cart_total = 0.50
-            
-        # If cart is empty, don't create payment intent
-        if cart_total <= 0:
-            context['empty_cart'] = True
+        # Calculate total (products + shipping)
+        cart_total = cart_subtotal + shipping_cost
+
+        # Calulate number of product for free shipping
+        items_for_free_shipping = max(0, 5 - len(cart_items))
+        
+        # Add to context
+        context['cart_items'] = cart_items
+        context['cart_subtotal'] = cart_subtotal
+        context['shipping_cost'] = shipping_cost
+        context['cart_total'] = cart_total
+        context['items_for_free_shipping'] = items_for_free_shipping
         context['stripe_public_key'] = settings.STRIPE_PUBLIC_KEY
-        context['cart_total'] = 0
+        
         return context
         
     
@@ -52,7 +126,6 @@ class CheckoutView(TemplateView):
         """
         Calculate the total cost of items in the cart.
         Handles both authenticated users (database) and non-authenticated users (session).
-        
         Returns:
             float: Total cost of items in the cart
         """
@@ -81,6 +154,35 @@ class CheckoutView(TemplateView):
                 cart_total = 0
                 
         return cart_total
+
+    def _calculate_shipping_cost(self, cart_items):
+        """
+        Calculate shipping cost based on total quantity of products:
+        - 1 product: 10€
+        - 2-4 products: 11€
+        - 5+ products: free shipping
+        
+        Args:
+            cart_items: List of cart items
+        
+        Returns:
+            float: Shipping cost
+        """
+        # Somma le quantità di tutti i prodotti
+        total_quantity = sum(item.get('quantity', 1) for item in cart_items)
+        
+        if total_quantity >= 5:
+            # Free shipping for 5+ products
+            return 0
+        elif total_quantity > 1:
+            # Base price + 1€ for second product
+            return 11
+        elif total_quantity == 1:
+            # Base price for one product
+            return 10
+        else:
+            # Empty cart
+            return 0
 
     def post(self, request, *args, **kwargs):
         """
@@ -236,8 +338,9 @@ def create_order(request):
     order.status = 'pending'
     order.save()
     
-    # Handle order items
-    cart_total = 0
+    # Prepare cart_items for subtotal and shipping calculation
+    cart_items = []
+    cart_subtotal = 0
     
     # Create order items from cart
     if request.user.is_authenticated:
@@ -253,7 +356,14 @@ def create_order(request):
                     color=item.color,
                     size=item.size
                 )
-                cart_total += item.quantity * item.product.price
+                # Add to subtotal
+                cart_subtotal += item.quantity * item.product.price
+                
+                # Add to cart_items for shipping calculation
+                cart_items.append({
+                    'quantity': item.quantity,
+                    'price': item.product.price * item.quantity
+                })
         except Cart.DoesNotExist:
             pass
     else:
@@ -271,10 +381,8 @@ def create_order(request):
                 color = None
                 size = None
                 if color_id:
-                    from products.models import Color
                     color = Color.objects.filter(id=color_id).first()
                 if size_id:
-                    from products.models import Size
                     size = Size.objects.filter(id=size_id).first()
                 
                 OrderItem.objects.create(
@@ -285,9 +393,27 @@ def create_order(request):
                     color=color,
                     size=size
                 )
-                cart_total += quantity * product.price
+                # Add to subtotal
+                cart_subtotal += quantity * product.price
+                
+                # Add to cart_items for shipping calculation
+                cart_items.append({
+                    'quantity': quantity,
+                    'price': product.price * quantity
+                })
             except (KeyError, Product.DoesNotExist, ValueError):
                 continue
+    
+    # Calculate shipping cost
+    view = CheckoutView()
+    shipping_cost = view._calculate_shipping_cost(cart_items)
+    
+    # Save shipping cost to order
+    order.shipping_cost = shipping_cost
+    order.save()
+    
+    # Calculate total with shipping
+    cart_total = cart_subtotal + shipping_cost
     
     # Ensure minimum amount for Stripe
     if cart_total < 0.50 and cart_total > 0:
@@ -296,16 +422,17 @@ def create_order(request):
     try:
         # Create a unique idempotency key for the payment intent
         idempotency_key = f"order_{int(time.time())}_{uuid.uuid4()}"
+        
         # Create payment intent with order ID in metadata        
         intent = stripe.PaymentIntent.create(
-            amount=int(cart_total * 100),
+            amount=int(cart_total * 100),  # Now includes shipping cost
             currency='eur',
             metadata={
                 'order_id': order.id,
                 'user_id': request.user.id if request.user.is_authenticated else 'anonymous'
             },
             # Ensure the payment intent is unique
-            idempotency_key=idempotency_key
+            idempotency_key=idempotency_key,
             setup_future_usage='off_session',
         )
         
@@ -329,3 +456,45 @@ class CheckoutSuccessView(TemplateView):
     Display order confirmation after successful checkout.
     """
     template_name = 'checkout/success.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        # Get the order ID from the URL
+        order_id = self.request.GET.get('order_id')
+        payment_confirmed = self.request.GET.get('payment_confirmed') == 'true'
+        
+        if order_id:
+            try:
+                # Get the order
+                order = Order.objects.get(id=order_id)
+                
+                # Verifica l'ordine appartiene all'utente o è un ordine di utente non autenticato
+                if (self.request.user.is_authenticated and order.user == self.request.user) or \
+                   (not self.request.user.is_authenticated and not order.user):
+                    context['order'] = order
+                    context['order_number'] = order.id
+                
+                # Clear the cart only if payment is confirmed
+                if payment_confirmed or order.paid:
+                    self._clear_cart()
+                    
+            except Order.DoesNotExist:
+                pass
+                
+        return context
+
+    def _clear_cart(self):
+        """Clear the user's cart after successful checkout"""
+        if self.request.user.is_authenticated:
+            # for authenticated users
+            try:
+                cart = Cart.objects.get(user=self.request.user)
+                CartItem.objects.filter(cart=cart).delete()
+            except Cart.DoesNotExist:
+                pass
+        else:
+            # for non-authenticated users
+            if 'cart' in self.request.session:
+                del self.request.session['cart']
+                self.request.session.modified = True

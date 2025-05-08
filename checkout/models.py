@@ -42,7 +42,12 @@ class Order(models.Model):
     billing_county = models.CharField(max_length=40, blank=True)
     billing_postcode = models.CharField(max_length=20, blank=True)
     billing_country = CountryField(blank=True)
+    shipping_cost = models.DecimalField(max_digits=6, decimal_places=2, default=0)
 
+    def get_total_cost(self):
+        """Calculate total cost including shipping"""
+        items_total = sum(item.price * item.quantity for item in self.items.all())
+        return items_total + self.shipping_cost
 
 class OrderItem(models.Model):
     """Items within an order"""
