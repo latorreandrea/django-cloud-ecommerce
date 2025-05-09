@@ -181,3 +181,5 @@ populate_neon.py
 import_to_neon.sh
 stripe.tar.gz
 neon_backup.sql
+upload_static.py
+upload_static_to_gcs.py
