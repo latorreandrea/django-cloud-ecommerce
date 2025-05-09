@@ -33,6 +33,13 @@ def is_running_on_gcp():
 if is_running_on_gcp():
     # Use PROJECT_ID as GCP project ID
     PROJECT_ID = os.environ.get('PROJECT_ID')
+    # Cookies settings
+    # Set CSRF_COOKIE_SECURE and SESSION_COOKIE_SECURE to True for production
+    # This ensures that cookies are only sent over HTTPS connections
+    # and helps prevent session hijacking
+    # and CSRF attacks.
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
     try:
         client = secretmanager.SecretManagerServiceClient()
         
@@ -105,6 +112,13 @@ if is_running_on_gcp():
         '.run.app', 'blunttee.com', 'www.blunttee.com',  # All Cloud Run URLs
         os.environ.get('ALLOWED_HOST', ''),  # Custom domain if specified
     ])
+
+    # Add CSRF trusted origins for HTTPS sites
+    CSRF_TRUSTED_ORIGINS = [
+        'https://blunttee.com',
+        'https://www.blunttee.com',
+        'https://*.run.app',  # For Cloud Run URLs
+    ]
 
 
 

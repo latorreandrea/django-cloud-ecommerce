@@ -180,3 +180,4 @@ dump.sql
 populate_neon.py
 import_to_neon.sh
 stripe.tar.gz
+neon_backup.sql
