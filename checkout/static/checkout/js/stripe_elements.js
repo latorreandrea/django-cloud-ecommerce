@@ -248,15 +248,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 submitButton.innerHTML = '<span class="d-flex align-items-center justify-content-center"><span class="me-2">Pay now</span><i class="fas fa-lock"></i></span>';
             } else {
                 if (result.paymentIntent.status === 'succeeded') {
-                    // Add payment intent ID to form and redirect
-                    const paymentIntentInput = document.createElement('input');
-                    paymentIntentInput.type = 'hidden';
-                    paymentIntentInput.name = 'payment_intent_id';
-                    paymentIntentInput.value = result.paymentIntent.id;
-                    form.appendChild(paymentIntentInput);
-                    
                     // Redirect to success page
-                    window.location.href = `/checkout/success/?order_id=${data.order_id}&payment_confirmed=true`;
+                    window.location.href = `/checkout/success/?payment_confirmed=true`;
                 } else if (result.paymentIntent.status === 'requires_action') {
                     // Handle 3D Secure
                     const { error, paymentIntent } = await stripe.confirmCardPayment(data.client_secret);

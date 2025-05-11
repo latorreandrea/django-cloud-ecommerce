@@ -1,103 +1,19 @@
-from django.utils import timezone
-from datetime import datetime
+from django.http import HttpResponse
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.conf import settings
-from .models import Order, EventLog
+from django.contrib.auth import get_user_model
+from django.utils import timezone
+
+from .models import Order, OrderItem, PendingOrder, EventLog
 from cart.models import Cart, CartItem
+from products.models import Product, Color, Size
+
 import stripe
+import json
+import logging
 
-
-def send_order_confirmation(order):
-    """Send order confirmation email"""
-    subject = f'Order Confirmation #{order.id}'
-    from_email = settings.DEFAULT_FROM_EMAIL
-    to_email = order.email_address
-    
-    # Render email template
-    context = {
-        'order': order,
-        'contact_email': settings.DEFAULT_FROM_EMAIL,
-    }
-    message = render_to_string('checkout/emails/order_confirmation.txt', context)
-    html_message = render_to_string('checkout/emails/order_confirmation.html', context)
-    
-    # Send email
-    send_mail(subject, message, from_email, [to_email], html_message=html_message, fail_silently=True)
-
-
-def handle_payment_succeeded(event):
-    """
-    Handle successful payment events from Stripe.
-    This function updates the order status in the database,
-    empties the cart, and sends a confirmation email.
-    """
-    payment_intent = event['data']['object']
-    order_id = payment_intent['metadata'].get('order_id')
-    try:
-        order = Order.objects.get(id=order_id)
-
-        pi_retrieve = stripe.PaymentIntent.retrieve(payment_intent['id'])
-        # Check if the payment intent status isn't succeeded
-        if pi_retrieve.status != 'succeeded':
-            print(f"Warning: Payment intent {payment_intent['id']} has status {pi_retrieve.status} in Stripe API!")
-            return
-        
-        if not order.paid:  # Prevent duplicates
-            # Mark as paid
-            order.paid = True
-            order.status = 'paid'
-            order.payment_date = timezone.now()
-            order.save()
-
-            # Register details of the payment
-            payment_details = {
-                'stripe_id': payment_intent['id'],
-                'amount': payment_intent['amount'] / 100,  # Convert from cents
-                'payment_method': payment_intent.get('payment_method_types', ['unknown'])[0],
-                'created': datetime.fromtimestamp(payment_intent['created']),
-                'currency': payment_intent['currency'],
-            }
-            # Empty the cart
-            if order.user:
-                try:
-                    cart = Cart.objects.get(user=order.user)
-                    CartItem.objects.filter(cart=cart).delete()
-                except Cart.DoesNotExist:
-                    pass
-            
-            # Send confirmation email
-            send_order_confirmation(order)
-
-    except Exception as e:
-        # Log dettagliato dell'errore
-        import logging
-        logging.error(f"Error in handle_payment_succeeded: {str(e)}")
-            
-    except Order.DoesNotExist:
-        # Log error
-        print(f"Error: Order with ID {order_id} not found.")
-    except stripe.error.StripeError as e:
-        # Log stripe error
-        print(f"Stripe error: {str(e)}")
-
-
-
-def handle_payment_failed(event):
-    """Handle failed payment events from Stripe"""
-    payment_intent = event['data']['object']
-    order_id = payment_intent['metadata'].get('order_id')
-    
-    try:
-        order = Order.objects.get(id=order_id)
-        # Update order status
-        order.status = 'cancelled'
-        order.save()
-        
-        # Optionally notify the customer
-    except Order.DoesNotExist:
-        # Log error
-        print(f"Error: Order with ID {order_id} not found.")
+logger = logging.getLogger(__name__)
 
 
 def handle_stripe_event(event):
@@ -120,5 +36,184 @@ def handle_stripe_event(event):
         handle_payment_succeeded(event)
     elif event_type == 'payment_intent.payment_failed':
         handle_payment_failed(event)
+
+
+def handle_payment_succeeded(event):
+    """   
+    Handle the payment succeeded event from Stripe.
+    This function creates an order in the database from the pending order data.    
+    """
+    payment_intent = event['data']['object']
+    pending_order_id = payment_intent['metadata'].get('pending_order_id')
+
+    logger.info(f"Webhook payment_succeeded received for pending_order_id: {pending_order_id}")
+
+    try:
+        # Retrieve the pending order
+        pending_order = PendingOrder.objects.get(id=pending_order_id)
+
+        # Retrieve the order and item data
+        order_data = pending_order.order_data
+        items_data = pending_order.items_data
+
+        # Create the real order
+        order = Order(
+            full_name=order_data['full_name'],
+            email_address=order_data['email_address'],
+            phone_number=order_data['phone_number'],
+            country=order_data['country'],
+            postcode=order_data['postcode'],
+            town_or_city=order_data['town_or_city'],
+            street_address1=order_data['street_address1'],
+            street_address2=order_data.get('street_address2', ''),
+            county=order_data.get('county', ''),
+            billing_full_name=order_data.get('billing_full_name', ''),
+            billing_email_address=order_data.get('billing_email_address', ''),
+            billing_phone_number=order_data.get('billing_phone_number', ''),
+            billing_country=order_data.get('billing_country', ''),
+            billing_postcode=order_data.get('billing_postcode', ''),
+            billing_town_or_city=order_data.get('billing_town_or_city', ''),
+            billing_street_address1=order_data.get('billing_street_address1', ''),
+            billing_street_address2=order_data.get('billing_street_address2', ''),
+            billing_county=order_data.get('billing_county', ''),
+            subtotal=order_data['order_total'],
+            shipping_cost=order_data['shipping_cost'],
+            total=order_data['grand_total'], 
+            stripe_payment_intent=payment_intent['id'],
+            status='paid',
+            paid=True,
+            payment_date=timezone.now()
+        )
+
+        # Add the user if available
+        if 'user_id' in order_data:
+            try:
+                user = get_user_model().objects.get(id=order_data['user_id'])
+                order.user = user
+            except get_user_model().DoesNotExist:
+                pass
+        
+        order.save()
+
+        # Create the order items
+        for item_data in items_data:
+            try:
+                product = Product.objects.get(id=item_data['product_id'])
+
+                # Set color and size if present
+                color = None
+                size = None
+                if 'color_id' in item_data:
+                    try:
+                        color = Color.objects.get(id=item_data['color_id'])
+                    except Color.DoesNotExist:
+                        pass
+                
+                if 'size_id' in item_data:
+                    try:
+                        size = Size.objects.get(id=item_data['size_id'])
+                    except Size.DoesNotExist:
+                        pass
+                
+                OrderItem.objects.create(
+                    order=order,
+                    product=product,
+                    quantity=item_data['quantity'],
+                    price=item_data['price'],
+                    color=color,
+                    size=size
+                )
+            except Product.DoesNotExist:
+                logger.warning(f"Prodotto con ID {item_data['product_id']} non trovato")
+                continue
+        
+        # Delete the pending order
+        pending_order.delete()
+
+        # Empty the cart for authenticated users
+        user_id = payment_intent['metadata'].get('user_id')
+        if user_id and user_id != 'anonymous':
+            try:
+                user = get_user_model().objects.get(id=user_id)
+                cart = Cart.objects.get(user=user)
+                CartItem.objects.filter(cart=cart).delete()
+                logger.info(f"Carrello svuotato per l'utente {user_id}.")
+            except (get_user_model().DoesNotExist, Cart.DoesNotExist):
+                logger.warning(f"Impossibile trovare l'utente o il carrello per user_id: {user_id}")
+        
+        # Send order confirmation email
+        send_order_confirmation(order)
+        
+        logger.info(f"Ordine {order.id} creato con successo dal pending order {pending_order_id}")
+        return HttpResponse(status=200)
+    
+    except PendingOrder.DoesNotExist:
+        logger.error(f"PendingOrder con ID {pending_order_id} non trovato.")
+        return HttpResponse(status=404)
+    except Exception as e:
+        logger.error(f"Errore nel processare il payment_succeeded webhook: {str(e)}", exc_info=True)
+        return HttpResponse(status=500)
+
+
+def send_order_confirmation(order):
+    """
+    Send an order confirmation email to the customer.
+    """
+    subject = f'Order confirmation {order.id}'
+    message = render_to_string(
+        'checkout/confirmation_emails/confirmation_email.txt',
+        {'order': order}
+    )
+    email_from = settings.DEFAULT_FROM_EMAIL
+    email_to = [order.email_address]
+    
+    send_mail(
+        subject,
+        message,
+        email_from,
+        email_to,
+        fail_silently=False,
+    )
+
+    logger.info(f"Confirmation email sent for order {order.id}")
+
+
+def handle_payment_failed(event):
+    """Handle failed payment events from Stripe"""
+    payment_intent = event['data']['object']
+    pending_order_id = payment_intent['metadata'].get('pending_order_id')
+    user_id = payment_intent['metadata'].get('user_id')
+    
+    logger.warning(f"Payment failed for pending order ID: {pending_order_id}, user ID: {user_id}")
+    
+    try:
+        # Get the pending order
+        pending_order = PendingOrder.objects.get(id=pending_order_id)
+        
+        # For debugging, log some details about the failed payment
+        failure_message = payment_intent.get('last_payment_error', {}).get('message', 'Unknown reason')
+        logger.info(f"Payment failed reason: {failure_message}")
+        
+        # Don't need to create an order since payment failed
+        # Just delete the pending order
+        pending_order.delete()
+        logger.info(f"Deleted pending order {pending_order_id} after payment failure")
+        
+        # You could store the failure in a PaymentFailureLog model if needed
+        # PaymentFailureLog.objects.create(
+        #     user_id=user_id if user_id != 'anonymous' else None,
+        #     payment_intent_id=payment_intent['id'],
+        #     failure_reason=failure_message
+        # )
+        
+        return HttpResponse(status=200)
+    except PendingOrder.DoesNotExist:
+        logger.error(f"PendingOrder with ID {pending_order_id} not found for failed payment.")
+        return HttpResponse(status=404)
+    except Exception as e:
+        logger.error(f"Error processing payment_failed webhook: {str(e)}", exc_info=True)
+        return HttpResponse(status=500)
+
+
 
     

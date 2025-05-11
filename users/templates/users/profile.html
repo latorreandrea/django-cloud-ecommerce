@@ -26,11 +26,11 @@
                 Payments
             </button>
         </li> -->
-        <!-- <li class="nav-item" role="presentation">
+        <li class="nav-item" role="presentation">
             <button class="nav-link" id="wishlist-tab" data-bs-toggle="tab" data-bs-target="#wishlist" type="button" role="tab">
                 Wishlist
             </button>
-        </li> -->
+        </li>
         <!-- <li class="nav-item" role="presentation">
             <button class="nav-link" id="rewards-tab" data-bs-toggle="tab" data-bs-target="#rewards" type="button" role="tab">
                 Loyalty
@@ -57,39 +57,85 @@
             <p><strong>Country:</strong> {{ userprofile.country }}</p>
             <!-- ...altro... -->
         </div>
-        <!-- next step
-        <div class="tab-pane fade" id="orders" role="tabpanel">
-             Orders info here 
-            <p><strong>Total Orders:</strong> {{ userprofile.orders.count }}</p>             
-            {% for order in page_obj %}
-                <p><strong>Order History:</strong></p>
-                <p><strong>Order ID:</strong> {{ order.id }}</p>
-                <p><strong>Order Date:</strong> {{ order.date }}</p>
-                <p><strong>Status:</strong> {{ order.status }}</p>
-            {% empty %}
-                <p>No orders found.</p>
-            {% endfor %}
-             Pagination controls 
-            <nav>
-                <ul class="pagination">
-                {% if page_obj.has_previous %}
-                    <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
-                    </li>
+        
+        <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
+            {% if page_obj %}
+                <p class="mb-3"><strong>Total Orders:</strong> {{ page_obj.paginator.count }}</p>
+
+                {% for order in page_obj %}
+                <div class="card mb-3 shadow-sm">
+                    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                        <span>Order #{{ order.id }} - {{ order.created_at|date:"M d Y, H:i" }}</span>
+                        <span class="badge 
+                            {% if order.status == 'delivered' or order.status == 'shipped' %}bg-success
+                            {% elif order.status == 'processing' or order.status == 'paid' %}bg-primary
+                            {% elif order.status == 'cancelled' or order.status == 'refunded' or order.status == 'failed_shirtigo' %}bg-danger
+                            {% else %}bg-secondary
+                            {% endif %}">
+                            {{ order.get_status_display }}
+                        </span>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text"><strong>Recipient:</strong> {{ order.full_name }}</p>
+                        <p class="card-text"><strong>Order Total:</strong> €{{ order.get_total_cost|floatformat:2 }}</p>
+                        <p class="card-text"><strong>Address:</strong> {{ order.street_address1 }}, {{ order.town_or_city }}, {{ order.country.name }}</p>
+                        
+                        {% if order.status in "paid,processing,shipped,delivered,failed_shirtigo" %}
+                            <i class="fas fa-truck"></i> Partner Shipping Details
+                        </a>
+                        {% endif %}
+                        
+                    </div>
+                </div>
+                {% empty %}
+                <div class="alert alert-info" role="alert">
+                    You haven't placed any orders yet.
+                </div>
+                {% endfor %}
+
+                {% if page_obj.has_other_pages %}
+                <nav aria-label="Page navigation" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}#orders" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span> Previous
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link"><span aria-hidden="true">&laquo;</span> Previous</span>
+                            </li>
+                        {% endif %}
+
+                        {% for i in page_obj.paginator.page_range %}
+                            {% if page_obj.number == i %}
+                                <li class="page-item active" aria-current="page"><span class="page-link">{{ i }}</span></li>
+                            {% elif i > page_obj.number|add:'-3' and i < page_obj.number|add:'3' %}
+                                <li class="page-item"><a class="page-link" href="?page={{ i }}#orders">{{ i }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}#orders" aria-label="Next">
+                                    Next <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link">Next <span aria-hidden="true">&raquo;</span></span>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
                 {% endif %}
-                <li class="page-item disabled">
-                    <span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
-                </li>
-                {% if page_obj.has_next %}
-                    <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
-                    </li>
-                {% endif %}
-                </ul>
-            </nav> 
-             
-            
-        </div> -->
+            {% else %}
+                 <div class="alert alert-info" role="alert">
+                    You haven't placed any orders yet.
+                </div>
+            {% endif %}
+        </div>
     </div>
     <div class="text-end mt-4">
         <a href="{% url 'edit_profile' %}" class="btn btn-primary">Change Info</a>

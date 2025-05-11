@@ -1,3 +1,6 @@
+from django.utils import timezone
+from datetime import timedelta
+import json
 from django.db import models
 from django.conf import settings
 from products.models import Product
@@ -43,7 +46,9 @@ class Order(models.Model):
     billing_postcode = models.CharField(max_length=20, blank=True)
     billing_country = CountryField(blank=True)
     shipping_cost = models.DecimalField(max_digits=6, decimal_places=2, default=0)
-
+    subtotal = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    
     def get_total_cost(self):
         """Calculate total cost including shipping"""
         items_total = sum(item.price * item.quantity for item in self.items.all())
@@ -69,3 +74,27 @@ class EventLog(models.Model):
     
     def __str__(self):
         return f"{self.event_type} - {self.stripe_id}"
+
+
+class PendingOrder(models.Model):
+    """
+    Memorizza temporaneamente i dati dell'ordine prima della conferma del pagamento.
+    Viene convertito in un Order reale solo dopo la conferma del pagamento.
+    """
+    # Order data saved as JSON
+    order_data = models.JSONField()
+    items_data = models.JSONField()
+    # ID payment Stripe
+    stripe_payment_intent = models.CharField(max_length=255, blank=True, null=True)
+    # temporary metadata
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()  # Scadenza automatica dopo un certo periodo
+    
+    def __str__(self):
+        return f"Pending Order {self.id}"
+    
+    def save(self, *args, **kwargs):
+        # Set default expiration time to 24 hours from now if not provided
+        if not self.expires_at:
+            self.expires_at = timezone.now() + timedelta(hours=24)
+        super().save(*args, **kwargs)

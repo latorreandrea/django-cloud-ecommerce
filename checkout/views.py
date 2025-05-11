@@ -5,13 +5,15 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
+from django.utils import timezone
 from django.contrib import messages
 from products.models import Product, Color, Size, ProductImage
 from cart.models import Cart, CartItem
 from .forms import OrderForm
-from .models import Order, OrderItem
+from .models import Order, OrderItem, PendingOrder
 import stripe
 import time
+from datetime import timedelta
 import uuid
 
 # Configure Stripe API key
@@ -306,148 +308,181 @@ class CheckoutView(TemplateView):
 @require_POST
 def create_order(request):
     """
-    Create order and payment intent before payment is processed.
-    Returns JSON with client_secret and order_id.
+    Create temporary order and payment intent before payment processing.
+    returns JsonResponse with client_secret and pending_order_id.
     """
     form = OrderForm(request.POST)
     if not form.is_valid():
         return JsonResponse({'errors': form.errors}, status=400)
     
-    # Create order
-    order = form.save(commit=False)
+    # Extract order data from the form
+    order_data = {
+        'full_name': form.cleaned_data['full_name'],
+        'email_address': form.cleaned_data['email_address'],
+        'phone_number': form.cleaned_data['phone_number'],
+        'country': str(form.cleaned_data['country']),
+        'postcode': form.cleaned_data['postcode'],
+        'town_or_city': form.cleaned_data['town_or_city'],
+        'street_address1': form.cleaned_data['street_address1'],
+        'street_address2': form.cleaned_data['street_address2'],
+        'county': form.cleaned_data['county'],
+    }
     
-    # Set user if authenticated
-    if request.user.is_authenticated:
-        order.user = request.user
-    
-    # Handle billing address
+    # Managing billing address
     billing_different = request.POST.get('billing_different') == 'on'
     if not billing_different:
         # Copy shipping address to billing fields
-        order.billing_full_name = order.full_name
-        order.billing_email_address = order.email_address
-        order.billing_phone_number = order.phone_number
-        order.billing_street_address1 = order.street_address1
-        order.billing_street_address2 = order.street_address2
-        order.billing_town_or_city = order.town_or_city
-        order.billing_county = order.county
-        order.billing_postcode = order.postcode
-        order.billing_country = order.country
-    
-    # Set status to pending
-    order.status = 'pending'
-    order.save()
-    
-    # Prepare cart_items for subtotal and shipping calculation
+        order_data['billing_full_name'] = order_data['full_name']
+        order_data['billing_email_address'] = order_data['email_address']
+        order_data['billing_phone_number'] = order_data['phone_number']
+        order_data['billing_country'] = order_data['country']
+        order_data['billing_postcode'] = order_data['postcode']
+        order_data['billing_town_or_city'] = order_data['town_or_city']
+        order_data['billing_street_address1'] = order_data['street_address1']
+        order_data['billing_street_address2'] = order_data['street_address2']
+        order_data['billing_county'] = order_data['county']
+    else:
+        # Use provided billing address
+        order_data['billing_full_name'] = form.cleaned_data['billing_full_name']
+        order_data['billing_email_address'] = form.cleaned_data['billing_email_address']
+        order_data['billing_phone_number'] = form.cleaned_data['billing_phone_number']
+        order_data['billing_country'] = str(form.cleaned_data['billing_country'])
+        order_data['billing_postcode'] = form.cleaned_data['billing_postcode']
+        order_data['billing_town_or_city'] = form.cleaned_data['billing_town_or_city']
+        order_data['billing_street_address1'] = form.cleaned_data['billing_street_address1']
+        order_data['billing_street_address2'] = form.cleaned_data['billing_street_address2']
+        order_data['billing_county'] = form.cleaned_data['billing_county']
+
+    # Add user ID if authenticated
+    if request.user.is_authenticated:
+        order_data['user_id'] = request.user.id
+
+    # Prepare item data and calculate totals
+    items_data = []
     cart_items = []
     cart_subtotal = 0
-    
-    # Create order items from cart
+
     if request.user.is_authenticated:
         # For authenticated users
         try:
             cart = Cart.objects.get(user=request.user)
             for item in CartItem.objects.filter(cart=cart):
-                OrderItem.objects.create(
-                    order=order,
-                    product=item.product,
-                    quantity=item.quantity,
-                    price=item.product.price,
-                    color=item.color,
-                    size=item.size
-                )
-                # Add to subtotal
+                item_data = {
+                    'product_id': item.product.id,
+                    'product_name': item.product.name,
+                    'quantity': item.quantity,
+                    'price': float(item.product.price),
+                }
+                
+                if item.color:
+                    item_data['color_id'] = item.color.id
+                    item_data['color_name'] = item.color.name
+                if item.size:
+                    item_data['size_id'] = item.size.id
+                    item_data['size_name'] = item.size.name
+                
+                items_data.append(item_data)
                 cart_subtotal += item.quantity * item.product.price
                 
-                # Add to cart_items for shipping calculation
+                # Add a cart items for shipping calculation
                 cart_items.append({
                     'quantity': item.quantity,
-                    'price': item.product.price * item.quantity
+                    'price': float(item.product.price * item.quantity)
                 })
         except Cart.DoesNotExist:
             pass
     else:
-        # For non-authenticated users
+        # For unauthenticated users
         cart = request.session.get('cart', {})
         for key, item_data in cart.items():
             try:
                 product_id = int(item_data.get('product'))
                 product = Product.objects.get(id=product_id)
                 quantity = int(item_data.get('quantity', 1))
+                
+                item_obj = {
+                    'product_id': product_id,
+                    'product_name': product.name,
+                    'quantity': quantity,
+                    'price': float(product.price),
+                }
+                
                 color_id = item_data.get('color')
                 size_id = item_data.get('size')
                 
-                # Get color and size objects if IDs are provided
-                color = None
-                size = None
                 if color_id:
                     color = Color.objects.filter(id=color_id).first()
+                    if color:
+                        item_obj['color_id'] = color_id
+                        item_obj['color_name'] = color.name
                 if size_id:
                     size = Size.objects.filter(id=size_id).first()
+                    if size:
+                        item_obj['size_id'] = size_id
+                        item_obj['size_name'] = size.name
                 
-                OrderItem.objects.create(
-                    order=order,
-                    product=product,
-                    quantity=quantity,
-                    price=product.price,
-                    color=color,
-                    size=size
-                )
-                # Add to subtotal
+                items_data.append(item_obj)
                 cart_subtotal += quantity * product.price
                 
-                # Add to cart_items for shipping calculation
+                # Add a cart items for shipping calculation
                 cart_items.append({
                     'quantity': quantity,
-                    'price': product.price * quantity
+                    'price': float(product.price * quantity)
                 })
             except (KeyError, Product.DoesNotExist, ValueError):
                 continue
     
-    # Calculate shipping cost
+    # Shipping cost is calculated based on the cart items
     view = CheckoutView()
     shipping_cost = view._calculate_shipping_cost(cart_items)
     
-    # Save shipping cost to order
-    order.shipping_cost = shipping_cost
-    order.save()
-    
-    # Calculate total with shipping
-    cart_total = cart_subtotal + shipping_cost
-    
-    # Ensure minimum amount for Stripe
+    # Saving shipping cost and totals
+    order_data['shipping_cost'] = float(shipping_cost)
+    order_data['order_total'] = float(cart_subtotal)
+    order_data['grand_total'] = float(cart_subtotal + shipping_cost)    
+
+    # Secure minimum amount for Stripe
+    cart_total = order_data['grand_total']
     if cart_total < 0.50 and cart_total > 0:
         cart_total = 0.50
     
     try:
-        # Create a unique idempotency key for the payment intent
+        # Create a unique idempotency key
         idempotency_key = f"order_{int(time.time())}_{uuid.uuid4()}"
-        
-        # Create payment intent with order ID in metadata        
+
+        # Create a PendingOrder with expiration
+        pending_order = PendingOrder(
+            order_data=order_data,
+            items_data=items_data,
+            expires_at=timezone.now() + timedelta(hours=24),  # Expires after 24 hours
+        )
+        pending_order.save()
+
+        # Create payment intent with pending_order_id in metadata
         intent = stripe.PaymentIntent.create(
-            amount=int(cart_total * 100),  # Now includes shipping cost
+            amount=int(cart_total * 100),
             currency='eur',
             metadata={
-                'order_id': order.id,
+                'pending_order_id': pending_order.id,
                 'user_id': request.user.id if request.user.is_authenticated else 'anonymous'
             },
-            # Ensure the payment intent is unique
             idempotency_key=idempotency_key,
             setup_future_usage='off_session',
         )
-        
-        # Save the payment intent ID to the order
-        order.stripe_payment_intent = intent.id
-        order.save()
-        
-        # Return the client secret and order ID
+
+        # Save the payment intent ID in the pending order
+        pending_order.stripe_payment_intent = intent.id
+        pending_order.save()
+
+        # Return client secret and pending_order_id
         return JsonResponse({
             'client_secret': intent.client_secret,
-            'order_id': order.id
+            'pending_order_id': pending_order.id
         })
     except stripe.error.StripeError as e:
-        # Delete the order if payment intent creation fails
-        order.delete()
+        # Delete the pending order if the payment intent creation fails
+        if 'pending_order' in locals():
+            pending_order.delete()
         return JsonResponse({'error': str(e)}, status=400)
 
 
@@ -460,32 +495,19 @@ class CheckoutSuccessView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
-        # Get the order ID from the URL
-        order_id = self.request.GET.get('order_id')
+        # Verify if payment was successful
         payment_confirmed = self.request.GET.get('payment_confirmed') == 'true'
         
-        if order_id:
-            try:
-                # Get the order
-                order = Order.objects.get(id=order_id)
-                
-                # Verifica l'ordine appartiene all'utente o è un ordine di utente non autenticato
-                if (self.request.user.is_authenticated and order.user == self.request.user) or \
-                   (not self.request.user.is_authenticated and not order.user):
-                    context['order'] = order
-                    context['order_number'] = order.id
-                
-                # Clear the cart only if payment is confirmed
-                if payment_confirmed or order.paid:
-                    self._clear_cart()
-                    
-            except Order.DoesNotExist:
-                pass
+        if payment_confirmed:
+            context['payment_successful'] = True
+
+            # Empty the cart
+            self._clear_cart()
                 
         return context
-
+    
     def _clear_cart(self):
-        """Clear the user's cart after successful checkout"""
+        """Empty the user's cart after a successful checkout"""
         if self.request.user.is_authenticated:
             # for authenticated users
             try:
