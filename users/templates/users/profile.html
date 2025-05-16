@@ -80,10 +80,6 @@
                         <p class="card-text"><strong>Order Total:</strong> €{{ order.get_total_cost|floatformat:2 }}</p>
                         <p class="card-text"><strong>Address:</strong> {{ order.street_address1 }}, {{ order.town_or_city }}, {{ order.country.name }}</p>
                         
-                        {% if order.status in "paid,processing,shipped,delivered,failed_shirtigo" %}
-                            <i class="fas fa-truck"></i> Partner Shipping Details
-                        </a>
-                        {% endif %}
                         
                     </div>
                 </div>

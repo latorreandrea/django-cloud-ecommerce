@@ -43,7 +43,7 @@
                     <td>
                         x <strong>{{ item.quantity }}</strong>
                     </td>
-                    <td>{{ item.price }}€</td>
+                    <td>{{ item.price|floatformat:2 }}€</td>
                     <td>
                         {% if item.key %}
                             <form method="post" action="{% url 'remove_from_cart' item.key %}" style="display:inline;">

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container my-5">
+    <h1>Stato di spedizione dell'ordine #{{ order.id }}</h1>
+    
+    {% if error %}
+        <div class="alert alert-warning">{{ error }}</div>
+    {% else %}
+        <div class="card mb-4">
+            <div class="card-header">
+                <h2 class="h5 mb-0">Shipment Details</h2>
+            </div>
+            <div class="card-body">
+                <p><strong>Order ID:</strong> {{ order.id }}</p>
+                <p><strong>Shirtigo Order ID:</strong> {{ shirtigo_order.shirtigo_order_id }}</p>
+                <p><strong>Status:</strong> 
+                    <span class="badge {% if shirtigo_order.status == 'delivered' %}bg-success
+                          {% elif shirtigo_order.status == 'shipped' %}bg-info
+                          {% elif shirtigo_order.status == 'processing' %}bg-primary
+                          {% elif shirtigo_order.status == 'created' %}bg-secondary
+                          {% else %}bg-warning{% endif %}">
+                    </span>
+                </p>
+                {% if shirtigo_order.status_message %}
+                    <p><small class="text-muted">{{ shirtigo_order.status_message }}</small></p>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2 class="h5 mb-0">Update History</h2>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    {% for log in shirtigo_order.api_logs.all|dictsortreversed:"timestamp" %}
+                    <li class="list-group-item">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <strong>{{ log.endpoint }}</strong>
+                                <span class="badge {% if log.success %}bg-success{% else %}bg-danger{% endif %}">
+                                    {{ log.success|yesno:"Success,Failed" }}
+                                </span>
+                            </div>
+                            <div>
+                                {{ log.timestamp|date:"d/m/Y H:i:s" }}
+                            </div>
+                        </div>
+                    </li>
+                    {% empty %}
+                    <li class="list-group-item">No logs available</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+    
+    <div class="mt-4">
+        <a href="{% url 'user_profile' %}" class="btn btn-outline-primary">
+            <i class="fas fa-arrow-left"></i> Back to Profile
+        </a>
+    </div>
+</div>
+{% endblock %}

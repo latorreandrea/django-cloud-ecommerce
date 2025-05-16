@@ -18,7 +18,7 @@
                             {% endif %}
                             <div class="card-body">
                                 <h5 class="card-title">{{ item.product.name|truncatechars:25 }}</h5>
-                                <p class="card-text"><strong>Price:</strong> {{ item.product.price }}€</p>
+                                <p class="card-text"><strong>Price:</strong> {{ item.product.price|floatformat:2 }}€</p>
                             </div>
                         </a>
                     </div>

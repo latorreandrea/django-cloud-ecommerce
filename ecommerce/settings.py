@@ -18,6 +18,7 @@ import dj_database_url
 # urllib.parse is used to parse the database URL
 from urllib.parse import urlparse
 
+
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -67,7 +68,13 @@ if is_running_on_gcp():
         stripe_webhook_secret = f"projects/{PROJECT_ID}/secrets/blunttee_STRIPE_WEBHOOK_SECRET/versions/latest"
         stripe_webhook_response = client.access_secret_version(request={"name": stripe_webhook_secret})
         STRIPE_WEBHOOK_SECRET = stripe_webhook_response.payload.data.decode("UTF-8")
-    
+
+        # Shirtigo API settings
+        shirtigo_api_token_secret = f"projects/{PROJECT_ID}/secrets/blunttee_SHIRTIGO_API_TOKEN/versions/latest"
+        shirtigo_api_token_response = client.access_secret_version(request={"name": shirtigo_api_token_secret})
+        SHIRTIGO_API_TOKEN = shirtigo_api_token_response.payload.data.decode("UTF-8")
+        SHIRTIGO_API_BASE_URL = 'https://cockpit.shirtigo.com/api'
+   
     except Exception as e:
         print(f"Error accessing Secret Manager: {e}")
         SECRET_KEY = os.environ.get('SECRET_KEY')
@@ -100,6 +107,10 @@ else:
     STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY', '')
     STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY', '')
     STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET', '')
+    # Shirtigo API settings
+    SHIRTIGO_API_TOKEN = os.environ.get('SHIRTIGO_API_TOKEN', '')
+    SHIRTIGO_API_BASE_URL = os.environ.get('SHIRTIGO_API_BASE_URL', 'https://cockpit.shirtigo.com/api')
+
 
 
 # Debug settings
@@ -146,6 +157,7 @@ INSTALLED_APPS = [
     'users',
     'cart',
     'checkout',
+    'shirtigo',
     # Third-party apps
     'storages',
     # Crispy Forms
