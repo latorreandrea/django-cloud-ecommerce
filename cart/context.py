@@ -8,6 +8,7 @@ def cart_contents(request):
     """
     cart_items = []
     cart_total = 0
+    cart_count = 0
     
     if request.user.is_authenticated:
         # Handle authenticated users with database Cart
@@ -26,7 +27,8 @@ def cart_contents(request):
                 # Calculate price per item
                 price = item.quantity * item.product.price
                 cart_total += price
-                
+                # Update cart count
+                cart_count += item.quantity
                 # Add item to list
                 cart_items.append({
                     'id': item.id,
@@ -37,6 +39,7 @@ def cart_contents(request):
                     'price': price,
                     'image_url': image_url,
                 })
+                
         except Cart.DoesNotExist:
             # User has no cart yet
             pass
@@ -47,20 +50,23 @@ def cart_contents(request):
         for key, cart_item in cart.items():
             product_id, color_id, size_id = key.split(':')
             
+            
             try:
                 product = Product.objects.get(id=product_id)
                 color = Color.objects.get(id=color_id) if color_id else None
                 size = Size.objects.get(id=size_id) if size_id else None
                 quantity = cart_item.get('quantity', 1)
                 
-                # Get product image matching color
+                
+                # Get product image matching color            
                 image = product.images.filter(color=color).first()
                 image_url = image.small_image if image else ''
-                
+                             
                 # Calculate price
                 price = quantity * product.price
                 cart_total += price
-                
+                # Update cart count
+                cart_count += quantity
                 # Add item to list
                 cart_items.append({
                     'key': key,
@@ -71,11 +77,11 @@ def cart_contents(request):
                     'price': price,
                     'image_url': image_url,
                 })
+
+                
             except (Product.DoesNotExist, Color.DoesNotExist, Size.DoesNotExist):
                 # Handle invalid items in cart
                 pass
-    
-    cart_count = len(cart_items)
     
     return {
         'cart_items': cart_items,

@@ -497,14 +497,58 @@ class CheckoutSuccessView(TemplateView):
         
         # Verify if payment was successful
         payment_confirmed = self.request.GET.get('payment_confirmed') == 'true'
-        
+        order_id = self.request.GET.get('order_id')
+
         if payment_confirmed:
             context['payment_successful'] = True
+
+            # Get order details if available
+            if order_id:
+                try:
+                    if self.request.user.is_authenticated:
+                        order = Order.objects.get(id=order_id, user=self.request.user)
+                    else:
+                        order = Order.objects.get(id=order_id, email_address=self.request.session.get('email_address', ''))
+                    
+                    context['order'] = order
+                    
+                    # Send confirmation email
+                    self.send_confirmation_email(order)
+                except Order.DoesNotExist:
+                    pass
 
             # Empty the cart
             self._clear_cart()
                 
         return context
+    
+    def send_confirmation_email(self, order):
+        """Send confirmation email using the existing template"""
+        subject = f'Order NR #{order.id} confirmation '
+        
+        # Use HTML template
+        html_message = render_to_string(
+            'checkout/emails/order_confirmation.html',
+            {'order': order, 'contact_email': settings.DEFAULT_FROM_EMAIL}
+        )
+        
+        # Use text template
+        plain_message = render_to_string(
+            'checkout/emails/order_confirmation.txt',
+            {'order': order, 'contact_email': settings.DEFAULT_FROM_EMAIL}
+        )
+        
+        from_email = settings.DEFAULT_FROM_EMAIL
+        to_email = order.email_address
+        
+        send_mail(
+            subject,
+            plain_message,
+            from_email,
+            [to_email],
+            html_message=html_message,
+            fail_silently=False
+        )
     
     def _clear_cart(self):
         """Empty the user's cart after a successful checkout"""

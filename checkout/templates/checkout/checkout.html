@@ -67,13 +67,14 @@
             </div>
           </div>
 
-          <!-- Billing Address Toggle -->
-          <div class="form-check mb-4">
-            <input class="form-check-input" type="checkbox" id="billing-different" name="billing_different">
+          <!-- Billing Address Toggle -->          
+          <div class="form-check mb-4 p-2 bg-primary text-white rounded-3">
+            <input class="form-check-input mx-4" type="checkbox" id="billing-different" name="billing_different">
             <label class="form-check-label fw-medium" for="billing-different">
               My billing address is different from my shipping address
             </label>
           </div>
+          
 
           <!-- Billing Info -->
           <div class="card mb-4 border-0 shadow-sm" id="billing-card" style="display: none;">
@@ -205,7 +206,7 @@
           <div class="d-grid">
             <button id="submit" class="btn btn-primary btn-lg py-3">
               <span class="d-flex align-items-center justify-content-center">
-                <span class="me-2">Pay {{ cart_total }} €</span>
+                <span class="me-2">Pay {{ cart_total|floatformat:2  }} €</span>
                 <i class="fas fa-lock"></i>
               </span>
             </button>
@@ -241,7 +242,7 @@
                         </small>
                       </div>
                     </div>
-                    <span class="fw-medium">{{ item.price }} €</span>
+                    <span class="fw-medium">{{ item.price|floatformat:2 }} €</span>
                   </li>
                 {% endfor %}
               </ul>
@@ -249,13 +250,13 @@
               <div class="border-bottom mb-3">
                 <div class="d-flex justify-content-between mb-2">
                   <span>Subtotal</span>
-                  <span>{{ cart_subtotal }} €</span>
+                  <span>{{ cart_subtotal|floatformat:2 }} €</span>
                 </div>
                 <div class="d-flex justify-content-between mb-3">
                   <span>Shipping</span>
                   {% if shipping_cost > 0 %}
                     <div class="text-end">
-                      <span>{{ shipping_cost }} €</span>
+                      <span>{{ shipping_cost|floatformat:2 }} €</span>
                       {% if items_for_free_shipping > 0 %}
                         <div class="text-success small">
                           <i class="fas fa-info-circle me-1"></i>Add {{ items_for_free_shipping }} more item{% if items_for_free_shipping != 1 %}s{% endif %} for free shipping!
@@ -270,7 +271,7 @@
               
               <div class="d-flex justify-content-between mb-0">
                 <span class="h5 fw-bold">Total</span>
-                <span class="h5 fw-bold">{{ cart_total }} €</span>
+                <span class="h5 fw-bold">{{ cart_total|floatformat:2 }} €</span>
               </div>
               
               <!-- Security badges -->

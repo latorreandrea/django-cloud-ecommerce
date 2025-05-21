@@ -6,6 +6,7 @@
         What's in your cart?
     </p>
     {% if cart_items %}
+        <p><strong>Total Items:</strong> {{ cart_count }}</p>
         <table class="table align-middle">
             <thead>
                 <tr>
@@ -59,7 +60,7 @@
             </tbody>
         </table>
         <div class="text-end">
-            <h4>Total: <span class="fw-bold">{{ cart_total }}€</span></h4>
+            <h4>Total: <span class="fw-bold">{{ cart_total|floatformat:2  }}€</span></h4>
             <a href="{% url 'checkout' %}" class="btn call-action px-4 py-2 fw-semibold">
                 Proceed to Checkout
             </a>

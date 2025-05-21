@@ -9,6 +9,9 @@ from .models import Order, OrderItem, PendingOrder, EventLog
 from cart.models import Cart, CartItem
 from products.models import Product, Color, Size
 
+from shirtigo.models import ShirtigoOrder
+from shirtigo.services import ShirtigoAPI
+
 import stripe
 import json
 import logging
@@ -45,8 +48,6 @@ def handle_payment_succeeded(event):
     """
     payment_intent = event['data']['object']
     pending_order_id = payment_intent['metadata'].get('pending_order_id')
-
-    logger.info(f"Webhook payment_succeeded received for pending_order_id: {pending_order_id}")
 
     try:
         # Retrieve the pending order
@@ -86,7 +87,7 @@ def handle_payment_succeeded(event):
         )
 
         # Add the user if available
-        if 'user_id' in order_data:
+        if 'user_id' in order_data  and order_data['user_id'] != 'anonymous':
             try:
                 user = get_user_model().objects.get(id=order_data['user_id'])
                 order.user = user
@@ -143,8 +144,25 @@ def handle_payment_succeeded(event):
         
         # Send order confirmation email
         send_order_confirmation(order)
-        
-        logger.info(f"Ordine {order.id} creato con successo dal pending order {pending_order_id}")
+
+        # SHIRTIGO INTEGRATION
+        try:
+            logger.info("Inizializzazione integrazione Shirtigo...")
+            # Create a ShirtigoOrder connected to the order
+            shirtigo_order = ShirtigoOrder.objects.create(
+                order = order,
+                status = 'pending',
+                status_message='Order paid and now is being processed'
+            )
+            # Make api call to create order on Shirtigo
+            shirtigo_api = ShirtigoAPI()
+            shirtigo_api.create_order(shirtigo_order)
+            logger.info(f"Shirtigo order created with ID {shirtigo_order.id} for order {order.id}")
+        except Exception as e:
+            logger.error(f"error during order creation in Shirtigo: {str(e)}", exc_info=True)
+
+
+        logger.info(f"Order {order.id} created from pending order {pending_order_id}")
         return HttpResponse(status=200)
     
     except PendingOrder.DoesNotExist:
@@ -161,7 +179,7 @@ def send_order_confirmation(order):
     """
     subject = f'Order confirmation {order.id}'
     message = render_to_string(
-        'checkout/confirmation_emails/confirmation_email.txt',
+        'checkout/emails/order_confirmation.txt',
         {'order': order}
     )
     email_from = settings.DEFAULT_FROM_EMAIL

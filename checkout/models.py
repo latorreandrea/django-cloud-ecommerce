@@ -1,10 +1,14 @@
-from django.utils import timezone
+from decimal import Decimal
+
 from datetime import timedelta
-import json
+from django.utils import timezone
+
 from django.db import models
 from django.conf import settings
 from products.models import Product
 from django_countries.fields import CountryField
+
+import json
 # Create your models here.
 
 
@@ -52,7 +56,7 @@ class Order(models.Model):
     def get_total_cost(self):
         """Calculate total cost including shipping"""
         items_total = sum(item.price * item.quantity for item in self.items.all())
-        return items_total + self.shipping_cost
+        return items_total + Decimal(str(self.shipping_cost))
 
 class OrderItem(models.Model):
     """Items within an order"""
