@@ -13,7 +13,7 @@
         <div class="w-100 hero-text-wrapper">
             <h1 class="display-4 text-white fw-bold">BluntTee – Wear Your Wit!</h1>
             <p class="lead text-white">Let Your T-Shirt Do the Talking</p>
-            <a href="#" class="btn btn-warning btn-shop-now btn-lg mt-3 fw-semibold px-4">Shop Now</a>
+            <a href="{% url 'products_list' %}" class="btn btn-warning btn-shop-now btn-lg mt-3 fw-semibold px-4">Shop Now</a>
         </div>
     </div>
 </div>
@@ -22,7 +22,7 @@
 <section class="py-5 text-center bg-warning bg-gradient">
     <div class="container">
         <h2 class="display-6 fw-bold mb-3">Warning: Your wardrobe is about to get a whole lot sassier.</h2>
-        <a href="#" class="btn btn-dark btn-lg fw-semibold px-4">Shop the Madness</a>
+        <a href="{% url 'products_list' %}" class="btn btn-dark btn-lg fw-semibold px-4">Shop the Madness</a>
     </div>
 </section>
 
@@ -36,7 +36,7 @@
                     <div class="card-body d-flex flex-column justify-content-end">
                         <h3 class="card-title">Freshly Baked Tees</h3>
                         <p class="card-text">New Arrivals</p>
-                        <a href="#" class="btn btn-warning mt-3 fw-semibold">Shop New</a>
+                        <a href="{% url 'products_list' %}" class="btn btn-warning mt-3 fw-semibold">Shop New</a>
                     </div>
                 </div>
             </div>
@@ -45,7 +45,7 @@
                     <div class="card-body d-flex flex-column justify-content-end">
                         <h3 class="card-title">Fan Favorites</h3>
                         <p class="card-text">Best Sellers</p>
-                        <a href="#" class="btn btn-dark mt-3 fw-semibold">See Best Sellers</a>
+                        <a href="{% url 'products_list' %}" class="btn btn-warning mt-3 fw-semibold">See Best Sellers</a>
                     </div>
                 </div>
             </div>
@@ -54,7 +54,7 @@
                     <div class="card-body d-flex flex-column justify-content-end">
                         <h3 class="card-title">Mood Swings Included</h3>
                         <p class="card-text">Collections by Theme: Nerd, Work, Life Struggles, etc.</p>
-                        <a href="#" class="btn btn-outline-dark mt-3 fw-semibold">Browse Themes</a>
+                        <a href="{% url 'products_list' %}" class="btn btn-warning mt-3 fw-semibold">Browse Themes</a>
                     </div>
                 </div>
             </div>
@@ -63,7 +63,7 @@
 </section>
 
 <!-- 3. Best Sellers -->
-<section class="py-5">
+<section class="py-5 fade-in">
     <div class="container">
         <h2 class="fw-bold text-center mb-4">These Tees Broke the Internet (Almost)</h2>
         <div class="row g-4">
@@ -113,7 +113,7 @@
 </section>
 
 <!-- 4. Why You'll Love Us -->
-<section class="py-5 bg-light">
+<section class="py-5 bg-light fade-in">
     <div class="container">
         <h2 class="fw-bold text-center mb-4">Because Life’s Too Short for Boring Clothes:</h2>
         <div class="row justify-content-center">
@@ -130,7 +130,7 @@
 </section>
 
 <!-- 5. Customer Reviews -->
-<section class="py-5">
+<section class="py-5 fade-in">
     <div class="container">
         <h2 class="fw-bold text-center mb-4">Real People, Real Sass.</h2>
         <div class="row g-4">
@@ -164,7 +164,7 @@
 </section>
 
 <!-- 6. Insta-Party / Customer Love -->
-<section class="py-5 bg-light">
+<section class="py-5 bg-light fade-in">
     <div class="container">
         <h2 class="fw-bold text-center mb-4">Caught Wearing Us in Public (And Loving It)</h2>
         <p class="text-center mb-4">Your selfies + our tees = a match made in meme heaven.</p>
@@ -190,7 +190,7 @@
 </section>
 
 <!-- 7. About Us -->
-<section class="py-5">
+<section class="py-5 fade-in">
     <div class="container">
         <h2 class="fw-bold text-center mb-4">We’re Just Here to Make You LOL (and Look Good Doing It)</h2>
         <div class="row justify-content-center">
@@ -205,7 +205,7 @@
 </section>
 
 <!-- 8. Newsletter Sign-up -->
-<section class="py-5 bg-warning bg-gradient">
+<section class="py-5 bg-warning bg-gradient fade-in">
     <div class="container">
         <h2 class="fw-bold text-center mb-3">Join Our Cult (We Mean... Mailing List)</h2>
         <p class="text-center mb-4">Get 10% off your first order and maybe an unsolicited dad joke.</p>

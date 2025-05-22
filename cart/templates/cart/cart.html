@@ -59,6 +59,27 @@
                 {% endfor %}                
             </tbody>
         </table>
+
+        {% if cart_count < 5 %}
+            <div class="alert alert-info mt-3 p-3 border-left border-info d-flex align-items-center">
+                <i class="fas fa-shipping-fast me-3 fa-2x"></i>
+                <div>
+                    <strong>Shipping FOMO Alert!</strong><br>
+                    5 items needed for free shipping. 
+                    <span class="fw-bold">Add more items and watch those shipping fees disappear faster than your excuses at the gym.</span>
+                </div>
+            </div>
+        {% else %}
+            <div class="alert alert-success mt-3 p-3 border-left border-success d-flex align-items-center">
+                <i class="fas fa-gift me-3 fa-2x"></i>
+                <div>
+                    <strong>Congrats, Big Spender!</strong><br>
+                    You've unlocked free shipping! That's right - you just saved money by spending money. 
+                    <span class="fw-bold">Financial wisdom at its finest.</span>
+                </div>
+            </div>
+        {% endif %}
+
         <div class="text-end">
             <h4>Total: <span class="fw-bold">{{ cart_total|floatformat:2  }}€</span></h4>
             <a href="{% url 'checkout' %}" class="btn call-action px-4 py-2 fw-semibold">

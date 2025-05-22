@@ -110,18 +110,6 @@ h1, h2, h3, h4, h5, h6, .navbar-brand {
     background: rgba(29,53,87,0.55);
     padding: 3rem 1rem;
 }
-/*Hero call to action*/
-.btn-shop-now {
-    background-color: #E63946 !important;
-    border: 2px solid #b71c2b !important;
-}
-
-.btn-shop-now:hover,
-.btn-shop-now:focus {
-    background-color: #b71c2b !important;
-    border-color: #b71c2b !important;
-    color: #fff !important;
-}
 
 /* Scrool to top */
 #scrollToTopBtn {
