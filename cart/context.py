@@ -69,7 +69,7 @@ def cart_contents(request):
                 cart_count += quantity
                 # Add item to list
                 cart_items.append({
-                    'key': key,
+                    'id': key,
                     'product': product,
                     'quantity': quantity,
                     'color': color,

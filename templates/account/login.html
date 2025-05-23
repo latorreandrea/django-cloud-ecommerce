@@ -5,6 +5,9 @@
     {% trans "Sign In" %}
 {% endblock head_title %}
 {% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        
     {% element h1 %}
         {% trans "Sign In" %}
     {% endelement %}
@@ -52,6 +55,8 @@
     {% if SOCIALACCOUNT_ENABLED %}
         {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
     {% endif %}
+    </div>
+</div>
 {% endblock content %}
 {% block extra_body %}
     {{ block.super }}

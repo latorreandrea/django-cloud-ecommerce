@@ -119,6 +119,7 @@ DEBUG = not is_running_on_gcp()  # True in local dev, False in production
 # Update ALLOWED_HOSTS for Cloud Run
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 if is_running_on_gcp():
+    DEBUG = True  # Enable debug mode for Cloud Run for testing
     ALLOWED_HOSTS.extend([
         '.run.app', 'blunttee.com', 'www.blunttee.com',  # All Cloud Run URLs
         os.environ.get('ALLOWED_HOST', ''),  # Custom domain if specified
@@ -214,6 +215,7 @@ ACCOUNT_LOGIN_METHODS = {'username', 'email'}
 ACCOUNT_SIGNUP_FIELDS = ['email*', 'email2*', 'username*', 'password1*', 'password2*']
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_USERNAME_MIN_LENGTH = 5
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'

@@ -46,8 +46,8 @@
                     </td>
                     <td>{{ item.price|floatformat:2 }}€</td>
                     <td>
-                        {% if item.key %}
-                            <form method="post" action="{% url 'remove_from_cart' item.key %}" style="display:inline;">
+                        {% if item.id %}
+                            <form method="post" action="{% url 'remove_from_cart' item.id %}" style="display:inline;">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-sm" title="Remove">
                                     <i class="fas fa-trash"></i>

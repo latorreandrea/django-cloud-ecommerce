@@ -185,3 +185,6 @@ upload_static.py
 upload_static_to_gcs.py
 storage_admin.json
 rispostashirtigo.txt
+migrate_to_neon.sh
+.gitignore
+all_data.json
