@@ -292,10 +292,24 @@ if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
     DEFAULT_FROM_EMAIL = 'BluntTee@example.com'
 else:
-    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-    EMAIL_USE_TLS = True
-    EMAIL_PORT = 587
-    EMAIL_HOST = 'smtp.zoho.com'
-    EMAIL_HOST_USER = os.environ.get('blunttee_EMAIL_HOST_USER')
-    EMAIL_HOST_PASSWORD = os.environ.get('blunttee_EMAIL_HOST_PASS')
-    DEFAULT_FROM_EMAIL = os.environ.get('blunttee_DEFAULT_FROM_EMAIL')
+    email_host_user = os.environ.get('blunttee_EMAIL_HOST_USER')
+    email_host_pass = os.environ.get('blunttee_EMAIL_HOST_PASS')
+    default_from_email = os.environ.get('blunttee_DEFAULT_FROM_EMAIL')
+
+    if email_host_user and email_host_pass:
+        EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+        EMAIL_USE_TLS = True
+        EMAIL_PORT = 587
+        EMAIL_HOST = 'smtp.zoho.com'
+        EMAIL_HOST_USER = email_host_user
+        EMAIL_HOST_PASSWORD = email_host_pass
+        DEFAULT_FROM_EMAIL = default_from_email or 'noreply@blunttee.com'
+        
+        # Aggiungi timeout per evitare blocchi
+        EMAIL_TIMEOUT = 30
+    else:
+        # Fallback se le credenziali email non sono disponibili
+        print("WARNING: Email credentials not found, using file backend")
+        EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+        EMAIL_FILE_PATH = '/tmp/emails'
+        DEFAULT_FROM_EMAIL = 'noreply@blunttee.com'
