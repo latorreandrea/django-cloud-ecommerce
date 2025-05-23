@@ -292,24 +292,29 @@ if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
     DEFAULT_FROM_EMAIL = 'BluntTee@example.com'
 else:
-    email_host_user = os.environ.get('blunttee_EMAIL_HOST_USER')
-    email_host_pass = os.environ.get('blunttee_EMAIL_HOST_PASS')
-    default_from_email = os.environ.get('blunttee_DEFAULT_FROM_EMAIL')
-
-    if email_host_user and email_host_pass:
+    try:
+        email_user_secret = f"projects/{PROJECT_ID}/secrets/blunttee_EMAIL_HOST_USER/versions/latest"
+        email_user_response = client.access_secret_version(request={"name": email_user_secret})
+        EMAIL_HOST_USER = email_user_response.payload.data.decode("UTF-8")
+        
+        email_pass_secret = f"projects/{PROJECT_ID}/secrets/blunttee_EMAIL_HOST_PASS/versions/latest"
+        email_pass_response = client.access_secret_version(request={"name": email_pass_secret})
+        EMAIL_HOST_PASSWORD = email_pass_response.payload.data.decode("UTF-8")
+        
+        email_from_secret = f"projects/{PROJECT_ID}/secrets/blunttee_DEFAULT_FROM_EMAIL/versions/latest"
+        email_from_response = client.access_secret_version(request={"name": email_from_secret})
+        DEFAULT_FROM_EMAIL = email_from_response.payload.data.decode("UTF-8")
+        
         EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
         EMAIL_USE_TLS = True
         EMAIL_PORT = 587
         EMAIL_HOST = 'smtp.zoho.com'
-        EMAIL_HOST_USER = email_host_user
-        EMAIL_HOST_PASSWORD = email_host_pass
-        DEFAULT_FROM_EMAIL = default_from_email or 'noreply@blunttee.com'
-        
-        # Aggiungi timeout per evitare blocchi
         EMAIL_TIMEOUT = 30
-    else:
-        # Fallback se le credenziali email non sono disponibili
-        print("WARNING: Email credentials not found, using file backend")
+        
+        
+    except Exception as e:
+        print(f"Error accessing Email Secret Manager: {e}")
+        # Fallback
         EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
         EMAIL_FILE_PATH = '/tmp/emails'
         DEFAULT_FROM_EMAIL = 'noreply@blunttee.com'
