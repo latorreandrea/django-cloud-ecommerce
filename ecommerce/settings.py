@@ -290,7 +290,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Email settings
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-    DEFAULT_FROM_EMAIL = 'BluntTee@example.com'
+    DEFAULT_FROM_EMAIL = 'info@blunttee.com'
+    
 else:
     try:
         email_user_secret = f"projects/{PROJECT_ID}/secrets/blunttee_EMAIL_HOST_USER/versions/latest"
@@ -308,7 +309,7 @@ else:
         EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
         EMAIL_USE_TLS = True
         EMAIL_PORT = 587
-        EMAIL_HOST = 'smtp.zoho.com'
+        EMAIL_HOST = 'smtp.zoho.eu'
         EMAIL_TIMEOUT = 30
         
         
