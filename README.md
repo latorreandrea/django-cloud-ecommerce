@@ -8,6 +8,7 @@
 - [Features](#features)
 - [Architecture](#architecture)
   - [System Overview](#system-overview)
+  - [Database ER Diagram](#database-er-diagram)
   - [Technology Stack](#technology-stack)
   - [Data Flow](#data-flow)
 - [Setup & Installation](#setup--installation)
@@ -18,6 +19,7 @@
 - [Security](#security)
 - [Troubleshooting](#troubleshooting)
 - [License](#license)
+- [Next Steps](#next-steps)
 
 ---
 
@@ -62,6 +64,84 @@ Product creation and management are handled externally on [Shirtigo.com](https:/
                                                 | (Browse, Buy, Track) |
                                                 +----------------------+
 ```
+
+### Database ER Diagram
+
+Below is a simplified Entity-Relationship (ER) schema of the main models:
+
+```
++-------------------+         +-------------------+         +-------------------+
+|     User          |         |   UserProfile     |         |     Product       |
+|-------------------|         |------------------|         |-------------------|
+| id (BigAutoField) PK        | id (BigAutoField) PK        | id (BigAutoField) PK
+| username (str)              | user (OneToOne)   FK->User  | name (str)
+| email (str)                 | full_name (str)             | shirtigo_id (int)
+| ...                         | contact_email (str)         | category (FK)      FK->Category
+                              | phone_number (str)          | description (text)
+                              | country (str)               | price (decimal)
+                              | ...                         | cost (decimal)
+                                                            | colors (M2M)       FK->Color
+                                                            | sizes (M2M)        FK->Size
+
++-------------------+         +-------------------+         +-------------------+
+|    Category       |         |      Color        |         |      Size         |
+|-------------------|         |------------------|         |-------------------|
+| id (BigAutoField) PK        | id (BigAutoField) PK        | id (BigAutoField) PK
+| name (str)                  | name (str)                  | name (str)
+| friendly_name (str)         | shirtigo_color_id (int)     | shirtigo_size_id (int)
+| material_care (text)        |                             |
+
++-------------------+         +-------------------+         +-------------------+
+|   ProductImage    |         |      Cart         |         |    CartItem       |
+|-------------------|         |------------------|         |-------------------|
+| id (BigAutoField) PK        | id (BigAutoField) PK        | id (BigAutoField) PK
+| product (FK)      FK->Product| user (OneToOne)  FK->User  | cart (FK)         FK->Cart
+| color (FK)        FK->Color |                          | product (FK)      FK->Product
+| small_image (url)           |                          | color (FK)        FK->Color
+| large_image (url)           |                          | size (FK)         FK->Size
+                                                            | quantity (int)
+
++-------------------+         +-------------------+         +-------------------+
+|     Wishlist      |         |   WishlistItem    |         |      Order        |
+|-------------------|         |------------------|         |-------------------|
+| id (BigAutoField) PK        | id (BigAutoField) PK        | id (BigAutoField) PK
+| user (OneToOne)   FK->User  | wishlist (FK)     FK->Wishlist| user (FK)        FK->User
+                              | product (FK)      FK->Product | status (str)
+                              | added_at (datetime)           | created_at (datetime)
+                                                            | paid (bool)
+                                                            | ... (shipping/billing fields)
+
++-------------------+         +-------------------+         +-------------------+
+|    OrderItem      |         |   ShirtigoOrder   |         |  ShirtigoAPILog   |
+|-------------------|         |------------------|         |-------------------|
+| id (BigAutoField) PK        | id (BigAutoField) PK        | id (BigAutoField) PK
+| order (FK)        FK->Order | order (OneToOne)  FK->Order | shirtigo_order (FK) FK->ShirtigoOrder
+| product (FK)      FK->Product| shirtigo_order_id (str)    | request_data (JSON)
+| quantity (int)              | status (str)                | response_data (JSON)
+| price (decimal)             | status_message (text)       | success (bool)
+| color (FK)        FK->Color | created_at (datetime)       | timestamp (datetime)
+| size (FK)         FK->Size  | updated_at (datetime)       | endpoint (str)
+
++-------------------+         +-------------------+         +-------------------+
+|    EventLog       |         |   PendingOrder    |
+|-------------------|         |------------------|
+| id (BigAutoField) PK        | id (BigAutoField) PK
+| stripe_id (str)              | order_data (JSON)
+| event_type (str)             | items_data (JSON)
+| processed_at (datetime)      | stripe_payment_intent (str)
+                               | created_at (datetime)
+                               | expires_at (datetime)
+```
+
+**Legend:**  
+- `PK` = Primary Key  
+- `FK` = Foreign Key (→ referenced table)  
+- `M2M` = Many-to-Many relationship
+
+> *Note: Only main fields and relationships are shown for clarity. Some auxiliary fields (timestamps, status, etc.) are omitted.*
+
+---
+
 
 ### Technology Stack
 
@@ -161,6 +241,24 @@ Product creation and management are handled externally on [Shirtigo.com](https:/
 This project is for demonstration purposes.
 
 ---
+
+## Next Steps
+
+- **Marketing implementation:**
+  Add a marketing app
+- **Expand Payment Methods:**  
+  Integrate additional payment gateways for broader customer reach.
+- **Analytics and Reporting:**  
+  Add dashboards for sales analytics and product performance.
+- **Internationalization:**  
+  Support multiple languages and currencies.
+- **Performance Optimization:**  
+  Implement caching and optimize database queries for scalability.
+- **User Reviews and Ratings:**  
+  Allow customers to leave feedback on products.
+- **Marketing Integrations:**  
+  Integrate with email marketing and social media platforms.
+
 
 **BluntTee** – Cloud-Native E-commerce Example  
 Built with Django & Google Cloud by Andrea Latorre

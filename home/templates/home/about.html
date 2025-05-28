@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}About Us | BluntTee{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 text-center">
+            <h1 class="fw-bold mb-4">About Us – The Blunt Truth</h1>
+            <p class="lead mb-4">
+                Welcome to <span class="fw-bold">BluntTee</span>, where sarcasm is stitched into every seam and puns are printed with pride.
+            </p>
+            <p>
+                We’re not your average t-shirt brand. We’re the weird cousin at the family reunion, the friend who always has a comeback, the reason your laundry day is actually fun.
+            </p>
+            <ul class="list-group list-group-flush my-4">
+                <li class="list-group-item bg-light">Founded after one too many bad puns and caffeine overdoses</li>
+                <li class="list-group-item bg-light">Mission: Make you laugh, make you comfy, and maybe make your mom roll her eyes</li>
+                <li class="list-group-item bg-light">Our tees: 100% premium cotton, 200% attitude</li>
+                <li class="list-group-item bg-light">Warning: Wearing our shirts may cause spontaneous compliments and uncontrollable giggles</li>
+            </ul>
+            <p>
+                Whether you’re a meme lord, a pun enthusiast, or just someone who likes their clothes with a side of sass, you’re in the right place.
+            </p>
+            <p class="fw-semibold mt-4">
+                <em>BluntTee – Because life’s too short for boring shirts.</em>
+            </p>
+            <a href="{% url 'home' %}" class="btn btn-warning mt-3 fw-semibold">Back to Home</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

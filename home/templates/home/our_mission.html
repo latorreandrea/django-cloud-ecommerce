@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Our Mission | BluntTee{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 text-center">
+            <h1 class="fw-bold mb-4">Our Mission – Say It Without Saying It</h1>
+            <p class="lead mb-4">
+                At <span class="fw-bold">BluntTee</span>, our mission is simple: to make you smile and help you break the ice in any situation by saying what everyone thinks, but no one dares to say.
+            </p>
+            <p>
+                Why risk awkward silences or subtle hints when you can let your shirt do the talking? With one of our accessories, you won’t even have to open your mouth—just point to your chest and let the world know what’s really on your mind. XD
+            </p>
+            <ul class="list-group list-group-flush my-4">
+                <li class="list-group-item bg-light">We believe honesty is the best policy (especially when it’s hilarious).</li>
+                <li class="list-group-item bg-light">Our products are designed to break the ice, not the bank.</li>
+                <li class="list-group-item bg-light">Warning: May cause spontaneous laughter, new friendships, and the occasional side-eye.</li>
+                <li class="list-group-item bg-light">No filter needed—just fabric and a little bit of attitude.</li>
+            </ul>
+            <p>
+                So go ahead, wear your thoughts. Because with BluntTee, you’ll never have to say it yourself.
+            </p>
+            <p class="fw-semibold mt-4">
+                <em>BluntTee – For those who’d rather let their clothes do the talking.</em>
+            </p>
+            <a href="{% url 'home' %}" class="btn btn-warning mt-3 fw-semibold">Back to Home</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

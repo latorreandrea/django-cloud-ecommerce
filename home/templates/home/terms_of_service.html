@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Terms of Service | BluntTee{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 text-center">
+            <h1 class="fw-bold mb-4">Terms of Service – The Fine Print (But Funnier)</h1>
+            <p class="lead mb-4">
+                Welcome to <span class="fw-bold">BluntTee</span>. By shopping with us, you agree to the following terms. Don’t worry, we kept the legalese to a minimum (and the sarcasm to a maximum).
+            </p>
+            <ul class="list-group list-group-flush my-4 text-start">
+                <li class="list-group-item bg-light"><strong>1. Eligibility:</strong> You must be old enough to use the internet unsupervised. If you’re not, ask your mom first.</li>
+                <li class="list-group-item bg-light"><strong>2. Orders:</strong> Place an order, pay for it, and we’ll send you awesome stuff. No magic spells required.</li>
+                <li class="list-group-item bg-light"><strong>3. Payment:</strong> We accept major credit cards, not Monopoly money. All payments are processed securely (even our jokes aren’t that secure).</li>
+                <li class="list-group-item bg-light"><strong>4. Shipping:</strong> We ship worldwide, as long as your mailman is brave enough. Delivery times may vary depending on your location, the weather, and the alignment of the stars.</li>
+                <li class="list-group-item bg-light"><strong>5. Returns:</strong> Not happy? You can return unworn items within 30 days. If you laughed too hard and spilled coffee on your tee, that’s on you.</li>
+                <li class="list-group-item bg-light"><strong>6. Intellectual Property:</strong> Our designs, logos, and puns are ours. Please don’t steal them (karma’s a thing).</li>
+                <li class="list-group-item bg-light"><strong>7. Behavior:</strong> Don’t use our site for evil. Shopping for gifts is fine. Hacking our site to make your ex jealous? Not cool.</li>
+                <li class="list-group-item bg-light"><strong>8. Liability:</strong> We’re not responsible if your shirt makes you too popular, causes excessive laughter, or leads to spontaneous dance parties.</li>
+                <li class="list-group-item bg-light"><strong>9. Changes:</strong> We can update these terms whenever we want (but we’ll try to keep it interesting).</li>
+                <li class="list-group-item bg-light"><strong>10. Questions?</strong> Email us at <a href="mailto:support@blunttee.com">support@blunttee.com</a> (bonus points for funny subject lines).</li>
+            </ul>
+            <p class="fw-semibold mt-4">
+                <em>By using our site, you agree to these terms. If you don’t, you’re probably in the wrong place (try “SeriousTee” instead).</em>
+            </p>
+            <a href="{% url 'home' %}" class="btn btn-warning mt-3 fw-semibold">Back to Home</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

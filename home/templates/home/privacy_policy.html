@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Privacy Policy | BluntTee{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 text-center">
+            <h1 class="fw-bold mb-4">Privacy Policy – We Guard Your Secrets (and Your Tees)</h1>
+            <p class="lead mb-4">
+                At <span class="fw-bold">BluntTee</span>, we take your privacy as seriously as we take our sarcasm.
+            </p>
+            <p>
+                Here’s the blunt truth: the only reason we collect your data is to make sure your awesome t-shirt finds its way to your doorstep (and not your neighbor’s).
+            </p>
+            <ul class="list-group list-group-flush my-4">
+                <li class="list-group-item bg-light">We collect only what we need: your name, address, email, and payment info (no embarrassing secrets, promise).</li>
+                <li class="list-group-item bg-light">Your data is used exclusively to process and ship your order. No spam, no nonsense, no selling your info to shady third parties.</li>
+                <li class="list-group-item bg-light">We don’t share your data with anyone—unless you count our delivery guy, and he’s sworn to secrecy.</li>
+                <li class="list-group-item bg-light">We protect your info with the same passion we protect our best punchlines.</li>
+                <li class="list-group-item bg-light">You can request to see, change, or delete your data anytime. Just email us at <a href="mailto:info@blunttee.com">info@blunttee.com</a> (bonus points for funny subject lines).</li>
+            </ul>
+            <p class="mt-4">
+                By using our site, you agree to this policy. If you don’t, you’re probably lost—try searching for “boring t-shirts” instead.
+            </p>
+            <p class="fw-semibold mt-4">
+                <em>BluntTee – Because your privacy deserves as much respect as your wardrobe.</em>
+            </p>
+            <a href="{% url 'home' %}" class="btn btn-warning mt-3 fw-semibold">Back to Home</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

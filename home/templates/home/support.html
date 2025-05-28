@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Support | BluntTee{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 text-center">
+            <h1 class="fw-bold mb-4">Need Support? We Got You!</h1>
+            <p class="lead mb-4">
+                Is your t-shirt too funny for your friends to handle? Did your sarcasm level break the internet? Or maybe you just need help with your order?
+            </p>
+            <p>
+                Don’t panic! Our support squad is ready to rescue you (with memes, if necessary).
+            </p>
+            <ul class="list-group list-group-flush my-4">
+                <li class="list-group-item bg-light">Step 1: Open your email app (we believe in you!)</li>
+                <li class="list-group-item bg-light">Step 2: Set the subject to <strong>SUPPORT</strong> (all caps, because we mean business)</li>
+                <li class="list-group-item bg-light">Step 3: Tell us what’s wrong, what’s weird, or what made you giggle</li>
+                <li class="list-group-item bg-light">Step 4: Send your email to <a href="mailto:support@blunttee.com?subject=SUPPORT">support@blunttee.com</a></li>
+            </ul>
+            <p>
+                Our team will get back to you faster than you can say “BluntTee rocks!” (Okay, maybe not that fast, but pretty close.)
+            </p>
+            <p class="fw-semibold mt-4">
+                <em>Support: Because even legends need a little help sometimes.</em>
+            </p>
+            <a href="{% url 'home' %}" class="btn btn-warning mt-3 fw-semibold">Back to Home</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Contact | BluntTee{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 text-center">
+            <h1 class="fw-bold mb-4">Contact Us – Slide Into Our Inbox</h1>
+            <p class="lead mb-4">
+                Got questions, compliments, or a burning desire to share your best pun? We’re all ears (and inboxes).
+            </p>
+            <p>
+                Whether you want to tell us how awesome your new tee is, need help with an order, or just want to say hi, we promise we don’t bite (unless you’re a spam bot).
+            </p>
+            <div class="my-4">
+                <a href="mailto:info@blunttee.com" class="btn btn-warning btn-lg fw-semibold">
+                    Email us: info@blunttee.com
+                </a>
+            </div>
+            <ul class="list-group list-group-flush my-4">
+                <li class="list-group-item bg-light">Response time: Faster than you can say “BluntTee rocks!” (usually within 24 hours)</li>
+                <li class="list-group-item bg-light">No carrier pigeons or smoke signals, please</li>
+                <li class="list-group-item bg-light">Bonus points for memes and dad jokes</li>
+            </ul>
+            <p class="fw-semibold mt-4">
+                <em>BluntTee – Because even our customer service has attitude.</em>
+            </p>
+            <a href="{% url 'home' %}" class="btn btn-dark mt-3 fw-semibold">Back to Home</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

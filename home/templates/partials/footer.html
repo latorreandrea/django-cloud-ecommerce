@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    {% block meta %}
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+        
+        <!-- Favicon -->
+        <link rel="shortcut icon" href="{% static 'img/favicon/favicon.ico' %}" type="image/x-icon">
+        <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon/favicon-32x32.png' %}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicon/favicon-16x16.png' %}">
+        <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/favicon/apple-touch-icon.png' %}">
+    {% endblock %}
+
+    {% block extra_meta %}
+    {% endblock %}
+
+    {% block corecss %}
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    {% endblock %}
+
+    {% block extra_css %}
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    {% endblock %}
+
+    {% block corejs %}
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {% endblock %}
+
+    {% block extra_js %}
+        <script src="{% static 'js/main.js' %}"></script>
+    {% endblock %}
+
+    <title>    
+        {% block title %}BluntTee {% endblock %}
+        {% block extra_title %}{% endblock %}
+    </title>
+</head>
+<body>  
+
+    <header>
+        {% block header %}
+            {% include 'partials/navbar.html' %}
+        {% endblock %}
+    </header>
+
+    {% if messages %}
+        <div class="message-container">
+            {% for message in messages %}
+                {% with message.level as level %}
+                    {% if level == 40 %}
+                        {% include 'includes/toasts/error.html' %}
+                    {% else %}
+                        {% include 'includes/toasts/success.html' %}
+                    {% endif %}
+                {% endwith %}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% block page_header %}
+    {% endblock %}
+
+    {% block content %}
+    {% endblock %}
+    <!-- botton scroll-to-top -->
+        <button id="scrollToTopBtn" class="btn btn-dark rounded-circle shadow">
+            <i class="fas fa-arrow-up"></i>
+        </button>
+
+    {% block footer %}
+        {% include 'partials/footer.html' %}
+    {% endblock %}
+
+    {% block postloadjs %}
+    {% endblock %}
+</body>
+</html>
