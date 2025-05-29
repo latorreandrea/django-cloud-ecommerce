@@ -237,3 +237,13 @@ h1, h2, h3, h4, h5, h6, .navbar-brand {
     opacity: 1;
     transform: translateX(0);
 }
+
+
+/* Allauth Buttons Custom Styles */
+body > div > div > form > button {
+    background-color: #ffc107 !important; /* btn-warning */
+    border-color: #ffc107 !important;
+    font-weight: 600 !important;
+    padding: 0.5rem 1rem !important;
+    border-radius: 0.375rem !important;
+}

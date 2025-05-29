@@ -117,6 +117,20 @@
                 document.getElementById('selected-size').value = this.dataset.sizeId;
             });
         });
+
+        // --- Select first color if only one is available ---
+        var colorOptions = document.querySelectorAll('.color-option');
+        if (colorOptions.length === 1) {
+            colorOptions[0].classList.add('border-primary', 'shadow');
+            document.getElementById('selected-color').value = colorOptions[0].dataset.colorId;
+        }
+
+        // --- Select first size if only one is available ---
+        var sizeBtns = document.querySelectorAll('.size-btn');
+        if (sizeBtns.length === 1) {
+            sizeBtns[0].classList.add('active');
+            document.getElementById('selected-size').value = sizeBtns[0].dataset.sizeId;
+        }
     });
     </script>
 {% endblock %}

@@ -21,9 +21,9 @@
             <div class="col-6 col-md-2 mb-4 mb-md-0">
                 <h6 class="text-uppercase fw-bold mb-3">Shop</h6>
                 <ul class="list-unstyled">
-                    <li><a href="#" class="text-white-50 text-decoration-none">Home</a></li>
-                    <li><a href="#" class="text-white-50 text-decoration-none">Products</a></li>
-                    <li><a href="#" class="text-white-50 text-decoration-none">Special Offers</a></li>
+                    <li><a href="/" class="text-white-50 text-decoration-none">Home</a></li>
+                    <li><a href="{% url 'products_list' %}" class="text-white-50 text-decoration-none">Products</a></li>
+                    <li><a href="{% url 'products_list' %}" class="text-white-50 text-decoration-none">Special Offers</a></li>
                 </ul>
             </div>
             <!-- Policies -->
@@ -31,9 +31,9 @@
                 <h6 class="text-uppercase fw-bold mb-3">Policies & FAQs</h6>
                 <ul class="list-unstyled">
                     <li><a href="{% url 'privacy_policy' %}" class="text-white-50 text-decoration-none">Privacy Policy</a></li>
-                    <li><a href="#" class="text-white-50 text-decoration-none">Terms of Service</a></li>
-                    <li><a href="#" class="text-white-50 text-decoration-none">FAQs</a></li>
-                    <li><a href="#" class="text-white-50 text-decoration-none">Shipping & Returns</a></li>
+                    <li><a href="{% url terms_of_service %}" class="text-white-50 text-decoration-none">Terms of Service</a></li>
+                    <li><a href="{% url 'faq'%}" class="text-white-50 text-decoration-none">FAQs</a></li>
+                    <li><a href="{% url 'shipping_returns' %}" class="text-white-50 text-decoration-none">Shipping & Returns</a></li>
                 </ul>
             </div>
             <!-- Contact -->

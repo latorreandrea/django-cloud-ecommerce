@@ -47,3 +47,9 @@ def terms_of_service(request):
     A view to render the Terms of Service page.
     """
     return render(request, "home/terms_of_service.html")
+
+def shipping_returns(request):
+    """
+    A view to render the Shipping & Returns page.
+    """
+    return render(request, "home/shipping_returns.html")
