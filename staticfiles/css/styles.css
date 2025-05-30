@@ -100,13 +100,26 @@ h1, h2, h3, h4, h5, h6, .navbar-brand {
 .banner-bar a, .banner-bar p {
     color: #000 !important;
 }
-/* Hero */
+/* Hero section */
 .hero-image {
-    min-height: 350px; 
-    background: url('{% static "img/hero.jpg" %}') center/cover no-repeat;
+    position: relative;
+    min-height: 350px;
+    overflow: hidden;
+}
+
+.hero-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
 }
 
 .hero-text-wrapper {
+    position: relative;
+    z-index: 1;
     background: rgba(29,53,87,0.55);
     padding: 3rem 1rem;
 }
@@ -236,4 +249,14 @@ h1, h2, h3, h4, h5, h6, .navbar-brand {
 .fade-in-right.visible {
     opacity: 1;
     transform: translateX(0);
+}
+
+
+/* Allauth Buttons Custom Styles */
+body > div > div > form > button {
+    background-color: #ffc107 !important; /* btn-warning */
+    border-color: #ffc107 !important;
+    font-weight: 600 !important;
+    padding: 0.5rem 1rem !important;
+    border-radius: 0.375rem !important;
 }
