@@ -11,12 +11,10 @@
 <div class="container-fluid p-0">
     <!-- Nel tuo template HTML (ad esempio home/templates/home/index.html) -->
     <div class="hero-image d-flex align-items-center justify-content-center text-center">
-        <video autoplay muted playsinline class="hero-video">
+        <video autoplay muted playsinline preload="auto" class="hero-video" poster="{% static 'img/bt_logo.png' %}">
             <source src="{% static 'img/hero_products.mp4' %}" type="video/mp4">
-            <!-- Fallback per browser che non supportano video -->
-            <img src="{% static 'img/bt_logo.png' %}" alt="Hero Image">
         </video>
-        <div class="hero-text-wrapper text-center ">
+        <div class="hero-text-wrapper text-center">
             <h1 class="display-4 text-white fw-bold">BluntTee – Wear Your Wit!</h1>
             <p class="lead text-white">Let Your T-Shirt Do the Talking</p>
             <a href="{% url 'products_list' %}" class="btn btn-warning btn-shop-now btn-lg mt-3 fw-semibold px-4">Shop Now</a>

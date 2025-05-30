@@ -102,19 +102,20 @@ h1, h2, h3, h4, h5, h6, .navbar-brand {
 }
 /* Hero section */
 .hero-image {
-    position: relative;
+    position: relative !important;
     min-height: 350px;
     overflow: hidden;
+    background: url('../img/bt_logo.png') center/cover no-repeat; /* Fallback finché il video non carica */
 }
 
 .hero-video {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: 0;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    z-index: 0 !important;
 }
 
 .hero-text-wrapper {
