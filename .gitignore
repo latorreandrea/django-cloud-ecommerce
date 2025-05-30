@@ -188,6 +188,5 @@ rispostashirtigo.txt
 migrate_to_neon.sh
 .gitignore
 all_data.json
-static/img/hero_products.mp4
 .gitignore
-staticfiles/img/hero_products.mp4
+
