@@ -25,8 +25,7 @@ def get_products():
     Fetches the list of products from the Shirtigo API.
     """
     url = BASE_URL + PRODUCTS_URL
-    response = requests.request("GET", url, headers=headers) #, data=payload
-    print(f'{API_KEY}')
+    response = requests.request("GET", url, headers=headers)
     if response.status_code == 200:
         data = response.json()
         return data
