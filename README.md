@@ -46,31 +46,32 @@ The platform allows the BluntTee team to create and manage products via the Shir
 
 The website has the following features available to different types of users:
 
-Feature	Not logged in	Logged in as regular user	Logged in as admin
-Home Page	✅	✅	✅
-Products			
-Products Listing	✅	✅	✅
-Product Detail	✅	✅	✅
-Cart & Wishlist			
-View Cart	✅	✅	✅
-Add to Cart	✅	✅	✅
-View Wishlist	❌	✅	✅
-Add to Wishlist	❌	✅	✅
-Checkout			
-Checkout Process	✅	✅	✅
-View Order Confirmation	✅	✅	✅
-User Features			
-My Profile	❌	✅	✅
-Order History	❌	✅	✅
-View Order Shipping Status	❌	✅	✅
-Register	✅	❌	❌
-Login	✅	❌	❌
-Logout	❌	✅	✅
-Admin Features			
-Update Products from Shirtigo	❌	❌	✅
-Django Admin Interface	❌	❌	✅
-View Order Management	❌	❌	✅
-Update Site Content	❌	❌	✅
+| Feature | Not logged in | Logged in as regular user | Logged in as admin |
+|---------|---------------|--------------------------|-------------------|
+| **Home Page** | ✅ | ✅ | ✅ |
+| **Products** | | | |
+| Products Listing | ✅ | ✅ | ✅ |
+| Product Detail | ✅ | ✅ | ✅ |
+| **Cart & Wishlist** | | | |
+| View Cart | ✅ | ✅ | ✅ |
+| Add to Cart | ✅ | ✅ | ✅ |
+| View Wishlist | ❌ | ✅ | ✅ |
+| Add to Wishlist | ❌ | ✅ | ✅ |
+| **Checkout** | | | |
+| Checkout Process | ✅ | ✅ | ✅ |
+| View Order Confirmation | ✅ | ✅ | ✅ |
+| **User Features** | | | |
+| My Profile | ❌ | ✅ | ✅ |
+| Order History | ❌ | ✅ | ✅ |
+| View Order Shipping Status | ❌ | ✅ | ✅ |
+| Register | ✅ | ❌ | ❌ |
+| Login | ✅ | ❌ | ❌ |
+| Logout | ❌ | ✅ | ✅ |
+| **Admin Features** | | | |
+| Update Products from Shirtigo | ❌ | ❌ | ✅ |
+| Django Admin Interface | ❌ | ❌ | ✅ |
+| View Order Management | ❌ | ❌ | ✅ |
+| Update Site Content | ❌ | ❌ | ✅ |
 
 ---
 
