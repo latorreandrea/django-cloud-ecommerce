@@ -174,19 +174,18 @@ cython_debug/
 .pypirc
 
 # Data Pipeline scripts:
-pipeline.py
-dump_postgres.sql
-dump.sql
-populate_neon.py
-import_to_neon.sh
+
 stripe.tar.gz
-neon_backup.sql
-upload_static.py
-upload_static_to_gcs.py
+
+
+
+# DONT DELETE!!!
+# This section contains critical files required for storage administration and static file uploads.
 storage_admin.json
-rispostashirtigo.txt
-migrate_to_neon.sh
-.gitignore
-all_data.json
-.gitignore
+upload_static_to_gcs.py
+
+
+
+
+
 
