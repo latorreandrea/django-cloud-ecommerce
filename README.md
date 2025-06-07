@@ -40,7 +40,37 @@ The platform allows the BluntTee team to create and manage products via the Shir
 - **Automated Emails:** Transactional emails (registration, order confirmation, etc.) via Zoho Mail.
 - **Order Fulfillment:** Orders are automatically placed on Shirtigo after successful payment.
 - **Status Sync:** Order statuses are updated from Shirtigo every two days.
+- **Manual Product Updates:** Admin users can update products from Shirtigo by accessing the URL `/products/admin/update-products/` after login, ensuring newly created or modified products are synchronized with the app.
 - **Modern Stack:** Uses Django, PostgreSQL (Neon), and modern frontend practices.
+
+
+The website has the following features available to different types of users:
+
+Feature	Not logged in	Logged in as regular user	Logged in as admin
+Home Page	✅	✅	✅
+Products			
+Products Listing	✅	✅	✅
+Product Detail	✅	✅	✅
+Cart & Wishlist			
+View Cart	✅	✅	✅
+Add to Cart	✅	✅	✅
+View Wishlist	❌	✅	✅
+Add to Wishlist	❌	✅	✅
+Checkout			
+Checkout Process	✅	✅	✅
+View Order Confirmation	✅	✅	✅
+User Features			
+My Profile	❌	✅	✅
+Order History	❌	✅	✅
+View Order Shipping Status	❌	✅	✅
+Register	✅	❌	❌
+Login	✅	❌	❌
+Logout	❌	✅	✅
+Admin Features			
+Update Products from Shirtigo	❌	❌	✅
+Django Admin Interface	❌	❌	✅
+View Order Management	❌	❌	✅
+Update Site Content	❌	❌	✅
 
 ---
 
