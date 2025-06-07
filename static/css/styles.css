@@ -1,6 +1,11 @@
 /* Import Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans:wght@400;600&display=swap');
 
+html, body {
+    overflow-x: hidden;
+    width: 100%;
+    position: relative;
+}
 
 body {
     font-family: 'Open Sans', Arial, sans-serif;
@@ -27,6 +32,7 @@ h1, h2, h3, h4, h5, h6, .navbar-brand {
 .navbar-toggler {
     padding: 0.25rem 0.5rem;
     font-size: 1rem;
+    color: #0d6efd;
 }
 
 .search-bar {
