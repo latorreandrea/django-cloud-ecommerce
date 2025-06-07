@@ -2,6 +2,7 @@ import os
 import requests
 import django
 import logging
+from django.conf import settings
 # model imports
 from products.models import Category, Color, Product, ProductImage, Size
 
@@ -10,7 +11,7 @@ from products.models import Category, Color, Product, ProductImage, Size
 logger = logging.getLogger(__name__)
 
 # Setup API
-API_KEY = os.environ.get('SHIRTIGO_API_TOKEN')
+API_KEY = settings.SHIRTIGO_API_TOKEN
 BASE_URL = "https://cockpit.shirtigo.com/api/"
 PRODUCTS_URL = "products?include=projectProductColors"
 headers = {
