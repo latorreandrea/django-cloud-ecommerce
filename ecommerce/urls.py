@@ -26,4 +26,5 @@ urlpatterns = [
     path('cart/', include('cart.urls')),
     path('checkout/', include('checkout.urls')),
     path('shirtigo/', include('shirtigo.urls')),
+    path('newsletter/', include('newsletter.urls', namespace='newsletter')),
 ]

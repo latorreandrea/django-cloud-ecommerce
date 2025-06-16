@@ -213,9 +213,10 @@
     <div class="container">
         <h2 class="fw-bold text-center mb-3">Join Our Cult (We Mean... Mailing List)</h2>
         <p class="text-center mb-4">Get 10% off your first order and maybe an unsolicited dad joke.</p>
-        <form class="row justify-content-center">
+        <form class="row justify-content-center" method="post" action="{% url 'newsletter:subscribe' %}">
+            {% csrf_token %}
             <div class="col-md-6 col-lg-4">
-                <input type="email" class="form-control form-control-lg mb-2" placeholder="Your email address" required>
+                <input type="email" name="email" class="form-control form-control-lg mb-2" placeholder="Your email address" required>
             </div>
             <div class="col-md-2 col-lg-2">
                 <button type="submit" class="btn btn-dark btn-lg w-100 fw-semibold">Sign Up</button>

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h1 class="card-title mb-4">Unsubscribed</h1>
+                    
+                    <p class="lead">You have been successfully unsubscribed from our newsletter.</p>
+                    <p>You will no longer receive marketing emails from us.</p>
+                    
+                    <a href="{% url 'home' %}" class="btn btn-primary mt-3">Return to Homepage</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

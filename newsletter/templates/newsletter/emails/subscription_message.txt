@@ -1,0 +1,15 @@
+Hello there! 👋
+
+Thanks a bunch for subscribing to our newsletter — you just joined a pretty awesome club! 🥳  
+Get ready for a fun ride packed with cool products, sweet deals, and juicy updates. 🚀✨
+
+But hey — if you didn’t mean to sign up (maybe your cat walked on the keyboard? 🐱💻), no worries. 
+You can unsubscribe faster than you can say “Oops!” right here:  
+👉 {{ unsubscribe_url }}
+
+Talk soon!  
+– The {{ site_name }} Team 💌
+
+---
+
+P.S. You can always opt out of our emails by clicking here: {{ unsubscribe_url }} – we’ll still be friends (probably).

@@ -1,0 +1,41 @@
+<html lang="en">
+<head>
+<title>Thank you for subscribing!</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; font-size: 12px; color: #888; }
+    </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎉 Welcome Aboard! Let's Have Some Fun 🎉</h1>
+
+    <p>Hello there! 👋</p>
+
+    <p>Thanks a bunch for subscribing to our newsletter — you just joined a pretty awesome club! 🥳</p>
+
+    <p>Get ready for a fun ride packed with cool products, sweet deals, and juicy updates. 🚀✨</p>
+
+    <p>But hey — if you didn’t mean to sign up (maybe your cat walked on the keyboard? 🐱💻), no worries.<br>
+    You can unsubscribe faster than you can say “Oops!” right here:</p>
+
+    <p>
+      <a href="{{ unsubscribe_url }}" >Unsubscribe</a>
+    </p>
+
+    <p>Talk soon!<br>
+    – The {{ site_name }} Team 💌</p>
+
+    <hr>
+
+    <div class="footer">
+        <p>
+            P.S. You can always opt out of our emails by clicking here: 
+            <a href="{{ unsubscribe_url }}" style="color: #f44336;">Unsubscribe</a> – we’ll still be friends (probably).
+        </p>
+      
+    </div>
+  </div>
+</body>
+</html>

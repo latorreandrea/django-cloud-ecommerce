@@ -160,6 +160,7 @@ INSTALLED_APPS = [
     'cart',
     'checkout',
     'shirtigo',
+    'newsletter',
     # Third-party apps
     'storages',
     # Crispy Forms
