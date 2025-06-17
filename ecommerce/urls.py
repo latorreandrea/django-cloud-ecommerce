@@ -19,7 +19,7 @@ from django.urls import path, include
 
 # SEO
 from django.contrib.sitemaps.views import sitemap
-from .sitemaps import ProductSitemap, StaticViewSitemap
+from .sitemaps import ProductSitemap, StaticViewSitemap, CategorySitemap, NewsletterSitemap
 from django.views.generic.base import TemplateView
 
 sitemaps = {
