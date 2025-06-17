@@ -1,9 +1,14 @@
 from django.shortcuts import render
-
+from .models import InstagramPost
 # Create your views here.
 def index(request):
     """ A view to render homepage """
-    return render(request, "home/index.html")
+    instagram_posts = InstagramPost.objects.filter(approved=True)[:5]
+    context = {
+        'instagram_posts': instagram_posts,
+        # Altri context data
+    }
+    return render(request, 'home/index.html', context)
 
 def about(request):
     """A view to render the About Us page"""

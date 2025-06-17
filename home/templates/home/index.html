@@ -173,23 +173,34 @@
         <h2 class="fw-bold text-center mb-4">Caught Wearing Us in Public (And Loving It)</h2>
         <p class="text-center mb-4">Your selfies + our tees = a match made in meme heaven.</p>
         <div class="row g-3 justify-content-center">
-            <!-- Example Instagram-style images, replace with real ones -->
-            <div class="col-4 col-md-2">
-                <img src="{% static 'img/insta1.jpg' %}" class="img-fluid rounded shadow-sm" alt="Customer Selfie 1">
-            </div>
-            <div class="col-4 col-md-2">
-                <img src="{% static 'img/insta2.jpg' %}" class="img-fluid rounded shadow-sm" alt="Customer Selfie 2">
-            </div>
-            <div class="col-4 col-md-2">
-                <img src="{% static 'img/insta3.jpg' %}" class="img-fluid rounded shadow-sm" alt="Customer Selfie 3">
-            </div>
-            <div class="col-4 col-md-2">
-                <img src="{% static 'img/insta4.jpg' %}" class="img-fluid rounded shadow-sm" alt="Customer Selfie 4">
-            </div>
-            <div class="col-4 col-md-2">
-                <img src="{% static 'img/insta5.jpg' %}" class="img-fluid rounded shadow-sm" alt="Customer Selfie 5">
-            </div>
+            {% for post in instagram_posts %}
+                <div class="col-4 col-md-2">
+                    <a href="{{ post.permalink }}" target="_blank" rel="noopener">
+                        <img src="{{ post.image_url }}" class="img-fluid rounded shadow-sm" alt="Customer {{ post.username }}">
+                    </a>
+                </div>
+            {% empty %}
+                <!-- Fallback Example Instagram-style images, replace with real ones -->
+                <div class="col-4 col-md-2">
+                    <img src="{% static 'img/insta1.jpg' %}" class="img-fluid rounded shadow-sm" alt="Customer Selfie 1">
+                </div>
+                <div class="col-4 col-md-2">
+                    <img src="{% static 'img/insta2.jpg' %}" class="img-fluid rounded shadow-sm" alt="Customer Selfie 2">
+                </div>
+                <div class="col-4 col-md-2">
+                    <img src="{% static 'img/insta3.jpg' %}" class="img-fluid rounded shadow-sm" alt="Customer Selfie 3">
+                </div>
+                <div class="col-4 col-md-2">
+                    <img src="{% static 'img/insta4.jpg' %}" class="img-fluid rounded shadow-sm" alt="Customer Selfie 4">
+                </div>
+                <div class="col-4 col-md-2">
+                    <img src="{% static 'img/insta5.jpg' %}" class="img-fluid rounded shadow-sm" alt="Customer Selfie 5">
+                </div>
+            {% endfor %}
         </div>
+        
+            
+        
     </div>
 </section>
 
