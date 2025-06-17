@@ -1,7 +1,7 @@
 # ecommerce/sitemaps.py
 from django.contrib.sitemaps import Sitemap
 from django.urls import reverse
-from products.models import Product
+from products.models import Product, Category
 from home.views import index, about, our_mission, contact, support, faq
 
 class ProductSitemap(Sitemap):
@@ -9,7 +9,7 @@ class ProductSitemap(Sitemap):
     priority = 0.9
 
     def items(self):
-        return Product.objects.filter(active=True)
+        return Product.objects.all()
 
     def location(self, obj):
         return f'/products/{obj.id}/'
