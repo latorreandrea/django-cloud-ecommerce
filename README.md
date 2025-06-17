@@ -15,8 +15,9 @@
 - [Deployment](#deployment)
 - [Integrations](#integrations)
 - [Usage](#usage)
-- [Testing](#testing)
 - [Security](#security)
+- [SEO](#seo)
+- [Testing](#testing)
 - [Troubleshooting](#troubleshooting)
 - [License](#license)
 - [Next Steps](#next-steps)
@@ -60,6 +61,7 @@ The website has the following features available to different types of users:
 | **Checkout** | | | |
 | Checkout Process | ✅ | ✅ | ✅ |
 | View Order Confirmation | ✅ | ✅ | ✅ |
+| **NewsLetter** | ✅ | ✅ | ✅ |
 | **User Features** | | | |
 | My Profile | ❌ | ✅ | ✅ |
 | Order History | ❌ | ✅ | ✅ |
@@ -242,17 +244,91 @@ Below is a simplified Entity-Relationship (ER) schema of the main models:
 
 ---
 
-## Testing
-
-
----
-
 ## Security
 
 - All secrets are stored in Google Cloud Secret Manager.
 - HTTPS enforced in production.
 - Stripe handles all payment data securely.
 - User data is protected via Django's authentication and permissions.
+
+---
+
+## SEO
+
+### Implementing SEO
+
+To improve SEO for BluntTee, implement the following steps:
+
+#### 1. Add `robots.txt`
+
+Create a `robots.txt` file in your Django project's `static` or root directory:
+
+```
+User-agent: *
+Disallow:
+
+Sitemap: https://www.blunttee.com/sitemap.xml
+```
+
+Serve this file at `/robots.txt` by adding a URL pattern or configuring your web server.
+
+#### 2. Generate `sitemap.xml` with Django
+
+- Install `django.contrib.sitemaps` in `INSTALLED_APPS`.
+- In your app, create a sitemap class for your models:
+
+```python
+from django.contrib.sitemaps import Sitemap
+from .models import Product
+
+class ProductSitemap(Sitemap):
+  changefreq = "weekly"
+  priority = 0.8
+
+  def items(self):
+    return Product.objects.all()
+
+  def location(self, obj):
+    return obj.get_absolute_url()
+```
+
+- In your `urls.py`:
+
+```python
+from django.contrib.sitemaps.views import sitemap
+from .sitemaps import ProductSitemap
+
+sitemaps = {
+  'products': ProductSitemap,
+}
+
+urlpatterns = [
+  # ... other urls ...
+  path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+]
+```
+
+#### 3. Add `sitemap.txt` (Optional)
+
+If you want a plain text sitemap, generate it with a management command or script listing all URLs, and serve it at `/sitemap.txt`.
+
+#### 4. Submit to Search Engines
+
+- Ensure `/robots.txt` and `/sitemap.xml` are accessible.
+- Submit your sitemap URL to Google Search Console and Bing Webmaster Tools.
+
+#### 5. Additional SEO Tips
+
+- Used semantic HTML and proper meta tags.
+- Add Open Graph and Twitter Card metadata.
+- Ensure fast page loads and mobile responsiveness.
+- Use descriptive URLs and alt text for images.
+
+For more, see [Django SEO documentation](https://docs.djangoproject.com/en/stable/ref/contrib/sitemaps/).
+
+---
+
+## Testing
 
 ---
 
@@ -267,16 +343,18 @@ Below is a simplified Entity-Relationship (ER) schema of the main models:
 
 ---
 
+
 ## License
 
 This project is for demonstration purposes.
 
+## Update
+**Marketing implementation: (added 17/06/2025)**
+  Add a marketing app and base email marketing registration.
 ---
 
 ## Next Steps
 
-- **Marketing implementation:**
-  Add a marketing app
 - **Expand Payment Methods:**  
   Integrate additional payment gateways for broader customer reach.
 - **Analytics and Reporting:**  

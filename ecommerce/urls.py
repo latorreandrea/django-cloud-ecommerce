@@ -17,6 +17,18 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+# SEO
+from django.contrib.sitemaps.views import sitemap
+from .sitemaps import ProductSitemap, StaticViewSitemap
+from django.views.generic.base import TemplateView
+
+sitemaps = {
+    'products': ProductSitemap,
+    'static': StaticViewSitemap,
+    'categories': CategorySitemap,
+    'newsletter': NewsletterSitemap
+}
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('home.urls')),
@@ -27,4 +39,9 @@ urlpatterns = [
     path('checkout/', include('checkout.urls')),
     path('shirtigo/', include('shirtigo.urls')),
     path('newsletter/', include('newsletter.urls', namespace='newsletter')),
+    # SEO
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+    path('robots.txt', TemplateView.as_view(
+        template_name="robots.txt", content_type="text/plain")
+    ),
 ]

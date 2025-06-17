@@ -145,6 +145,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # SEO
+    'django.contrib.sitemaps',
     # Allauth
     'allauth',
     'allauth.account',
