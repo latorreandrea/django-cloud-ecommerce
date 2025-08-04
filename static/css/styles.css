@@ -111,7 +111,7 @@ h1, h2, h3, h4, h5, h6, .navbar-brand {
     position: relative ;
     min-height: 350px;
     overflow: hidden;
-    background: url('../img/bt_logo.png') center/cover no-repeat; 
+    background: url('../img/bt_logo_nobg.png') center/cover no-repeat; 
 }
 
 .hero-video {
